@@ -22,13 +22,22 @@ const Login = () => {
     e.preventDefault(); // submit action을 안타도록 설정
 
     try {
-      await fetch("/main/login", {
+      const res = await fetch("/main/login", {
         method: "POST", //메소드 지정
         headers: {
           //데이터 타입 지정
-          "Content-Type": "application/json; charset=utf-8",
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          u_id: username,
+          u_password: password,
+        }),
       });
+      if (res.ok) {
+        console.log("okok");
+      } else {
+        console.log("gg");
+      }
     } catch (error) {
       console.log(error);
     }

@@ -43,8 +43,8 @@ const App = () => {
         <section>
           <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/join" element={<Join />} />
+            <Route path="/main/login" element={<Login />} />
+            <Route path="/main/join" element={<Join />} />
             <Route path="/main" element={<Dash />} />
             <Route path="/ticket" element={<Dash />} />
           </Routes>

@@ -1,5 +1,5 @@
 'use client';
-import Header from '@/include/Header';
+import Header from '@/include/Header.js';
 import '@/css/index.css';
 import Side from '@/include/Side';
 import { SessionProvider } from 'next-auth/react';

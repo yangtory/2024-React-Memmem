@@ -18,7 +18,7 @@ const Header = () => {
                         <div>Loading...</div>
                     ) : session ? (
                         <>
-                            <span>{session.user.name}님</span>
+                            <a>{session.user.name}님</a>
                             <a href="/logout" onClick={() => signOut()}>
                                 Log out
                             </a>

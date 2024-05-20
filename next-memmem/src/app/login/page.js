@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import { signIn } from 'next-auth/react';
 
 const LoginPage = () => {
@@ -11,7 +11,7 @@ const LoginPage = () => {
             id: idRef.current.value,
             password: passRef.current.value,
             redirect: true,
-            callbackUrl: '/',
+            callbackUrl: '/dash',
         });
         if (res.ok) {
             // 로그인 성공 처리

@@ -1,7 +1,8 @@
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { findUnique } from '../../user';
+import { findUnique, findUserComp } from '../../user';
 import bcrypt from 'bcryptjs';
+import { findComp } from '../../company';
 
 const Handler = NextAuth({
     pages: {
@@ -30,10 +31,12 @@ const Handler = NextAuth({
                 const { id, password } = credentials;
 
                 const user = await findUnique({ u_id: id });
+                const comp = await findComp({ c_uid: id });
                 if (user && bcrypt.compareSync(password, user.u_password)) {
                     return {
                         id: user.u_id,
                         name: user.u_name,
+                        ccode: user.c_code,
                     };
                 } else {
                     return null;
@@ -45,12 +48,15 @@ const Handler = NextAuth({
         async session({ session, token }) {
             session.user.id = token.id;
             session.user.name = token.name;
+            session.user.ccode = token.ccode;
+            console.log('Session callback session:', session);
             return session;
         },
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id;
                 token.name = user.name;
+                token.ccode = user.ccode;
             }
             return token;
         },

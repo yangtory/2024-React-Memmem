@@ -40,6 +40,7 @@ const App = () => {
             <Route path="/main/join" element={<Join />} />
             <Route path="/main" element={<Dash />} />
             <Route path="/ticket" element={<Dash />} />
+            <Route path="/user" element={<User />} />
           </Routes>
         </section>
       </div>

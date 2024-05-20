@@ -1,6 +1,16 @@
-import "../css/Welcome.css";
+"use client";
+import "@/css/Welcome.css";
+import AOS from "aos";
+import { useEffect } from "react";
+import Nav from "./include/Nav";
 
-function Main() {
+const Home = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1200,
+    });
+  }, []);
+
   return (
     <>
       <div className="welcome_wrap">
@@ -67,8 +77,8 @@ function Main() {
           <div data-aos="fade-up">
             <h1>간편한 일정관리</h1>
             <p>
-              일정관리 기능을 통해 수업 일정을 효율적으로 관리할 수 있습니다. <br />
-              각 수업의 일정을 등록하고 수정하여 회원들에게 정확한 정보를 제공할 수 있습니다. <br />
+              일정관리 기능을 통해 수업 일정을 효율적으로 관리할 수 있습니다. <br />각 수업의 일정을
+              등록하고 수정하여 회원들에게 정확한 정보를 제공할 수 있습니다. <br />
               또한 강사들과의 일정을 조율하여 강의를 원할하게 운영할 수 있습니다.
             </p>
           </div>
@@ -115,5 +125,6 @@ function Main() {
       </div>
     </>
   );
-}
-export default Main;
+};
+
+export default Home;

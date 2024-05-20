@@ -1,0 +1,141 @@
+@charset "UTF-8";
+
+.page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.total {
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  width: 30%;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  font-weight: 900;
+  span {
+    font-weight: 900;
+  }
+  p {
+    font-weight: 700;
+  }
+}
+.total_box {
+  display: flex;
+  justify-content: center;
+}
+.top {
+  background-color: #e9dcd6;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  margin: 10px;
+  height: 45vh;
+  .month {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: nowrap;
+  }
+}
+.chart {
+  width: 500px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.bottom {
+  margin: 2rem 10px 10px 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 45vh;
+  width: 90%;
+  .notice {
+    flex: 1;
+    width: 100%;
+
+    overflow: auto;
+  }
+  .notice_list {
+    background-color: #e9dcd6;
+    margin: 0 auto;
+  }
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.error {
+  width: 80%;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  height: 88%;
+  margin-bottom: 30px;
+  .left {
+    flex: 1;
+  }
+  .right {
+    flex: 1;
+  }
+}
+
+.notice::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  border-radius: 10px;
+}
+
+.notice:hover::-webkit-scrollbar {
+  display: block;
+}
+
+.notice::-webkit-scrollbar-thumb {
+  background-color: #e9dcd6;
+  border-radius: 5px;
+}
+
+.notice::-webkit-scrollbar-thumb:hover {
+  background-color: #faaca8;
+}
+
+.noList_wrapper {
+  margin-top: 1.2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.noList {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: #e9dcd6;
+  text-align: center;
+  padding: 3rem;
+  border-radius: 10px;
+}

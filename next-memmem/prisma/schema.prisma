@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model tbl_class {
+  c_seq       Int         @id @default(autoincrement())
+  c_name      String      @db.VarChar(50)
+  c_sdate     String      @db.VarChar(15)
+  c_edate     String      @db.VarChar(15)
+  c_stime     String      @db.VarChar(15)
+  c_etime     String      @db.VarChar(15)
+  c_tcode     String      @db.VarChar(10)
+  c_ccode     String      @db.VarChar(10)
+  c_color     String?     @db.VarChar(20)
+  tbl_teacher tbl_teacher @relation(fields: [c_tcode], references: [t_code], onDelete: Cascade, onUpdate: NoAction, map: "tbl_class_ibfk_1")
+  tbl_company tbl_company @relation(fields: [c_ccode], references: [c_code], onDelete: Cascade, onUpdate: NoAction, map: "tbl_class_ibfk_2")
+
+  @@index([c_ccode], map: "c_ccode")
+  @@index([c_tcode], map: "c_tcode")
+}
+
+model tbl_company {
+  c_code      String        @id @db.VarChar(10)
+  c_name      String        @db.VarChar(10)
+  c_addr      String?       @db.VarChar(125)
+  c_tel       String?       @db.VarChar(15)
+  c_uid       String?       @db.VarChar(20)
+  tbl_class   tbl_class[]
+  tbl_user    tbl_user?     @relation(fields: [c_uid], references: [u_id], onDelete: Cascade, onUpdate: NoAction, map: "tbl_company_ibfk_1")
+  tbl_minfo   tbl_minfo[]
+  tbl_notice  tbl_notice[]
+  tbl_teacher tbl_teacher[]
+
+  @@index([c_uid], map: "c_uid")
+}
+
+model tbl_gallerys {
+  g_id           String @id @db.VarChar(125)
+  g_date         String @db.VarChar(10)
+  g_time         String @db.VarChar(10)
+  g_author       String @db.VarChar(20)
+  g_subject      String @db.VarChar(20)
+  g_content      String @db.VarChar(100)
+  g_origin_image String @db.VarChar(255)
+  g_up_image     String @db.VarChar(255)
+}
+
+model tbl_minfo {
+  i_seq          Int              @id @default(autoincrement())
+  i_title        String           @db.VarChar(50)
+  i_price        Int
+  i_count        Int
+  i_ccode        String           @db.VarChar(10)
+  tbl_company    tbl_company      @relation(fields: [i_ccode], references: [c_code], onDelete: Cascade, onUpdate: NoAction, map: "tbl_minfo_ibfk_1")
+  tbl_user_minfo tbl_user_minfo[]
+
+  @@index([i_ccode], map: "i_ccode")
+}
+
+model tbl_notice {
+  n_seq       String      @id @db.VarChar(255)
+  n_title     String      @db.VarChar(125)
+  n_content   String      @db.VarChar(255)
+  n_ccode     String      @db.VarChar(10)
+  n_uid       String      @db.VarChar(20)
+  n_date      String      @db.VarChar(10)
+  n_time      String      @db.VarChar(10)
+  tbl_company tbl_company @relation(fields: [n_ccode], references: [c_code], onDelete: Cascade, onUpdate: NoAction, map: "tbl_notice_ibfk_1")
+  tbl_user    tbl_user    @relation(fields: [n_uid], references: [u_id], onDelete: Cascade, onUpdate: NoAction, map: "tbl_notice_ibfk_2")
+
+  @@index([n_ccode], map: "n_ccode")
+  @@index([n_uid], map: "n_uid")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model tbl_role {
+  r_uid    String   @db.VarChar(20)
+  r_role   String   @db.VarChar(20)
+  tbl_user tbl_user @relation(fields: [r_uid], references: [u_id], onDelete: Cascade, onUpdate: NoAction, map: "tbl_role_ibfk_1")
+
+  @@index([r_uid], map: "r_uid")
+  @@ignore
+}
+
+model tbl_schedule {
+  s_seq     Int     @id @default(autoincrement())
+  s_title   String  @db.VarChar(50)
+  s_content String? @db.VarChar(125)
+  s_sdate   String? @db.VarChar(15)
+  s_edate   String? @db.VarChar(15)
+  s_ccode   String? @db.VarChar(15)
+  s_color   String? @db.VarChar(20)
+}
+
+model tbl_teacher {
+  t_code      String      @id @db.VarChar(10)
+  t_name      String      @db.VarChar(10)
+  t_tel       String      @db.VarChar(15)
+  t_ccode     String      @db.VarChar(10)
+  tbl_class   tbl_class[]
+  tbl_company tbl_company @relation(fields: [t_ccode], references: [c_code], onDelete: Cascade, onUpdate: NoAction, map: "tbl_teacher_ibfk_1")
+
+  @@index([t_ccode], map: "t_ccode")
+}
+
+model tbl_user {
+  u_id        String        @id @db.VarChar(20)
+  u_password  String        @db.VarChar(125)
+  u_name      String        @db.VarChar(10)
+  u_tel       String        @db.VarChar(15)
+  u_comp      String?       @db.VarChar(10)
+  tbl_company tbl_company[]
+  tbl_notice  tbl_notice[]
+  tbl_role    tbl_role[]    @ignore
+}
+
+model tbl_user_comp {
+  us_uid   String  @db.VarChar(20)
+  us_ccode String  @db.VarChar(10)
+  us_uname String? @db.VarChar(10)
+  us_utel  String? @db.VarChar(15)
+  us_cname String? @db.VarChar(10)
+  us_date  String? @db.VarChar(15)
+
+  @@id([us_uid, us_ccode])
+}
+
+model tbl_user_minfo {
+  r_uid     String    @db.VarChar(20)
+  r_iseq    Int
+  r_icount  Int
+  r_sdate   String    @db.VarChar(10)
+  r_edate   String    @db.VarChar(10)
+  tbl_minfo tbl_minfo @relation(fields: [r_iseq], references: [i_seq], onDelete: Cascade, onUpdate: NoAction, map: "tbl_user_minfo_ibfk_1")
+
+  @@id([r_iseq, r_uid])
+}

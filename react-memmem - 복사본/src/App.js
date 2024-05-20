@@ -7,12 +7,7 @@ import Header from "./include/Header";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./css/App.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
 const App = () => {
   AOS.init({
@@ -25,9 +20,7 @@ const App = () => {
     <>
       <Header />
       <div className="main">
-        <div
-          className={loginStatus != false ? "side" : "side hidden"}
-        >
+        <div className={loginStatus != false ? "side" : "side hidden"}>
           <ul>
             <li>
               <Link to="/ticket">회원권</Link>
@@ -43,10 +36,11 @@ const App = () => {
         <section>
           <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/join" element={<Join />} />
+            <Route path="/main/login" element={<Login />} />
+            <Route path="/main/join" element={<Join />} />
             <Route path="/main" element={<Dash />} />
             <Route path="/ticket" element={<Dash />} />
+            <Route path="/user" element={<User />} />
           </Routes>
         </section>
       </div>

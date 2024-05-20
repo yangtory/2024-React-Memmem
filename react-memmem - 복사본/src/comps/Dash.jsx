@@ -1,29 +1,45 @@
+// import axios from "axios";
 import "../css/dash.css";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 const Dash = () => {
+  // 이건 proxy 설정 안했을때 적어주는거, 설정해줘서 안해도 됨
   // const baseUrl = "http://localhost:8080";
 
   const [data, setData] = useState("");
 
   useEffect(() => {
     // 컴포넌트가 마운트 될 때 실행
-    springDataSet();
+    // springDataSet();
+    springData();
   }, []);
 
-  function springDataSet() {
-    // Axios 방식 사용
-    axios
-      .get("/test/get") // 해당 URL에 HTTP GET 요청
-      .then((res) => {
-        console.log(res);
-        setData(res.data); // GET 요청하여 응답받은 data
-      })
-      .catch((err) => {
-        console.log(err);
+  //   // Axios 방식 사용
+  // function springDataSet() {
+  //   axios
+  //     .get("/test/get") // 해당 URL에 HTTP GET 요청
+  //     .then((res) => {
+  //       console.log(res);
+  //       setData(res.data); // GET 요청하여 응답받은 data
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
+
+  // fetch 사용
+  const springData = async () => {
+    try {
+      const res = await fetch("/test/get", {
+        method: "GET",
       });
-  }
+      const json = await res.text();
+      setData(res.data);
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>

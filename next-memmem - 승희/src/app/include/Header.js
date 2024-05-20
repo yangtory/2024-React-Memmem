@@ -9,8 +9,8 @@ const Header = () => {
           </a>
         </div>
         <nav className="nav">
-          <a href="/main/login">Log in</a>
-          <a href="/main/join" className="signup_btn">
+          <a href="/login">Log in</a>
+          <a href="/join" className="signup_btn">
             Sign up
           </a>
         </nav>
@@ -18,5 +18,4 @@ const Header = () => {
     </>
   );
 };
-
 export default Header;

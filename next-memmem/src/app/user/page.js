@@ -1,22 +1,24 @@
 "use client";
 import "@/css/table.css";
-import { findUsers } from "@/app/api/user"; // fetchUsers.js 파일의 함수 가져오기
-import List from "./insert/List";
+import { findUsers } from "@/app/api/userComp"; // fetchUsers.js 파일의 함수 가져오기
+
 import { useState, useEffect } from "react";
 const UserPage = () => {
+  const [users, setUsers] = useState([]);
   const [uname, setUname] = useState("");
   const [uid, setUid] = useState("");
   const [utel, setUtel] = useState("");
 
   useEffect(() => {
     const userFetch = async () => {
-      const result = await findUsers({ uname, uid, utel });
+      const result = await findUsers({ uname, uid, utel, us_ccode: "C0001" });
       if (result) {
         setUsers([...result]);
       }
     };
+
     userFetch();
-  }, []);
+  }, [uname, uid, utel]);
   const debounce = (callback, delay = 200) => {
     let debounceTimer;
     return (...args) => {
@@ -68,14 +70,13 @@ const UserPage = () => {
             </thead>
 
             <tbody>
-              <List />
-              {/* <c:forEach items="${USER }" var="USER"> */}
-              <tr data-id="${USER.us_uid }">
-                {/* <td>${USER.us_uid}</td>
-                <td>${USER.us_uname}</td>
-                <td>${USER.us_utel}</td> */}
-              </tr>
-              {/* </c:forEach> */}
+              {users.map((user) => (
+                <tr key={user.us_uid}>
+                  <td>{user.us_uid}</td>
+                  <td>{user.us_uname}</td>
+                  <td>{user.us_utel}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

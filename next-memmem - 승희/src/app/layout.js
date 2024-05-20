@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
-import "@/app/globals.css";
-import "@/css/page.module.css";
+import "@/css/layout.css";
 import Link from "next/link";
 import Header from "./include/Header";
 import Nav from "./include/Nav";
@@ -16,11 +15,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ko">
       <body className={inter.className}>
-        <>
-          <Header />
+        <Header />
+        <div className="main">
           <Nav />
-          {children}
-        </>
+          <section>{children}</section>
+        </div>
       </body>
     </html>
   );

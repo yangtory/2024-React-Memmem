@@ -11,3 +11,14 @@ export const ticketAll = async (ccode) => {
   });
   return result;
 };
+
+export const createTicket = async ({ formData }) => {
+  await TICKET.create({
+    data: {
+      i_title: formData.i_title,
+      i_price: formData.i_price,
+      i_count: formData.i_count,
+      i_ccode: formData.ccode,
+    },
+  });
+};

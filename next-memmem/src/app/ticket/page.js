@@ -29,7 +29,9 @@ const TicketPage = () => {
   return (
     <div className="list_home">
       <div className="insert_btn_box">
-        <a className="insert button-32">수강권 추가</a>
+        <a href="/ticket/insert" className="insert button-32">
+          수강권 추가
+        </a>
       </div>
       <div className="table_div">
         <table className="ticket list">

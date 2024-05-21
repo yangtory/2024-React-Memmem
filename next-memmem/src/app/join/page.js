@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
 import { createUser } from "../api/user";
+import { useRouter } from "next/navigation";
 
 const JoinPage = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     u_id: "",
     u_password: "",
@@ -27,7 +29,7 @@ const JoinPage = () => {
     try {
       const result = await createUser({ formData });
       console.log("User created:", result);
-      // 성공적으로 사용자 생성 후 추가 로직 (예: 리디렉션)
+      router.push("/login");
     } catch (error) {
       console.error("Failed to create user:", error);
     }

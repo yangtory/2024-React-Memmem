@@ -1,6 +1,7 @@
 "use server";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { selectAll } from "./company";
 
 const prisma = new PrismaClient();
 
@@ -11,6 +12,23 @@ export const findUnique = async ({ u_id }) => {
     include: { tbl_company: true },
   });
   return result;
+};
+
+// ccode 만들기
+export const createCCode = async () => {
+  let ccode = "C0001";
+  const result = await selectAll();
+  if (result.length > 0) {
+    const lastNum = Number(result.length - 1);
+    const currentNum = result[lastNum].c_code;
+    const subNum = currentNum.substring(1, 5);
+    const strNum = String(Number(subNum) + 1);
+    ccode = "C" + strNum.padStart(4, "0");
+    console.log(ccode);
+    return ccode;
+  }
+  console.log(ccode);
+  return ccode;
 };
 
 export const createUser = async ({ formData }) => {
@@ -48,9 +66,10 @@ export const createUser = async ({ formData }) => {
 
     // 회사 정보가 입력된 경우 tbl_company 테이블에 데이터 추가 및 역할 설정
     if (formData.u_comp && formData.c_tel && formData.c_addr) {
+      const ccode = await createCCode();
       await prisma.tbl_company.create({
         data: {
-          c_code: "C0001", // c_code 대체
+          c_code: ccode, // c_code 대체
           c_name: formData.u_comp,
           c_tel: formData.c_tel,
           c_addr: formData.c_addr,

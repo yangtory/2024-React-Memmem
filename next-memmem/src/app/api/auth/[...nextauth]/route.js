@@ -46,17 +46,18 @@ const Handler = NextAuth({
     async session({ session, token }) {
       session.user.id = token.id;
       session.user.name = token.name;
-      console.log(session);
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.name = user.name;
-        console.log(token);
       }
       return token;
     },
+  },
+  session: {
+    maxAge: 3600,
   },
 });
 

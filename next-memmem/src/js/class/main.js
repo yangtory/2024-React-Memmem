@@ -65,7 +65,7 @@ const ClassCalendar = async () => {
     let month_text = String(viewMonth + 1);
 
     // 데이터 가져오기
-    const res = await fetch(`${rootPath}/class/get`);
+    const res = await fetch(`/class/get`);
     const json = await res.json();
     // console.log(json);
 
@@ -80,12 +80,17 @@ const ClassCalendar = async () => {
       const formattedDate = formatDate(currentDate);
 
       // 해당 날짜에 속하는 일정들을 가져옴
-      const schedules = json.filter((schedule) => schedule.c_sdate <= formattedDate && schedule.c_edate >= formattedDate);
+      const schedules = json.filter(
+        (schedule) => schedule.c_sdate <= formattedDate && schedule.c_edate >= formattedDate
+      );
 
       if (schedules.length > 0) {
         // 이미 제목이 표시된 날짜인지 확인
         const existingTitleContainer = day_all[j].nextElementSibling;
-        if (!existingTitleContainer || !existingTitleContainer.classList.contains("title-container")) {
+        if (
+          !existingTitleContainer ||
+          !existingTitleContainer.classList.contains("title-container")
+        ) {
           // 새로운 제목 컨테이너를 생성하여 해당 날짜 바로 다음에 삽입
           const titleContainer = document.createElement("span");
           titleContainer.classList.add("title-container");
@@ -182,37 +187,37 @@ const ClassCalendar = async () => {
     }
   }
 
-  clickDates?.addEventListener("click", async (e) => {
-    const target = e.target;
+  // clickDates?.addEventListener("click", async (e) => {
+  //   const target = e.target;
 
-    let viewMonthStr = String(viewMonth + 1);
-    if (viewMonthStr.length === 1) {
-      viewMonthStr = "0" + viewMonthStr;
-    }
-    if (target.tagName === "SPAN" || target.classList.contains("date")) {
-      // trim 공백제거 , slice 날짜의 일자를 추출
-      const click = target.closest("DIV").innerText.trim().slice(0, 2);
-      let viewDateStr = String(click);
+  //   let viewMonthStr = String(viewMonth + 1);
+  //   if (viewMonthStr.length === 1) {
+  //     viewMonthStr = "0" + viewMonthStr;
+  //   }
+  //   if (target.tagName === "SPAN" || target.classList.contains("date")) {
+  //     // trim 공백제거 , slice 날짜의 일자를 추출
+  //     const click = target.closest("DIV").innerText.trim().slice(0, 2);
+  //     let viewDateStr = String(click);
 
-      if (viewDateStr.length === 1) {
-        viewDateStr = "0" + viewDateStr;
-      }
-      const dates = `${viewYear}-${viewMonthStr}-${viewDateStr}`;
+  //     if (viewDateStr.length === 1) {
+  //       viewDateStr = "0" + viewDateStr;
+  //     }
+  //     const dates = `${viewYear}-${viewMonthStr}-${viewDateStr}`;
 
-      document.location.href = `${rootPath}/class/detail/${dates}`;
-    }
-  });
+  //     document.location.href = `/class/detail/${dates}`;
+  //   }
+  // });
   const right_box = document.querySelector("aside.right");
   right_box.addEventListener("click", (e) => {
     const target = e.target;
     if (target.classList.contains("content") || target.tagName === "DIV") {
       const sdate = target.closest("div").dataset.sdate;
-      document.location.href = `${rootPath}/class/detail/${sdate}`;
+      document.location.href = `/class/detail/${sdate}`;
     }
   });
 
   const findTeacherName = async (tcode) => {
-    const res = await fetch(`${rootPath}/class/findteacher/${tcode}`);
+    const res = await fetch(`/class/findteacher/${tcode}`);
     const json = await res.json();
     return json;
   };

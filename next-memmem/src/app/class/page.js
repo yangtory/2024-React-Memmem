@@ -7,6 +7,9 @@ const ClassPage = () => {
   useEffect(() => {
     ClassCalendar();
   }, []);
+  const handleScheduleClick = (sdate) => {
+    document.location.href = `/class/detail/${sdate}`;
+  };
 
   return (
     <section>
@@ -37,7 +40,17 @@ const ClassPage = () => {
             </div>
           </div>
         </aside>
-        <aside className="right"></aside>
+        <aside className="right">
+          {schedules.map((schedule) => (
+            <div
+              key={schedule.id}
+              className="schedule"
+              onClick={() => handleScheduleClick(schedule.sdate)}
+            >
+              {schedule.title}
+            </div>
+          ))}
+        </aside>
       </div>
     </section>
   );

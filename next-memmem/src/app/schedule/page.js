@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import "@/css/schedule/main.css";
-import ScheduleCalendar from "@/js/schedule/main.js";
+import "../../css/schedule/main.css";
+import ScheduleCalendar from "../../js/schedule/main.js";
 const SchedulePage = () => {
   useEffect(() => {
     ScheduleCalendar();

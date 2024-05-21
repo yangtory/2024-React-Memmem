@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import "@/css/class/main.css";
-import ClassCalendar from "@/js/class/main";
+import "../../css/class/main.css";
+import ClassCalendar from "../../js/class/main";
 const ClassPage = () => {
   useEffect(() => {
     ClassCalendar();

@@ -39,17 +39,6 @@ model tbl_company {
   @@index([c_uid], map: "c_uid")
 }
 
-model tbl_gallerys {
-  g_id           String @id @db.VarChar(125)
-  g_date         String @db.VarChar(10)
-  g_time         String @db.VarChar(10)
-  g_author       String @db.VarChar(20)
-  g_subject      String @db.VarChar(20)
-  g_content      String @db.VarChar(100)
-  g_origin_image String @db.VarChar(255)
-  g_up_image     String @db.VarChar(255)
-}
-
 model tbl_minfo {
   i_seq          Int              @id @default(autoincrement())
   i_title        String           @db.VarChar(50)

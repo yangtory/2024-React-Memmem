@@ -1,8 +1,8 @@
 "use client";
-import "@/css/table.css";
-import { findUsers } from "@/app/api/userComp"; // fetchUsers.js 파일의 함수 가져오기
-
+import "../../css/table.css";
 import { useState, useEffect } from "react";
+import { findUsers } from "../api/userComp";
+
 const UserPage = () => {
   const [users, setUsers] = useState([]);
   const [uname, setUname] = useState("");
@@ -11,7 +11,12 @@ const UserPage = () => {
 
   useEffect(() => {
     const userFetch = async () => {
-      const result = await findUsers({ uname, uid, utel, us_ccode: "C0001" });
+      const result = await findUsers({
+        uname,
+        uid,
+        utel,
+        us_ccode: "C0001",
+      });
       if (result) {
         setUsers([...result]);
       }
@@ -23,7 +28,10 @@ const UserPage = () => {
     let debounceTimer;
     return (...args) => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => callback.apply(this, args), delay);
+      debounceTimer = setTimeout(
+        () => callback.apply(this, args),
+        delay
+      );
     };
   };
 
@@ -53,10 +61,29 @@ const UserPage = () => {
         </div>
         <div className="customer btn_box search">
           <form method="GET" modelAttribute="SEARCH">
-            <input className="search_input" placeholder="아이디" defaultValue={uid} onChange={onUidHandler} />
-            <input className="search_input" placeholder="이름" defaultValue={uname} onChange={onUnameHandler} />
-            <input className="search_input" placeholder="전화번호" defaultValue={utel} onChange={onUtelHandler} />
-            <img src="${rootPath }/static/images/search.png" width="10px" height="10px" />
+            <input
+              className="search_input"
+              placeholder="아이디"
+              defaultValue={uid}
+              onChange={onUidHandler}
+            />
+            <input
+              className="search_input"
+              placeholder="이름"
+              defaultValue={uname}
+              onChange={onUnameHandler}
+            />
+            <input
+              className="search_input"
+              placeholder="전화번호"
+              defaultValue={utel}
+              onChange={onUtelHandler}
+            />
+            <img
+              src="${rootPath }/static/images/search.png"
+              width="10px"
+              height="10px"
+            />
           </form>
         </div>
         <div className="table_div">

@@ -66,14 +66,13 @@ model tbl_notice {
   @@index([n_uid], map: "n_uid")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model tbl_role {
   r_uid    String   @db.VarChar(20)
   r_role   String   @db.VarChar(20)
   tbl_user tbl_user @relation(fields: [r_uid], references: [u_id], onDelete: Cascade, onUpdate: NoAction, map: "tbl_role_ibfk_1")
 
+  @@id([r_uid, r_role])  // Composite primary key
   @@index([r_uid], map: "r_uid")
-  @@ignore
 }
 
 model tbl_schedule {

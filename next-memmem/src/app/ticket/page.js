@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { ticketAll } from "../api/ticket";
 import { useSession } from "next-auth/react";
+import { findUnique } from "../api/user";
+import "../../css/table.css";
 
 const TicketPage = () => {
   const { data: session } = useSession();
@@ -9,19 +11,19 @@ const TicketPage = () => {
 
   useEffect(() => {
     if (session) {
-      const ccode = session;
-      console.log(ccode);
-
       const ticketFetch = async () => {
-        const result = await ticketAll(ccode);
-        setTicketList([...result]);
+        try {
+          const u_id = session.user.id;
+          const ccode = (await findUnique({ u_id })).tbl_company[0]
+            .c_code;
+          const result = await ticketAll(ccode);
+          setTicketList([...result]);
+        } catch (error) {
+          console.log(error);
+        }
       };
       ticketFetch();
     }
-  }, [session]);
-
-  useEffect(() => {
-    console.log("Session:", session);
   }, [session]);
 
   return (

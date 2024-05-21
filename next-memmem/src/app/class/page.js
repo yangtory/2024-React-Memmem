@@ -1,14 +1,122 @@
 "use client";
 
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../../css/class/main.css";
-import ClassCalendar from "../../js/class/main";
+
+import ClassDetail from "./detail/[dates]/page";
+import InputPage from "./insert/page";
+import { useSession } from "next-auth/react";
+import { findUnique } from "../api/user";
+import { classAll } from "../api/class";
+
 const ClassPage = () => {
+  const [viewYear, setViewYear] = useState(new Date().getFullYear());
+  const [viewMonth, setViewMonth] = useState(new Date().getMonth());
+  const [dates, setDates] = useState([]);
+
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [showInputPage, setShowInputPage] = useState(false);
+
+  const { data: session } = useSession();
+  const [classList, setClassList] = useState([]);
+
+  // useEffect(() => {
+  //   if (session) {
+  //     const classFetch = async () => {
+  //       try {
+  //         const selectedDate = new Date(viewYear, viewMonth);
+  //         const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, "0")}-${String(
+  //           selectedDate.getDate()
+  //         ).padStart(2, "0")}`;
+  //         const u_id = session.user.id;
+  //         const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
+  //         const result = await classAll(ccode, formattedDate);
+  //         console.log(formattedDate);
+  //         setClassList([...result]);
+  //         console.log(setClassList);
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     };
+  //     classFetch();
+  //   }
+  // }, [session]);
   useEffect(() => {
-    ClassCalendar();
-  }, []);
-  const handleScheduleClick = (sdate) => {
-    document.location.href = `/class/detail/${sdate}`;
+    renderCalendar();
+  }, [viewYear, viewMonth]);
+
+  const renderCalendar = async () => {
+    document.querySelector(".year-month").textContent = `${viewYear}년 ${viewMonth + 1}월`;
+
+    const prevLast = new Date(viewYear, viewMonth, 0);
+    const thisLast = new Date(viewYear, viewMonth + 1, 0);
+
+    const PLDate = prevLast.getDate();
+    const PLDay = prevLast.getDay();
+    const TLDate = thisLast.getDate();
+    const TLDay = thisLast.getDay();
+
+    const prevDates = [];
+    const thisDates = [...Array(TLDate + 1).keys()].slice(1);
+    const nextDates = [];
+
+    if (PLDay !== 6) {
+      for (let i = 0; i < PLDay + 1; i++) {
+        prevDates.unshift(PLDate - i);
+      }
+    }
+
+    for (let i = 1; i < 7 - TLDay; i++) {
+      nextDates.push(i);
+    }
+
+    const allDates = prevDates.concat(thisDates, nextDates);
+    const firstDateIndex = allDates.indexOf(1);
+    const lastDateIndex = allDates.lastIndexOf(TLDate);
+
+    const dateElements = allDates.map((date, i) => {
+      const condition = i >= firstDateIndex && i < lastDateIndex + 1 ? "this" : "other";
+      return `<div class="date"><div class=${condition}>${date}</div></div>`;
+    });
+
+    setDates(dateElements);
+  };
+
+  const prevMonth = () => {
+    if (viewMonth === 0) {
+      setViewYear((prev) => prev - 1);
+      setViewMonth(11);
+    } else {
+      setViewMonth((prev) => prev - 1);
+    }
+  };
+
+  const nextMonth = () => {
+    if (viewMonth === 11) {
+      setViewYear((prev) => prev + 1);
+      setViewMonth(0);
+    } else {
+      setViewMonth((prev) => prev + 1);
+    }
+  };
+
+  const goToday = () => {
+    const today = new Date();
+    setViewYear(today.getFullYear());
+    setViewMonth(today.getMonth());
+  };
+
+  const onClickHandler = (dates) => {
+    const target = dates.target.closest(".date");
+    if (target) {
+      const date = target.querySelector("div").innerText;
+      const selectedDate = new Date(viewYear, viewMonth, date);
+      const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, "0")}-${String(
+        selectedDate.getDate()
+      ).padStart(2, "0")}`;
+      setSelectedDate(formattedDate);
+      setShowInputPage(false); // 날짜를 클릭하면 입력 페이지를 숨김
+    }
   };
 
   return (
@@ -19,9 +127,15 @@ const ClassPage = () => {
             <div className="calHeader">
               <div className="year-month"></div>
               <div className="calNav">
-                <button className="nav-btn go-prev">&lt;</button>
-                <button className="nav-btn go-today">Today</button>
-                <button className="nav-btn go-next">&gt;</button>
+                <button className="nav-btn go-prev" onClick={prevMonth}>
+                  &lt;
+                </button>
+                <button className="nav-btn go-today" onClick={goToday}>
+                  Today
+                </button>
+                <button className="nav-btn go-next" onClick={nextMonth}>
+                  &gt;
+                </button>
               </div>
             </div>
             <div className="cal_wrapper">
@@ -35,24 +149,21 @@ const ClassPage = () => {
                   <div className="day">금</div>
                   <div className="day">토</div>
                 </div>
-                <div className="dates"></div>
+                <div className="dates" onClick={onClickHandler} dangerouslySetInnerHTML={{ __html: dates.join("") }}></div>
               </div>
             </div>
           </div>
         </aside>
         <aside className="right">
-          {schedules.map((schedule) => (
-            <div
-              key={schedule.id}
-              className="schedule"
-              onClick={() => handleScheduleClick(schedule.sdate)}
-            >
-              {schedule.title}
-            </div>
-          ))}
+          {showInputPage ? (
+            <InputPage date={selectedDate} />
+          ) : (
+            selectedDate && <ClassDetail date={selectedDate} classList={classList} setClassList={setClassList} showInputPage={setShowInputPage} />
+          )}
         </aside>
       </div>
     </section>
   );
 };
+
 export default ClassPage;

@@ -80,17 +80,12 @@ const ClassCalendar = async () => {
       const formattedDate = formatDate(currentDate);
 
       // 해당 날짜에 속하는 일정들을 가져옴
-      const schedules = json.filter(
-        (schedule) => schedule.c_sdate <= formattedDate && schedule.c_edate >= formattedDate
-      );
+      const schedules = json.filter((schedule) => schedule.c_sdate <= formattedDate && schedule.c_edate >= formattedDate);
 
       if (schedules.length > 0) {
         // 이미 제목이 표시된 날짜인지 확인
         const existingTitleContainer = day_all[j].nextElementSibling;
-        if (
-          !existingTitleContainer ||
-          !existingTitleContainer.classList.contains("title-container")
-        ) {
+        if (!existingTitleContainer || !existingTitleContainer.classList.contains("title-container")) {
           // 새로운 제목 컨테이너를 생성하여 해당 날짜 바로 다음에 삽입
           const titleContainer = document.createElement("span");
           titleContainer.classList.add("title-container");
@@ -207,14 +202,14 @@ const ClassCalendar = async () => {
   //     document.location.href = `/class/detail/${dates}`;
   //   }
   // });
-  const right_box = document.querySelector("aside.right");
-  right_box.addEventListener("click", (e) => {
-    const target = e.target;
-    if (target.classList.contains("content") || target.tagName === "DIV") {
-      const sdate = target.closest("div").dataset.sdate;
-      document.location.href = `/class/detail/${sdate}`;
-    }
-  });
+  // const right_box = document.querySelector("aside.right");
+  // right_box.addEventListener("click", (e) => {
+  //   const target = e.target;
+  //   if (target.classList.contains("content") || target.tagName === "DIV") {
+  //     const sdate = target.closest("div").dataset.sdate;
+  //     document.location.href = `/class/detail/${sdate}`;
+  //   }
+  // });
 
   const findTeacherName = async (tcode) => {
     const res = await fetch(`/class/findteacher/${tcode}`);

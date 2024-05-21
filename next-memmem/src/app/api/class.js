@@ -1,32 +1,28 @@
+"use server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export default async (req, res) => {
-  const { date } = req.query;
+const CLASS = prisma.tbl_class;
 
-  try {
-    const classData = await prisma.class.findMany({
-      where: {
-        c_sdate: {
-          lte: date,
-        },
-        c_edate: {
-          gte: date,
-        },
-      },
-      include: {
-        teacher: true, // 가정: teacher 관계를 포함하여 데이터를 가져옴
-      },
-    });
+export const classAll = async (ccode, formattedDate) => {
+  const result = await CLASS.findMany({
+    where: { c_ccode: ccode, c_sdate: formattedDate },
+  });
+  return result;
+};
 
-    if (!classData) {
-      return res.status(404).json({ error: "Class data not found" });
-    }
-
-    res.status(200).json(classData);
-  } catch (error) {
-    console.error("Error fetching class detail:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+export const createClass = async ({ formData }) => {
+  await prisma.CLASS.create({
+    data: {
+      c_name: formData.c_name,
+      c_sdate: formData.c_sdate,
+      c_edate: formData.c_edate,
+      c_stime: formData.c_stime,
+      c_etime: formData.c_etime,
+      c_tcode: formData.c_tcode,
+      c_ccode: formData.ccode,
+      c_color: formData.c_color,
+    },
+  });
 };

@@ -5,19 +5,21 @@ import { useEffect, useState } from "react";
 import { AllUser, findUnique } from "../../api/user";
 import { useSession } from "next-auth/react";
 import { AddUserComp } from "../../api/userComp";
-import { useRouter } from "next/router";
 
 const InsertPage = () => {
-  const router = useRouter();
+  const today = new Date();
+  const formattedDate = today.toISOString().split("T")[0];
+
   const { data: session } = useSession();
   const [userList, setUserList] = useState([]);
   const [ccode, setCcode] = useState("");
   const [cname, setCname] = useState("");
+  const [date, setDate] = useState("");
 
   const [formData, setFormData] = useState({
     us_ccode: ccode,
   });
-  const [id, setId] = useState();
+
   const [selectUser, setSelectUser] = useState(null);
   // 모든 유저 찾기
   useEffect(() => {
@@ -45,6 +47,7 @@ const InsertPage = () => {
       us_uname: clickUser.u_name,
       us_utel: clickUser.u_tel,
       us_cname: cname,
+      us_date: formattedDate,
     });
   };
 
@@ -78,10 +81,12 @@ const InsertPage = () => {
 
   const submit = async () => {
     try {
-      const result = AddUserComp({ formData, ccode });
+      const result = AddUserComp({ formData, ccode, formattedDate });
       console.log(result);
-      router.push("/user");
-    } catch (error) {}
+      document.location.href = "/user";
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -106,6 +111,7 @@ const InsertPage = () => {
             <input className="us_utel" placeholder="전화번호" name="us_utel" value={formData.us_utel} onChange={changeUser} />
             <input className="us_cname" placeholder="업체명" name="us_cname" readonly value={formData.us_cname} onChange={changeUser} />
             <input className="us_ccode" placeholder="업체코드" name="us_ccode" value={ccode} onChange={changeUser} readonly />
+            <input className="us_date" placeholder="날짜" name="us_date" value={formattedDate} onChange={changeUser} readonly />
 
             {/* <h3>수강권 정보</h3>
             <div className="m_error"></div>

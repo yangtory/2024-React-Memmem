@@ -5,10 +5,10 @@ const prisma = new PrismaClient();
 
 const USERCOMP = prisma.tbl_user_comp;
 
-export const findUsers = async ({ uname, uid, utel }) => {
+export const findUsers = async ({ uname, uid, utel, ccode }) => {
   return USERCOMP.findMany({
     where: {
-      us_ccode: "C0001", // 필터링할 조건
+      us_ccode: ccode, // 필터링할 조건
       us_uname: {
         contains: uname || "",
       },

@@ -65,7 +65,7 @@ const ClassCalendar = async () => {
     let month_text = String(viewMonth + 1);
 
     // 데이터 가져오기
-    const res = await fetch(`${rootPath}/class/get`);
+    const res = await fetch(`/class/get`);
     const json = await res.json();
     // console.log(json);
 
@@ -182,37 +182,37 @@ const ClassCalendar = async () => {
     }
   }
 
-  clickDates?.addEventListener("click", async (e) => {
-    const target = e.target;
+  // clickDates?.addEventListener("click", async (e) => {
+  //   const target = e.target;
 
-    let viewMonthStr = String(viewMonth + 1);
-    if (viewMonthStr.length === 1) {
-      viewMonthStr = "0" + viewMonthStr;
-    }
-    if (target.tagName === "SPAN" || target.classList.contains("date")) {
-      // trim 공백제거 , slice 날짜의 일자를 추출
-      const click = target.closest("DIV").innerText.trim().slice(0, 2);
-      let viewDateStr = String(click);
+  //   let viewMonthStr = String(viewMonth + 1);
+  //   if (viewMonthStr.length === 1) {
+  //     viewMonthStr = "0" + viewMonthStr;
+  //   }
+  //   if (target.tagName === "SPAN" || target.classList.contains("date")) {
+  //     // trim 공백제거 , slice 날짜의 일자를 추출
+  //     const click = target.closest("DIV").innerText.trim().slice(0, 2);
+  //     let viewDateStr = String(click);
 
-      if (viewDateStr.length === 1) {
-        viewDateStr = "0" + viewDateStr;
-      }
-      const dates = `${viewYear}-${viewMonthStr}-${viewDateStr}`;
+  //     if (viewDateStr.length === 1) {
+  //       viewDateStr = "0" + viewDateStr;
+  //     }
+  //     const dates = `${viewYear}-${viewMonthStr}-${viewDateStr}`;
 
-      document.location.href = `${rootPath}/class/detail/${dates}`;
-    }
-  });
-  const right_box = document.querySelector("aside.right");
-  right_box.addEventListener("click", (e) => {
-    const target = e.target;
-    if (target.classList.contains("content") || target.tagName === "DIV") {
-      const sdate = target.closest("div").dataset.sdate;
-      document.location.href = `${rootPath}/class/detail/${sdate}`;
-    }
-  });
+  //     document.location.href = `/class/detail/${dates}`;
+  //   }
+  // });
+  // const right_box = document.querySelector("aside.right");
+  // right_box.addEventListener("click", (e) => {
+  //   const target = e.target;
+  //   if (target.classList.contains("content") || target.tagName === "DIV") {
+  //     const sdate = target.closest("div").dataset.sdate;
+  //     document.location.href = `/class/detail/${sdate}`;
+  //   }
+  // });
 
   const findTeacherName = async (tcode) => {
-    const res = await fetch(`${rootPath}/class/findteacher/${tcode}`);
+    const res = await fetch(`/class/findteacher/${tcode}`);
     const json = await res.json();
     return json;
   };

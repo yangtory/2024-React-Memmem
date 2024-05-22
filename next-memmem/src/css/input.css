@@ -1,0 +1,152 @@
+.input_div {
+  width: 50%;
+  margin: 20px auto;
+  border-radius: 10px;
+
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.4);
+}
+
+.input_box {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #e9dcd6;
+  background-image: linear-gradient(to right, #e9dcd6, #ece1da); /* 그라데이션 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input_box label {
+  display: block;
+  width: 90%;
+  text-align: left;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.input_box input {
+  width: 90%;
+  padding: 8px;
+  margin-bottom: 15px;
+  color: #391145;
+  background-color: #e9dcd6;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #aaa;
+  transition: background-color 0.3s ease;
+
+  &:focus {
+    background-color: #d1c5c0;
+    border-radius: 10px;
+  }
+}
+
+.input_box input.insert {
+  width: 20%;
+  border: none;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  border-radius: 10px;
+  background-color: #fff;
+  &:hover {
+    background-color: #e4e4e4;
+  }
+}
+
+.input_box .ticket.error {
+  color: #ff4f33;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+div.selectBox {
+  width: 90%;
+}
+select {
+  width: 100%;
+  padding: 0.3rem;
+  text-align: center;
+  font-family: inherit;
+  border-radius: 0px;
+  border: none;
+  outline: none;
+  background-color: #e9dcd6;
+  border-bottom: 1px solid #eee;
+  color: #391145;
+  margin: 15px 0;
+
+  &:focus {
+    border-bottom: 1px solid #eee;
+  }
+}
+
+textarea {
+  width: 90%;
+  border: none;
+  outline: none;
+  margin: 8px 0;
+  background-color: #fff;
+  border: 1px solid white;
+  color: #391145;
+  padding: 12px;
+  resize: none;
+}
+
+div.palette {
+  display: flex;
+  margin-bottom: 10px;
+}
+.color1,
+.color2,
+.color3,
+.color4,
+.color5,
+.color6,
+.color7,
+.color8 {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  border-radius: 50%;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.color1 {
+  background-color: #fcd8c9;
+}
+.color2 {
+  background-color: #ef9297;
+}
+.color3 {
+  background-color: #f4d1db;
+}
+.color4 {
+  background-color: #cbcedc;
+}
+.color5 {
+  background-color: #f7c8cb;
+}
+.color6 {
+  background-color: #b6c7cf;
+}
+.color7 {
+  background-color: #f3d0cd;
+}
+.color8 {
+  background-color: #c8d8b4;
+}
+div.schedule {
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  input {
+    margin-right: 4px;
+  }
+}
+
+div.user_error,
+div.m_error,
+div.teacher.error {
+  color: #ff4f33;
+  font-size: 0.8rem;
+}

@@ -1,10 +1,8 @@
-"use server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+'use server';
+import prisma from './prisma';
 
 const COMP = prisma.tbl_company;
 export const selectAll = async () => {
-  const result = await COMP.findMany();
-  return result;
+    const result = await COMP.findMany();
+    return result;
 };

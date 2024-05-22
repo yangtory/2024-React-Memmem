@@ -3,6 +3,7 @@
 import bcrypt from 'bcrypt';
 import { selectAll } from './company';
 import prisma from './prisma';
+import { getSession } from 'next-auth/react';
 
 const USER = prisma.tbl_user;
 

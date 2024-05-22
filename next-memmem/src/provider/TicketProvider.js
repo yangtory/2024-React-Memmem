@@ -10,6 +10,7 @@ export const useTicket = () => {
 export const TicketProvider = ({ children }) => {
     const [ticketList, setTicketList] = useState([]);
     const [teacherList, setTeacherList] = useState([]);
+    const [noticeList, setNoticeList] = useState([]);
 
     const addTicket = (newTicket) => {
         setTicketList((prevList) => [...prevList, newTicket]);
@@ -18,9 +19,23 @@ export const TicketProvider = ({ children }) => {
         setTeacherList((prevList) => [...prevList, newTeacher]);
     };
 
+    const addNotice = (newNotice) => {
+        setTeacherList((prevList) => [...prevList, newNotice]);
+    };
+
     return (
         <TicketContext.Provider
-            value={{ ticketList, setTicketList, teacherList, setTeacherList, addTicket, addTeacher }}
+            value={{
+                ticketList,
+                setTicketList,
+                teacherList,
+                setTeacherList,
+                noticeList,
+                setNoticeList,
+                addTicket,
+                addTeacher,
+                addNotice,
+            }}
         >
             {children}
         </TicketContext.Provider>

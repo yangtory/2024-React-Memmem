@@ -2,34 +2,38 @@
 import styles from '../css/modal.module.css';
 import { useModal } from '../provider/ModalProvider';
 import { useEffect, useState } from 'react';
-import { createTicket } from '../app/api/ticket';
 import { useTicket } from '../provider/TicketProvider';
 import { getSession } from 'next-auth/react';
 import { findUnique } from '../app/api/user';
+import { createNotice } from '../app/api/notice';
+import moment from 'moment';
 
-const TicketModal = () => {
-    const { isModal, setIsModal } = useModal();
-    const { addTicket } = useTicket();
+const NoticeModal = () => {
+    const { noticeModal, setNoticeModal } = useModal();
+    const { addNotice } = useTicket();
     const [formData, setFormData] = useState({
-        i_title: '',
-        i_price: '',
-        i_count: '',
-        i_ccode: '',
+        n_title: '',
+        n_content: '',
+        n_ccode: '',
+        n_uid: '',
+        n_date: moment().format('YYYY-MM-DD'),
+        n_time: moment().format('HH:mm:ss'),
     });
 
     // ccode
     useEffect(() => {
         const getCCode = async () => {
             const session = await getSession();
-            const u_id = session?.user?.id;
-            const code = (await findUnique({ u_id })).tbl_company[0].c_code;
+            const id = session?.user?.id;
+            const code = (await findUnique({ id })).tbl_company[0].c_code;
             setFormData((prevFormData) => ({
                 ...prevFormData,
-                i_ccode: code,
+                n_ccode: code,
+                n_uid: id,
             }));
         };
         getCCode();
-    }, [isModal]);
+    }, [noticeModal]);
 
     // input 입력 할수 있게
     const handleChange = (e) => {
@@ -43,46 +47,55 @@ const TicketModal = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const result = await createTicket({ formData });
-            addTicket(result);
-            setIsModal(false);
-            setFormData('');
+            const result = await createNotice({ formData });
+            addNotice(result);
+            setNoticeModal(false);
+            setFormData({
+                n_title: '',
+                n_content: '',
+                n_date: moment().format('YYYY-MM-DD'),
+                n_time: moment().format('HH:mm:ss'),
+            });
             console.log('Ticket created:', result);
         } catch (error) {
             console.error('Failed to create user:', error);
         }
     };
-    if (!isModal) return null;
+    if (!noticeModal) return null;
 
     // 모달 close 하기
     function onClickClose() {
-        setIsModal(false);
+        setNoticeModal(false);
     }
 
     return (
-        <div className={isModal ? styles['modal'] : styles['close']}>
+        <div className={noticeModal ? styles['modal'] : styles['close']}>
             <section>
                 <header>
-                    <div>회원권 등록</div>
+                    <div>공지사항 등록</div>
                     <button onClick={onClickClose}>X</button>
                 </header>
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <main>
                         <div className={styles.input_div}>
                             <div className="ticket error"></div>
+                            <label>날짜</label>
+                            <input value={formData.n_date} name="n_date" readOnly />
+                            <label>시간</label>
+                            <input value={formData.n_time} name="n_time" readOnly />
+                            <label>아이디</label>
+                            <input value={formData.n_uid} name="n_uid" readOnly />
                             <label>업체코드</label>
-                            <input value={formData.i_ccode} name="i_ccode" readOnly />
+                            <input value={formData.n_ccode} name="n_ccode" readOnly />
                             <label>제목</label>
-                            <input placeholder="제목" name="i_title" value={formData.i_title} onChange={handleChange} />
-                            <label>수강횟수</label>
-                            <input
-                                placeholder="수강횟수"
-                                name="i_count"
-                                value={formData.i_count}
+                            <input placeholder="제목" name="n_title" value={formData.n_title} onChange={handleChange} />
+                            <label>내용</label>
+                            <textarea
+                                placeholder="내용"
+                                name="n_content"
+                                value={formData.n_content}
                                 onChange={handleChange}
-                            />
-                            <label>가격</label>
-                            <input placeholder="가격" name="i_price" value={formData.i_price} onChange={handleChange} />
+                            ></textarea>
                         </div>
                     </main>
                     <footer className={styles.footer}>
@@ -99,4 +112,4 @@ const TicketModal = () => {
     );
 };
 
-export default TicketModal;
+export default NoticeModal;

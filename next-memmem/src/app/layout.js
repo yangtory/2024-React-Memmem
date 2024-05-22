@@ -9,6 +9,7 @@ import { TicketProvider } from '../provider/TicketProvider';
 import { UserProvider } from '../provider/UserProvider';
 import TicketModal from '../modals/TicketModal';
 import TeacherModal from '../modals/TeacherModal';
+import NoticeModal from '../modals/NoticeModal';
 
 export default function RootLayout({ children }) {
     return (
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
                                 <div className={css.content}>
                                     <TicketModal />
                                     <TeacherModal />
+                                    <NoticeModal />
                                     <Header />
                                     <div className="main">
                                         <Side />

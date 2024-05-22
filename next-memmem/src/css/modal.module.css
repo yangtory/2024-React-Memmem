@@ -1,162 +1,162 @@
 .content {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 .close {
-  display: none;
-  animation: modal-close 0.3s;
+    display: none;
+    animation: modal-close 0.3s;
 }
 
 .modal {
-  z-index: 10;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  animation: modal-show 0.3s;
-  background-color: rgba(0, 0, 0, 0.6);
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    animation: modal-show 0.3s;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .modal > section {
-  width: 50%;
-  height: 40%;
-  margin-top: 20%;
-  margin-left: 25%;
-  border-radius: 0.5rem;
-  background: #e9dcd6;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    height: 40%;
+    margin-top: 20%;
+    margin-left: 25%;
+    border-radius: 0.5rem;
+    background: #e9dcd6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .modal > section > header {
-  width: 100%;
-  height: 20%;
-  display: flex;
-  font-size: 20px;
-  font-weight: bold;
-  position: relative;
-  background-color: #d4c4bb;
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
-  border-bottom: 1px solid #b5a59a;
+    width: 100%;
+    height: 20%;
+    display: flex;
+    font-size: 20px;
+    font-weight: bold;
+    position: relative;
+    background-color: #d4c4bb;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-bottom: 1px solid #b5a59a;
 }
 
 .modal > section > header > div {
-  width: 80%;
-  padding-left: 5%;
-  line-height: 74.16px;
+    width: 80%;
+    padding-left: 5%;
+    line-height: 74.16px;
 }
 
 .modal > section > header > button {
-  width: 20%;
-  border: 0;
-  transition: 0.3s;
-  line-height: 74.16px;
-  background-color: #d4c4bb;
-  border-top-right-radius: 0.5rem;
+    width: 20%;
+    border: 0;
+    transition: 0.3s;
+    line-height: 74.16px;
+    background-color: #d4c4bb;
+    border-top-right-radius: 0.5rem;
 }
 
 .modal > section > header > button:hover {
-  cursor: pointer;
-  background-color: #b5a59a;
+    cursor: pointer;
+    background-color: #b5a59a;
 }
 
 .modal > section > main {
-  height: 60%;
-  width: 100%;
-  border-bottom: 1px solid #b5a59a;
+    height: 60%;
+    width: 100%;
+    border-bottom: 1px solid #b5a59a;
 }
 
 .modal > section > main > div {
-  width: 100%;
-  height: 50%;
-  display: flex;
-  text-align: center;
+    width: 100%;
+    height: 50%;
+    display: flex;
+    text-align: center;
 }
 
 .modal > section > main > div > div {
-  width: 30%;
-  font-size: 15px;
-  font-weight: bold;
-  margin-top: 10%;
+    width: 30%;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 10%;
 }
 
 .btn-left {
-  border: 0;
-  width: 70px;
-  height: 40px;
-  font-size: 0.9rem;
+    border: 0;
+    width: 70px;
+    height: 40px;
+    font-size: 0.9rem;
 
-  transition: 0.3s;
-  font-weight: bold;
-  background-color: #b5a59a;
-  border-top-left-radius: 0.5rem;
-  border-bottom-left-radius: 0.5rem;
+    transition: 0.3s;
+    font-weight: bold;
+    background-color: #b5a59a;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
 }
 
 .btn-left:hover,
 .btn-right:hover {
-  cursor: pointer;
-  background-color: #968983;
+    cursor: pointer;
+    background-color: #968983;
 }
 
 .btn-right {
-  border: 0;
-  width: 70px;
-  height: 40px;
-  font-size: 0.9rem;
+    border: 0;
+    width: 70px;
+    height: 40px;
+    font-size: 0.9rem;
 
-  transition: 0.3s;
-  font-weight: bold;
-  background-color: #b5a59a;
-  border-top-right-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
+    transition: 0.3s;
+    font-weight: bold;
+    background-color: #b5a59a;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }
 
 @keyframes modal-show {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes modal-close {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }
 
 .form {
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  margin: 0.5rem auto;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem auto;
 }
 
 .input_div {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .input_div > input {
-  padding: 0.4rem;
-  margin: 2px 0;
-  border-radius: 5px;
-  border: none;
-  outline: none;
-  font-size: 1rem;
+    padding: 0.4rem;
+    margin: 2px 0;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
 }
 
 .footer {
-  height: 20%;
-  padding-right: 5%;
-  text-align: right;
-  margin-top: 5px;
+    height: 20%;
+    padding-right: 5%;
+    text-align: right;
+    margin-top: 5px;
 }

@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import '../../css/table.css'; // CSS 파일을 가져옵니다.
+import '../../css/search.css';
 import { findTeacher, getTeacherInfo, selectAll } from '../api/teacher';
 import { useUser } from '../../provider/UserProvider';
 import { useModal } from '../../provider/ModalProvider';
@@ -91,64 +92,66 @@ const TeacherPage = () => {
     }, [detail, teacherList]);
 
     return (
-        <div className="list_home">
+        <>
             <h1 className="list_title">강사 리스트</h1>
-            <div className="teacher input insert_btn_box">
-                <button className="teacher input insert button-32" type="button" onClick={openModal}>
-                    강사추가
-                </button>
+            <div className="list_home">
+                <div className="teacher input insert_btn_box">
+                    <button className="teacher input insert button-32" type="button" onClick={openModal}>
+                        강사추가
+                    </button>
+                </div>
+                <div className="teacher btn_box search">
+                    <form>
+                        <input
+                            className="search_input"
+                            placeholder="이름"
+                            name="tname"
+                            defaultValue={tname}
+                            onChange={onTnameHandler}
+                        />
+                        <input
+                            className="search_input"
+                            placeholder="강사코드"
+                            name="tcode"
+                            defaultValue={tcode}
+                            onChange={onTcodeHandler}
+                        />
+                        <input
+                            className="search_input"
+                            placeholder="전화번호"
+                            name="ttel"
+                            defaultValue={ttel}
+                            onChange={onTtelHandler}
+                        />
+                    </form>
+                </div>
+                <div className="table_div">
+                    <table className="teacher list">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>강사코드</th>
+                                <th>강사이름</th>
+                                <th>전화번호</th>
+                            </tr>
+                        </thead>
+                        <tbody>{teacherViewList}</tbody>
+                    </table>
+                </div>
+                <div className="view_box">
+                    {detail ? (
+                        <div>
+                            <h1>회원권Detail</h1>
+                            <p>회원권 : {detail.t_code}</p>
+                            <p>횟수 : {detail.t_name}</p>
+                            <p>가격 : {detail.t_tel}</p>
+                        </div>
+                    ) : (
+                        <p>No ticket selected</p>
+                    )}
+                </div>
             </div>
-            <div className="teacher btn_box search">
-                <form>
-                    <input
-                        className="search_input"
-                        placeholder="이름"
-                        name="tname"
-                        defaultValue={tname}
-                        onChange={onTnameHandler}
-                    />
-                    <input
-                        className="search_input"
-                        placeholder="강사코드"
-                        name="tcode"
-                        defaultValue={tcode}
-                        onChange={onTcodeHandler}
-                    />
-                    <input
-                        className="search_input"
-                        placeholder="전화번호"
-                        name="ttel"
-                        defaultValue={ttel}
-                        onChange={onTtelHandler}
-                    />
-                </form>
-            </div>
-            <div className="table_div">
-                <table className="teacher list">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>강사코드</th>
-                            <th>강사이름</th>
-                            <th>전화번호</th>
-                        </tr>
-                    </thead>
-                    <tbody>{teacherViewList}</tbody>
-                </table>
-            </div>
-            <div className="view_box">
-                {detail ? (
-                    <div>
-                        <h1>회원권Detail</h1>
-                        <p>회원권 : {detail.t_code}</p>
-                        <p>횟수 : {detail.t_name}</p>
-                        <p>가격 : {detail.t_tel}</p>
-                    </div>
-                ) : (
-                    <p>No ticket selected</p>
-                )}
-            </div>
-        </div>
+        </>
     );
 };
 

@@ -35,3 +35,14 @@ export const AddUserComp = async ({ formData, ccode, formattedDate }) => {
     },
   });
 };
+export const userDetail = async (uid) => {
+  console.log("uid", uid);
+
+  const result = await USERCOMP.findMany({
+    where: {
+      us_uid: uid,
+    },
+  });
+
+  return result;
+};

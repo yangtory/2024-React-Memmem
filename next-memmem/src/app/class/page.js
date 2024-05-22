@@ -6,6 +6,8 @@ import "../../css/class/main.css";
 import ClassDetail from "./detail/[dates]/page";
 import InputPage from "./insert/page";
 import UpPage from "./update/[seq]/page";
+import { getSession, useSession } from "next-auth/react";
+import { findUnique } from "../api/user";
 
 const ClassPage = () => {
   const [viewYear, setViewYear] = useState(new Date().getFullYear());
@@ -17,8 +19,32 @@ const ClassPage = () => {
   const [seq, setSeq] = useState(null);
 
   const [classList, setClassList] = useState([]);
+  const [list, setList] = useState([]);
+
+  const [ccode, setCcode] = useState("");
+  // console.log(dates);
+  useEffect(() => {
+    const getCCode = async () => {
+      const session = await getSession();
+      const u_id = session.user.id;
+
+      const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
+
+      setCcode(ccode);
+    };
+    getCCode();
+  }, []);
+  // const fetchList = async () => {
+  //   const res = await fetch(`/class`);
+  //   const json = await res.json();
+
+  //   console.log(json);
+  // };
+
+  const { data: session } = useSession();
 
   useEffect(() => {
+    // fetchList();
     renderCalendar();
   }, [viewYear, viewMonth]);
 
@@ -88,18 +114,34 @@ const ClassPage = () => {
     if (target) {
       const date = target.querySelector("div").innerText;
       const selectedDate = new Date(viewYear, viewMonth, date);
-      const formattedDate = `${selectedDate.getFullYear()}-${String(
-        selectedDate.getMonth() + 1
-      ).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(2, "0")}`;
+      const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, "0")}-${String(
+        selectedDate.getDate()
+      ).padStart(2, "0")}`;
       setSelectedDate(formattedDate);
       setShowInputPage(false); // 날짜를 클릭하면 입력 페이지를 숨김
       setSeq(null); // 날짜를 클릭하면 upPage 숨김
-      console.log(setClassList);
     }
   };
+  useEffect(() => {
+    if (session && selectedDate) {
+      const classFetch = async () => {
+        try {
+          const u_id = session.user.id;
+          const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
+          const result = await classAll(ccode, selectedDate);
+
+          setClassList([...result]);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      classFetch();
+    }
+  }, [session, selectedDate]);
 
   return (
     <section>
+      {list.length > 0 && list.map((item) => <div key={item.seq}>{item.c_name}</div>)}
       <div className="section_box">
         <aside className="left">
           <div className="calendar">
@@ -128,11 +170,7 @@ const ClassPage = () => {
                   <div className="day">금</div>
                   <div className="day">토</div>
                 </div>
-                <div
-                  className="dates"
-                  onClick={onClickHandler}
-                  dangerouslySetInnerHTML={{ __html: dates.join("") }}
-                ></div>
+                <div className="dates" onClick={onClickHandler} dangerouslySetInnerHTML={{ __html: dates.join("") }}></div>
               </div>
             </div>
           </div>

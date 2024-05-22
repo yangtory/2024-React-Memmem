@@ -6,6 +6,7 @@ import { selectAll } from "./company";
 const prisma = new PrismaClient();
 
 const USER = prisma.tbl_user;
+
 export const findUnique = async ({ u_id }) => {
   const result = await USER.findUnique({
     where: { u_id: u_id },
@@ -33,10 +34,7 @@ export const createCCode = async () => {
 
 export const createUser = async ({ formData }) => {
   const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(
-    formData.u_password,
-    saltRounds
-  );
+  const hashedPassword = await bcrypt.hash(formData.u_password, saltRounds);
 
   let newUser;
   try {
@@ -91,5 +89,26 @@ export const createUser = async ({ formData }) => {
   } catch (error) {
     console.error("Error creating user:", error);
     throw new Error("Failed to create user");
+  }
+};
+
+export const AllUser = async () => {
+  try {
+    const users = await prisma.tbl_user.findMany({
+      where: {
+        tbl_role: {
+          some: {
+            r_role: "ROLE_USER",
+          },
+        },
+      },
+      include: {
+        tbl_role: true,
+      },
+    });
+
+    return users;
+  } catch (error) {
+    console.error("Error fetching users:", error);
   }
 };

@@ -24,3 +24,16 @@ export const findUsers = async ({ uname, uid, utel, ccode }) => {
     },
   });
 };
+
+export const AddUserComp = async ({ formData, ccode }) => {
+  return await USERCOMP.create({
+    data: {
+      us_uid: formData.us_uid,
+      us_ccode: ccode,
+      us_uname: formData.us_uname,
+      us_utel: formData.us_utel,
+      us_cname: formData.us_cname,
+      us_date: "2024-05-22",
+    },
+  });
+};

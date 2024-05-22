@@ -104,7 +104,7 @@ model tbl_user {
   u_comp      String?       @db.VarChar(10)
   tbl_company tbl_company[]
   tbl_notice  tbl_notice[]
-  tbl_role    tbl_role[]    @ignore
+  tbl_role    tbl_role[]    
   tbl_user_comp tbl_user_comp[]
 }
 

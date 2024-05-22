@@ -2,20 +2,25 @@
 import "../../css/table.css";
 import { useState, useEffect } from "react";
 import { findUsers } from "../api/userComp";
+import { useSession } from "next-auth/react";
+import { findUnique } from "../api/user";
 
 const UserPage = () => {
   const [users, setUsers] = useState([]);
   const [uname, setUname] = useState("");
   const [uid, setUid] = useState("");
   const [utel, setUtel] = useState("");
+  const { data: session } = useSession();
 
   useEffect(() => {
     const userFetch = async () => {
+      const u_id = session.user.id;
+      const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
       const result = await findUsers({
         uname,
         uid,
         utel,
-        us_ccode: "C0001",
+        ccode,
       });
       if (result) {
         setUsers([...result]);
@@ -28,10 +33,7 @@ const UserPage = () => {
     let debounceTimer;
     return (...args) => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(
-        () => callback.apply(this, args),
-        delay
-      );
+      debounceTimer = setTimeout(() => callback.apply(this, args), delay);
     };
   };
 
@@ -79,11 +81,7 @@ const UserPage = () => {
               defaultValue={utel}
               onChange={onUtelHandler}
             />
-            <img
-              src="${rootPath }/static/images/search.png"
-              width="10px"
-              height="10px"
-            />
+            <img src="${rootPath }/static/images/search.png" width="10px" height="10px" />
           </form>
         </div>
         <div className="table_div">

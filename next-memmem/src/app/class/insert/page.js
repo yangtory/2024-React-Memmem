@@ -5,8 +5,10 @@ import { createClass } from "../../api/class";
 import { getSession } from "next-auth/react";
 import { findUnique } from "../../api/user";
 
-const InputPage = ({ date }) => {
-  const [formData, setFormData] = useState({});
+const InputPage = ({ date, selectedDate }) => {
+  const [formData, setFormData] = useState({
+    c_sdate: selectedDate,
+  });
   const [ccode, setCcode] = useState("");
   useEffect(() => {
     const getCCode = async () => {
@@ -44,16 +46,29 @@ const InputPage = ({ date }) => {
           <label>강사</label>
           <div className="selectBox">
             <select name="c_tcode" onChange={InputChange}>
-              <option value="">강사선택</option>
+              <option value="T0001">강사선택</option>
               <option value="T0001">정연</option>
             </select>
           </div>
           <label>시작일자</label>
-          <input placeholder="시작일자" type="date" name="c_sdate" onChange={InputChange} />
+          <input
+            placeholder="시작일자"
+            type="date"
+            name="c_sdate"
+            onChange={InputChange}
+            value={selectedDate}
+          />
           <label>종료일자</label>
           <input placeholder="종료일자" type="date" name="c_edate" onChange={InputChange} />
           <label>시작시간</label>
-          <input placeholder="시작시간" type="time" min="00:00" max="24:00" name="c_stime" onChange={InputChange} />
+          <input
+            placeholder="시작시간"
+            type="time"
+            min="00:00"
+            max="24:00"
+            name="c_stime"
+            onChange={InputChange}
+          />
           <label>종료시간</label>
           <input placeholder="종료시간" type="time" name="c_etime" onChange={InputChange} />
           <label>색상</label>
@@ -67,7 +82,14 @@ const InputPage = ({ date }) => {
             <div className="color color7"></div>
             <div className="color color8"></div>
           </div>
-          <input type="hidden" id="colorPicker" className="colorPicker" value="#ffffff" name="c_color" onChange={InputChange} />
+          <input
+            type="hidden"
+            id="colorPicker"
+            className="colorPicker"
+            value="#ffffff"
+            name="c_color"
+            onChange={InputChange}
+          />
           <input type="hidden" value={ccode} name="c_ccode" />
           <input type="submit" className="insert" value="작성" />
         </form>

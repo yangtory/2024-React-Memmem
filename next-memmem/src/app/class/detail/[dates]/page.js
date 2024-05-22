@@ -1,42 +1,41 @@
+"use client";
 import { useEffect, useState } from "react";
 import "../../../../css/table.css";
-import InputPage from "../../insert/page";
-import ClassPage from "../../page";
+
 import { useSession } from "next-auth/react";
 import { classAll } from "../../../api/class";
 import { findUnique } from "../../../api/user";
+import { useRouter } from "next/navigation";
 
-const ClassDetail = ({ showInputPage, date }) => {
+const ClassDetail = ({ showInputPage, date, selectedDate, setSeq }) => {
+  const router = useRouter();
   const inputButton = () => {
     showInputPage(true); // 입력 페이지 표시
   };
-  const [viewYear, setViewYear] = useState(new Date().getFullYear());
-  const [viewMonth, setViewMonth] = useState(new Date().getMonth());
-  const [dates, setDates] = useState([]);
+
   const { data: session } = useSession();
   const [classList, setClassList] = useState([]);
 
   useEffect(() => {
-    if (session) {
+    if (session && selectedDate) {
       const classFetch = async () => {
         try {
-          const selectedDate = new Date(viewYear, viewMonth);
-          const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, "0")}-${String(
-            selectedDate.getDate()
-          ).padStart(2, "0")}`;
           const u_id = session.user.id;
           const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
-          const result = await classAll(ccode, formattedDate);
+          const result = await classAll(ccode, selectedDate);
+
           setClassList([...result]);
-          console.log(setClassList);
-          console.log(viewYear);
         } catch (error) {
           console.log(error);
         }
       };
       classFetch();
     }
-  }, [session]);
+  }, [session, selectedDate]);
+
+  const clickHandler = (seq) => {
+    setSeq(seq);
+  };
 
   return (
     <>
@@ -65,10 +64,14 @@ const ClassDetail = ({ showInputPage, date }) => {
 
           <tbody className="body">
             {classList.map((CLASS, index) => (
-              <tr key={CLASS.i_seq} data-seq={CLASS.c_seq}>
+              <tr
+                key={CLASS.c_seq}
+                onClick={() => clickHandler(CLASS.c_seq)}
+                data-seq={CLASS.c_seq}
+              >
                 <td>{index + 1}</td>
                 <td>{CLASS.c_name}</td>
-                {/* <td>{CLASS.t_name}</td> */}
+                <td>{CLASS.tbl_teacher.t_name}</td>
                 <td>{CLASS.c_sdate}</td>
                 <td>{CLASS.c_edate}</td>
                 <td>{CLASS.c_stime}</td>

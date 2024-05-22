@@ -5,9 +5,7 @@ import "../../css/class/main.css";
 
 import ClassDetail from "./detail/[dates]/page";
 import InputPage from "./insert/page";
-import { useSession } from "next-auth/react";
-import { findUnique } from "../api/user";
-import { classAll } from "../api/class";
+import UpPage from "./update/[seq]/page";
 
 const ClassPage = () => {
   const [viewYear, setViewYear] = useState(new Date().getFullYear());
@@ -16,31 +14,10 @@ const ClassPage = () => {
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [showInputPage, setShowInputPage] = useState(false);
+  const [seq, setSeq] = useState(null);
 
-  const { data: session } = useSession();
   const [classList, setClassList] = useState([]);
 
-  // useEffect(() => {
-  //   if (session) {
-  //     const classFetch = async () => {
-  //       try {
-  //         const selectedDate = new Date(viewYear, viewMonth);
-  //         const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, "0")}-${String(
-  //           selectedDate.getDate()
-  //         ).padStart(2, "0")}`;
-  //         const u_id = session.user.id;
-  //         const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
-  //         const result = await classAll(ccode, formattedDate);
-  //         console.log(formattedDate);
-  //         setClassList([...result]);
-  //         console.log(setClassList);
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     };
-  //     classFetch();
-  //   }
-  // }, [session]);
   useEffect(() => {
     renderCalendar();
   }, [viewYear, viewMonth]);
@@ -111,11 +88,13 @@ const ClassPage = () => {
     if (target) {
       const date = target.querySelector("div").innerText;
       const selectedDate = new Date(viewYear, viewMonth, date);
-      const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, "0")}-${String(
-        selectedDate.getDate()
-      ).padStart(2, "0")}`;
+      const formattedDate = `${selectedDate.getFullYear()}-${String(
+        selectedDate.getMonth() + 1
+      ).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(2, "0")}`;
       setSelectedDate(formattedDate);
       setShowInputPage(false); // 날짜를 클릭하면 입력 페이지를 숨김
+      setSeq(null); // 날짜를 클릭하면 upPage 숨김
+      console.log(setClassList);
     }
   };
 
@@ -149,16 +128,31 @@ const ClassPage = () => {
                   <div className="day">금</div>
                   <div className="day">토</div>
                 </div>
-                <div className="dates" onClick={onClickHandler} dangerouslySetInnerHTML={{ __html: dates.join("") }}></div>
+                <div
+                  className="dates"
+                  onClick={onClickHandler}
+                  dangerouslySetInnerHTML={{ __html: dates.join("") }}
+                ></div>
               </div>
             </div>
           </div>
         </aside>
         <aside className="right">
           {showInputPage ? (
-            <InputPage date={selectedDate} />
+            <InputPage date={selectedDate} selectedDate={selectedDate} />
+          ) : seq ? (
+            <UpPage seq={seq} selectedDate={selectedDate} />
           ) : (
-            selectedDate && <ClassDetail date={selectedDate} classList={classList} setClassList={setClassList} showInputPage={setShowInputPage} />
+            selectedDate && (
+              <ClassDetail
+                date={selectedDate}
+                classList={classList}
+                setClassList={setClassList}
+                showInputPage={setShowInputPage}
+                selectedDate={selectedDate}
+                setSeq={setSeq}
+              />
+            )
           )}
         </aside>
       </div>

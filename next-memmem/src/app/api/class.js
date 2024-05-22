@@ -4,16 +4,18 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const CLASS = prisma.tbl_class;
+const TEACHER = prisma.tbl_teacher;
 
-export const classAll = async (ccode, formattedDate) => {
+export const classAll = async (ccode, selectedDate) => {
   const result = await CLASS.findMany({
-    where: { c_ccode: ccode, c_sdate: formattedDate },
+    where: { c_ccode: ccode, c_sdate: selectedDate },
+    include: { tbl_teacher: true },
   });
   return result;
 };
 
 export const createClass = async ({ formData }) => {
-  await prisma.CLASS.create({
+  await CLASS.create({
     data: {
       c_name: formData.c_name,
       c_sdate: formData.c_sdate,
@@ -25,4 +27,28 @@ export const createClass = async ({ formData }) => {
       c_color: formData.c_color,
     },
   });
+};
+
+export const classUnique = async (seq) => {
+  const result = await CLASS.findUnique({
+    where: { c_seq: seq },
+    include: { tbl_teacher: true },
+  });
+  return result;
+};
+
+export const Classupdate = async (classData, seq) => {
+  // 업데이트하지 않을 목록
+  const { c_seq, c_tcode, c_ccode, tbl_teacher, ...updateData } = classData;
+
+  const result = await CLASS.update({
+    where: { c_seq: seq },
+    data: {
+      ...updateData,
+      tbl_teacher: {
+        update: tbl_teacher,
+      },
+    },
+  });
+  return result;
 };

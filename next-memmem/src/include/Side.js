@@ -16,7 +16,9 @@ const Side = () => {
               <li>
                 <Link href="/user">회원관리</Link>
               </li>
-              <li>강사관리</li>
+              <li>
+                <Link href="/teacher">강사관리</Link>
+              </li>
               <li>
                 <Link href="/class">수업관리</Link>
               </li>

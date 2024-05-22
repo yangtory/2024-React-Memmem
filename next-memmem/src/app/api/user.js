@@ -31,6 +31,7 @@ export const createCCode = async () => {
   return ccode;
 };
 
+// user insert, 회원가입
 export const createUser = async ({ formData }) => {
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(

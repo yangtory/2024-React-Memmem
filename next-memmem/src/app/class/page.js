@@ -7,7 +7,7 @@ import ClassDetail from "./detail/[dates]/page";
 import InputPage from "./insert/page";
 import UpPage from "./update/[seq]/page";
 import { getSession, useSession } from "next-auth/react";
-import { findUnique } from "../api/user";
+
 import { classAll } from "../api/class"; // import the function to fetch class data
 
 const ClassPage = () => {
@@ -24,7 +24,7 @@ const ClassPage = () => {
   const { data: session } = useSession();
   const listFetch = async (ccode, formattedDate) => {
     const result = await classAll(ccode, formattedDate);
-    console.log(result);
+    // console.log(result);
     setList(result);
   };
 
@@ -84,8 +84,8 @@ const ClassPage = () => {
     setSeq(null);
 
     if (session) {
-      const u_id = session.user.id;
-      const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
+      const session = await getSession();
+      const ccode = session?.user.id.tbl_company[0].c_code;
       const result = await classAll(ccode, selectedDate);
       setClassList(result);
     }
@@ -126,7 +126,8 @@ const ClassPage = () => {
   };
 
   return (
-    <section>
+    <section className="classPage">
+      <h1 className="list_title">수업관리</h1>
       <div className="section_box">
         <aside className="left">
           <div className="calendar">

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-section {
+section.schedulePage {
   /* overflow: hidden; */
   min-height: 80vh;
   /* height: 50%; */

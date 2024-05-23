@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import "../../../../css/table.css";
 
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { classAll } from "../../../api/class";
-import { findUnique } from "../../../api/user";
+
 import { useRouter } from "next/navigation";
 
 const ClassDetail = ({ showInputPage, date, selectedDate, setSeq }) => {
@@ -20,8 +20,8 @@ const ClassDetail = ({ showInputPage, date, selectedDate, setSeq }) => {
     if (session && selectedDate) {
       const classFetch = async () => {
         try {
-          const u_id = session.user.id;
-          const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
+          const session = await getSession();
+          const ccode = session?.user.id.tbl_company[0].c_code;
           const result = await classAll(ccode, selectedDate);
 
           setClassList([...result]);
@@ -39,11 +39,8 @@ const ClassDetail = ({ showInputPage, date, selectedDate, setSeq }) => {
 
   return (
     <>
-      <h1>{date}</h1>
-      <h1 className="list_title">수업 관리</h1>
-
       <div className="list_home">
-        <div className="insert_btn_box">
+        <div className="insert_btn_box btn_box">
           <a className="insert button-32" onClick={inputButton} date={date}>
             수업 추가
           </a>
@@ -64,11 +61,7 @@ const ClassDetail = ({ showInputPage, date, selectedDate, setSeq }) => {
 
           <tbody className="body">
             {classList.map((CLASS, index) => (
-              <tr
-                key={CLASS.c_seq}
-                onClick={() => clickHandler(CLASS.c_seq)}
-                data-seq={CLASS.c_seq}
-              >
+              <tr key={CLASS.c_seq} onClick={() => clickHandler(CLASS.c_seq)} data-seq={CLASS.c_seq}>
                 <td>{index + 1}</td>
                 <td>{CLASS.c_name}</td>
                 <td>{CLASS.tbl_teacher.t_name}</td>

@@ -135,8 +135,25 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-  background-color: #e9dcd6;
+
   text-align: center;
   padding: 3rem;
   border-radius: 10px;
+}
+.table_wrapper {
+  width: 100%;
+}
+
+.notice.list {
+  td {
+    text-align: center;
+  }
+}
+
+tr.noList {
+  width: 50%;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

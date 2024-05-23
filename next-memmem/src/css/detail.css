@@ -1,0 +1,128 @@
+div.detail_box {
+  width: 70%;
+  margin: 20px auto;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 10px 20px;
+}
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+  margin: 15px 0;
+}
+div.detail_box.width {
+  width: 100%;
+}
+div.card {
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: #e9dcd6;
+  /* background: radial-gradient(circle, #e9dcc9, #e9dcd9); */
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+}
+div.container {
+  padding: 1rem 16px 0.5rem 16px;
+}
+div.info_container {
+  padding: 1rem 16px 0.5rem 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+div.info_head {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  background-color: #faaca8;
+  background-image: linear-gradient(19deg, #fccecb 20%, #e2daff 100%);
+
+  border-radius: 10px;
+  padding: 8px;
+  strong {
+    flex: 1;
+    text-align: center;
+  }
+  p {
+    flex: 1;
+    text-align: center;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #e9dcd6;
+  }
+
+  a {
+    flex: 1;
+  }
+}
+a.message_btn {
+  width: 20%;
+  border-radius: 10px;
+  background-color: #e6cadd;
+  color: #391145;
+  font-weight: 200;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+div.info_detail {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  div {
+    display: flex;
+    strong {
+      flex: 1;
+    }
+    p {
+      flex: 1;
+    }
+  }
+}
+
+div.detail.btn_box {
+  margin: 5px 10px 20px auto;
+  a {
+    width: 30%;
+    margin: 5px auto;
+    border-radius: 0;
+    background-color: #e6cadd;
+    color: #391145;
+    font-weight: 200;
+    border-radius: 10px;
+  }
+}
+
+span.dday {
+  background-color: #faaca8;
+  border-radius: 10px;
+  padding: 3px 12px;
+}
+span.p_count {
+  padding: 3px 12px;
+  background-color: #febb0b;
+  border-radius: 10px;
+  color: black;
+  font-weight: 800;
+}
+
+div.info {
+  div {
+    display: flex;
+  }
+  strong {
+    flex: 1;
+  }
+  p {
+    flex: 1;
+  }
+}

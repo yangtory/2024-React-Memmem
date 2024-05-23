@@ -89,7 +89,7 @@ const SchedulePage = () => {
   };
 
   return (
-    <section>
+    <section className="schedulePage">
       <div className="section_box">
         <aside className="left">
           <div className="calendar">

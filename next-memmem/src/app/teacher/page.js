@@ -145,6 +145,10 @@ const TeacherPage = () => {
                             <p>회원권 : {detail.t_code}</p>
                             <p>횟수 : {detail.t_name}</p>
                             <p>가격 : {detail.t_tel}</p>
+                            <div className="btn_box">
+                                <button>수정</button>
+                                <button>삭제</button>
+                            </div>
                         </div>
                     ) : (
                         <p>No ticket selected</p>

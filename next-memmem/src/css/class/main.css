@@ -199,3 +199,7 @@ span.title {
   padding: 8px;
   border-radius: 10px;
 }
+.has-data {
+  color: red;
+  margin-left: 5px;
+}

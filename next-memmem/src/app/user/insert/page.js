@@ -62,7 +62,7 @@ const InsertPage = () => {
   useEffect(() => {
     if (session) {
       const codeFetch = async () => {
-        const u_id = session.user.id;
+        const u_id = session.user.id.u_id;
         const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
         const cname = (await findUnique({ u_id })).tbl_company[0].c_name;
         setCname(cname);
@@ -108,9 +108,9 @@ const InsertPage = () => {
               value={formData.us_uname}
               onChange={changeUser}
             />
-            <input className="us_utel" placeholder="전화번호" name="us_utel" value={formData.us_utel} onChange={changeUser} />
-            <input className="us_cname" placeholder="업체명" name="us_cname" readonly value={formData.us_cname} onChange={changeUser} />
-            <input className="us_ccode" placeholder="업체코드" name="us_ccode" value={ccode} onChange={changeUser} readonly />
+            <input className="us_utel" type="hidden" placeholder="전화번호" name="us_utel" value={formData.us_utel} onChange={changeUser} />
+            <input className="us_cname" type="hidden" placeholder="업체명" name="us_cname" readonly value={formData.us_cname} onChange={changeUser} />
+            <input className="us_ccode" type="hidden" placeholder="업체코드" name="us_ccode" value={ccode} onChange={changeUser} readonly />
             <input className="us_date" placeholder="날짜" name="us_date" value={formattedDate} onChange={changeUser} readonly />
 
             {/* <h3>수강권 정보</h3>

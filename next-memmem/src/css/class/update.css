@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+form div {
+  display: flex;
+  padding: 10px;
+  label {
+    font-weight: 900;
+    flex: 1;
+    margin-top: 10px;
+  }
+  input {
+    padding: 10px;
+    flex: 1;
+    width: 100%;
+  }
+}
+div.btnBox {
+  justify-content: end;
+  button {
+    padding: 10px;
+  }
+}
+
+div.inputbox {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 0 auto;
+}
+input.delete {
+  width: 20%;
+  border: none;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  border-radius: 10px;
+  background-color: #fff;
+  &:hover {
+    background-color: #e4e4e4;
+  }
+}

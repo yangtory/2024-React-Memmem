@@ -1,10 +1,27 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Classupdate, classUnique } from "../../../api/class";
-
+import "../../../../css/class/update.css";
+import { getSession } from "next-auth/react";
+import { selectAll } from "../../../api/teacher";
 const UpPage = ({ seq, selectedDate }) => {
   const [list, setList] = useState({});
-
+  const [teacher, setTeacher] = useState([]);
+  // 선생님 리스트
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const session = await getSession();
+        const ccode = session?.user.id.tbl_company[0].c_code;
+        const result = await selectAll(ccode);
+        console.log(result);
+        setTeacher([...result]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       const result = await classUnique(seq);
@@ -37,9 +54,6 @@ const UpPage = ({ seq, selectedDate }) => {
 
   return (
     <>
-      <h1>{seq}수정페이지</h1>
-
-      <h1 class="list_title">수업 수정</h1>
       <div class="update input_div">
         <form class="input_box" onSubmit={update}>
           <div class="class error"></div>
@@ -50,37 +64,13 @@ const UpPage = ({ seq, selectedDate }) => {
           <label>강사명</label>
           <input placeholder="강사명" value={list.tbl_teacher?.t_name} name="t_name" readonly />
           <label>개강일자</label>
-          <input
-            placeholder="개강일자"
-            type="date"
-            value={selectedDate}
-            name="c_sdate"
-            onChange={handleChange}
-          />
+          <input placeholder="개강일자" type="date" value={selectedDate} name="c_sdate" onChange={handleChange} />
           <label>종강일자</label>
-          <input
-            placeholder="종강일자"
-            type="date"
-            name="c_edate"
-            value={list.c_edate}
-            onChange={handleChange}
-          />
+          <input placeholder="종강일자" type="date" name="c_edate" value={list.c_edate} onChange={handleChange} />
           <label>시작시간</label>
-          <input
-            placeholder="시작시간"
-            type="time"
-            name="c_stime"
-            value={list.c_stime}
-            onChange={handleChange}
-          />
+          <input placeholder="시작시간" type="time" name="c_stime" value={list.c_stime} onChange={handleChange} />
           <label>종료시간</label>
-          <input
-            placeholder="종료시간"
-            type="time"
-            name="c_etime"
-            value={list.c_etime}
-            onChange={handleChange}
-          />
+          <input placeholder="종료시간" type="time" name="c_etime" value={list.c_etime} onChange={handleChange} />
           <label>색상</label>
           <div class="palette">
             <div class="color color1"></div>

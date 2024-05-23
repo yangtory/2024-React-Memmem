@@ -1,3 +1,5 @@
+import "../../css/dash.css";
+
 const DashPage = () => {
   return (
     <section class="page">

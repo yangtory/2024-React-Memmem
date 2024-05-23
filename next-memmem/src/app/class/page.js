@@ -11,6 +11,7 @@ import { findUnique } from "../api/user";
 import { classAll } from "../api/class"; // import the function to fetch class data
 
 const ClassPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [viewYear, setViewYear] = useState(new Date().getFullYear());
   const [viewMonth, setViewMonth] = useState(new Date().getMonth() + 1);
   const [dates, setDates] = useState([]);
@@ -19,18 +20,26 @@ const ClassPage = () => {
   const [seq, setSeq] = useState(null);
   const [classList, setClassList] = useState([]);
   const [list, setList] = useState([]);
-  const [ccode, setCcode] = useState("");
 
   const { data: session } = useSession();
   const listFetch = async (ccode, formattedDate) => {
     const result = await classAll(ccode, formattedDate);
     console.log(result);
+    setList(result);
   };
 
   useEffect(() => {
-    renderCalendar();
-    listFetch();
-  }, [viewYear, viewMonth]);
+    const fetchData = async () => {
+      await listFetch();
+      setIsLoading(false);
+    };
+    fetchData();
+  }, [viewYear, viewMonth]); // viewYear, viewMonth 상태가 변경될 때마다 실행됩니다.
+  useEffect(() => {
+    if (!isLoading) {
+      renderCalendar(); // 데이터를 가져온 후에 달력을 다시 렌더링합니다.
+    }
+  }, [isLoading]);
 
   const renderCalendar = async () => {
     document.querySelector(".year-month").textContent = `${viewYear}년 ${viewMonth}월`;
@@ -55,24 +64,11 @@ const ClassPage = () => {
 
     const dateElements = allDates.map((date, i) => {
       return (
-        <div
-          key={i}
-          className={`date ${date ? "this" : "other"}`}
-          onClick={() => handleDateClick(date)}
-        >
+        <div key={i} className={`date ${date ? "this" : "other"}`} onClick={() => handleDateClick(date)}>
           <div>{date}</div>
-          {date &&
-            list.some(
-              (item) => item.c_sdate === formatDate(new Date(viewYear, viewMonth - 1, date))
-            ) && (
-              <div>
-                {
-                  list.find(
-                    (item) => item.c_sdate === formatDate(new Date(viewYear, viewMonth - 1, date))
-                  ).c_name
-                }
-              </div>
-            )}
+          {date && list.some((item) => item.c_sdate === formatDate(new Date(viewYear, viewMonth - 1, date))) && (
+            <div>{list.find((item) => item.c_sdate === formatDate(new Date(viewYear, viewMonth - 1, date))).c_name}</div>
+          )}
         </div>
       );
     });
@@ -109,6 +105,7 @@ const ClassPage = () => {
     } else {
       setViewMonth((prev) => prev - 1);
     }
+    setIsLoading(true); // 화면 전환 시 로딩 상태를 true로 설정하여 로딩 상태를 보여줍니다.
   };
 
   const nextMonth = () => {
@@ -118,12 +115,14 @@ const ClassPage = () => {
     } else {
       setViewMonth((prev) => prev + 1);
     }
+    setIsLoading(true); // 화면 전환 시 로딩 상태를 true로 설정하여 로딩 상태를 보여줍니다.
   };
 
   const goToday = () => {
     const today = new Date();
     setViewYear(today.getFullYear());
     setViewMonth(today.getMonth() + 1);
+    setIsLoading(true); // 화면 전환 시 로딩 상태를 true로 설정하여 로딩 상태를 보여줍니다.
   };
 
   return (

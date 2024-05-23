@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 /**
  * Prisma Client 인스턴스가 중복으로 생성되지 않도록
@@ -8,7 +8,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const closePrismaConnection = async () => {
-    await prisma.$disconnect();
+  await prisma.$disconnect();
 };
 
 export default prisma;

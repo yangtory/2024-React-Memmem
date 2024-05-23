@@ -146,8 +146,8 @@ const TeacherPage = () => {
                             <p>횟수 : {detail.t_name}</p>
                             <p>가격 : {detail.t_tel}</p>
                             <div className="btn_box">
-                                <button>수정</button>
-                                <button>삭제</button>
+                                <button className="update_btn">수정</button>
+                                <button className="delete_btn">삭제</button>
                             </div>
                         </div>
                     ) : (

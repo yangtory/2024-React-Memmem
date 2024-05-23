@@ -8,7 +8,7 @@ const Handler = NextAuth({
     pages: {
         signIn: '/login',
         signOut: '/logout',
-        error: '/auth/error',
+        // error: '/auth/error',
         verifyRequest: 'auth-verify-request',
         newUser: '/join',
     },
@@ -41,7 +41,7 @@ const Handler = NextAuth({
                         // member: user,
                     };
                 } else {
-                    return null;
+                    throw new Error('CredentialsSignin'); // 예외 발생 시 에러 코드 전달
                 }
             },
         }),

@@ -1,0 +1,41 @@
+div.list_home {
+    width: 90%;
+}
+.table_div {
+    height: 65vh;
+    width: 95%;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+.table_div::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    border-radius: 10px;
+}
+
+.table_div:hover::-webkit-scrollbar {
+    display: block;
+}
+
+.table_div::-webkit-scrollbar-thumb {
+    background-color: #e9dcd6;
+    border-radius: 5px;
+}
+
+.table_div::-webkit-scrollbar-thumb:hover {
+    background-color: #faaca8;
+}
+
+table.notice.list {
+    table-layout: fixed;
+    td.date {
+        font-size: 0.8rem;
+    }
+    td.title {
+        text-align: left;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}

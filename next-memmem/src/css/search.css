@@ -1,0 +1,49 @@
+div.search {
+    margin-bottom: 10px;
+    form {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }
+
+    label.sdate,
+    label.edate {
+        font-size: 0.8rem;
+        font-weight: 800;
+    }
+
+    input.search_input {
+        width: 80px;
+        height: 25px;
+        padding: 3px 10px;
+        margin-right: 5px;
+        border-radius: 5px;
+        outline: none;
+        border: none;
+        text-align: center;
+        transition: 0.3s ease;
+        &:focus {
+            border: 1px solid #d082c5;
+            width: 100px;
+        }
+    }
+    input.sdate,
+    input.edate {
+        width: 130px;
+        height: 25px;
+        padding: 3px 10px;
+        margin-right: 5px;
+        border-radius: 5px;
+        outline: none;
+        border: none;
+        text-align: center;
+        &:focus {
+            width: 130px;
+        }
+    }
+    button.button-32 {
+        width: 50px;
+        padding: 5px;
+        border-radius: 10px;
+    }
+}

@@ -11,6 +11,8 @@ export const findUnique = async ({ u_id }) => {
     where: { u_id: u_id },
     include: { tbl_company: true },
   });
+  //   console.log("findUnique result:", result);
+  prisma.$disconnect;
   return result;
 };
 
@@ -25,9 +27,11 @@ export const createCCode = async () => {
     const strNum = String(Number(subNum) + 1);
     ccode = "C" + strNum.padStart(4, "0");
     console.log(ccode);
+    prisma.$disconnect;
     return ccode;
   }
   console.log(ccode);
+  prisma.$disconnect;
   return ccode;
 };
 
@@ -106,7 +110,7 @@ export const AllUser = async () => {
         tbl_role: true,
       },
     });
-
+    prisma.$disconnect;
     return users;
   } catch (error) {
     console.error("Error fetching users:", error);

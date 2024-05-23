@@ -1,6 +1,12 @@
 import "../../css/dash.css";
 
+("use client");
+
+import { useSession } from "next-auth/react";
+
 const DashPage = () => {
+  const { data: session } = useSession();
+  console.log("Session", session);
   return (
     <section class="page">
       <div class="top">

@@ -1,6 +1,5 @@
+"use client";
 import "../../css/dash.css";
-
-("use client");
 
 import { useSession } from "next-auth/react";
 

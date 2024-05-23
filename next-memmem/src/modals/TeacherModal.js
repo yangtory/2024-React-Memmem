@@ -85,8 +85,8 @@ const TeacherModal = () => {
 
     return (
         <div className={teacherModal ? styles['modal'] : styles['close']}>
-            <section>
-                <header>
+            <section className="modal teacher">
+                <header className="header teacher">
                     <div>강사 등록</div>
                     <button onClick={onClickClose}>X</button>
                 </header>

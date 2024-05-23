@@ -98,12 +98,9 @@ const NoticeModal = () => {
                     <main>
                         <div className={styles.input_div}>
                             <div className="ticket error"></div>
-                            <label>날짜</label>
-                            <input value={formData.n_date} name="n_date" readOnly />
-                            <label>시간</label>
-                            <input value={formData.n_time} name="n_time" readOnly />
-                            <label>아이디</label>
-                            <input value={formData.n_uid} name="n_uid" readOnly />
+                            <input value={formData.n_date} name="n_date" type="hidden" readOnly />
+                            <input value={formData.n_time} name="n_time" type="hidden" readOnly />
+                            <input value={formData.n_uid} name="n_uid" type="hidden" readOnly />
                             <label>업체코드</label>
                             <input value={formData.n_ccode} name="n_ccode" readOnly />
                             <label>제목</label>
@@ -111,6 +108,7 @@ const NoticeModal = () => {
                             <label>내용</label>
                             <textarea
                                 placeholder="내용"
+                                rows="7"
                                 name="n_content"
                                 value={formData.n_content}
                                 onChange={handleChange}

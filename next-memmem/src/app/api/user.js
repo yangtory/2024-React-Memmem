@@ -110,9 +110,10 @@ export const AllUser = async () => {
         tbl_role: true,
       },
     });
-    prisma.$disconnect;
+    await prisma.$disconnect(); // 수정된 부분
     return users;
   } catch (error) {
     console.error("Error fetching users:", error);
+    throw error; // 오류를 다시 던져서 호출하는 곳에서 처리할 수 있도록 합니다.
   }
 };

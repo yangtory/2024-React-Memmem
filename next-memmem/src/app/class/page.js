@@ -20,24 +20,30 @@ const ClassPage = () => {
   const [seq, setSeq] = useState(null);
   const [classList, setClassList] = useState([]);
   const [list, setList] = useState([]);
-
+  const [selectColor, setSelectColor] = useState("#ffffff");
+  const handleColorChange = (color) => {
+    setSelectColor(color);
+  };
   const { data: session } = useSession();
+
   const listFetch = async (ccode, formattedDate) => {
     const result = await classAll(ccode, formattedDate);
-    // console.log(result);
     setList(result);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      await listFetch();
+      const session = await getSession();
+      const ccode = session?.user.id.tbl_company[0].c_code;
+      await listFetch(ccode);
       setIsLoading(false);
     };
     fetchData();
-  }, [viewYear, viewMonth]); // viewYear, viewMonth 상태가 변경될 때마다 실행됩니다.
+  }, [viewYear, viewMonth]);
+
   useEffect(() => {
     if (!isLoading) {
-      renderCalendar(); // 데이터를 가져온 후에 달력을 다시 렌더링합니다.
+      renderCalendar();
     }
   }, [isLoading]);
 
@@ -63,12 +69,25 @@ const ClassPage = () => {
     const allDates = prevDates.concat(thisDates);
 
     const dateElements = allDates.map((date, i) => {
+      const matchingItems = list?.filter(
+        (item) => item.c_sdate === formatDate(new Date(viewYear, viewMonth - 1, date))
+      );
+
       return (
-        <div key={i} className={`date ${date ? "this" : "other"}`} onClick={() => handleDateClick(date)}>
+        <div
+          key={i}
+          className={`date ${date ? "this" : "other"}`}
+          onClick={() => handleDateClick(date)}
+        >
           <div>{date}</div>
-          {date && list.some((item) => item.c_sdate === formatDate(new Date(viewYear, viewMonth - 1, date))) && (
-            <div>{list.find((item) => item.c_sdate === formatDate(new Date(viewYear, viewMonth - 1, date))).c_name}</div>
-          )}
+          {date &&
+            matchingItems &&
+            matchingItems.length > 0 &&
+            matchingItems.map((item, index) => (
+              <div key={index} className="class" style={{ backgroundColor: item.c_color }}>
+                {item.c_name}
+              </div>
+            ))}
         </div>
       );
     });
@@ -105,7 +124,7 @@ const ClassPage = () => {
     } else {
       setViewMonth((prev) => prev - 1);
     }
-    setIsLoading(true); // 화면 전환 시 로딩 상태를 true로 설정하여 로딩 상태를 보여줍니다.
+    setIsLoading(true);
   };
 
   const nextMonth = () => {
@@ -115,14 +134,14 @@ const ClassPage = () => {
     } else {
       setViewMonth((prev) => prev + 1);
     }
-    setIsLoading(true); // 화면 전환 시 로딩 상태를 true로 설정하여 로딩 상태를 보여줍니다.
+    setIsLoading(true);
   };
 
   const goToday = () => {
     const today = new Date();
     setViewYear(today.getFullYear());
     setViewMonth(today.getMonth() + 1);
-    setIsLoading(true); // 화면 전환 시 로딩 상태를 true로 설정하여 로딩 상태를 보여줍니다.
+    setIsLoading(true);
   };
 
   return (

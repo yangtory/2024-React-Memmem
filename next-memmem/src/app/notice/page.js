@@ -20,6 +20,7 @@ const NoticePage = () => {
   const [selectedNotice, setSelectedNotice] = useState(null);
   const [ntitle, setNtitle] = useState("");
   const [ndate, setNdate] = useState("");
+  const [isEditMode, setIsEditMode] = useState(false);
 
   // 검색 기능
   const onNtitleChange = (e) => {
@@ -83,17 +84,22 @@ const NoticePage = () => {
     setSelectedNotice(null);
   };
 
+  // 디테일에서 수정버튼 눌렀을때
   const updateClickHandler = (seq) => {
     // 클릭-모달-인풋 리드온리지워짐-수정완료버튼생성
+    console.log("update 입니다");
     setSelectedNotice(seq);
+    setIsEditMode(true); // readonly해제
   };
 
+  // 수정완료버튼 눌렀을때
   const updateHandler = async ({ seq, title, content }) => {
     await updateNotice({
       seq,
       title,
       content,
     });
+    setIsEditMode(false);
     setSelectedNotice(null);
   };
   return (
@@ -205,12 +211,13 @@ const NoticePage = () => {
               <span>X</span>
             </div>
             <div className="notice input_box">
+              <h3>{isEditMode ? "공지사항 수정" : ""}</h3>
               <label htmlFor="title">제목</label>
               <input
                 id="title"
                 name="title"
                 value={selectedNotice?.n_title}
-                readOnly
+                readOnly={!isEditMode} // 수정보드 readonly=false
               />
 
               <label htmlFor="content">내용</label>
@@ -219,13 +226,15 @@ const NoticePage = () => {
                 name="content"
                 rows="20"
                 value={selectedNotice?.n_content}
-                readOnly
+                readOnly={!isEditMode}
               ></textarea>
 
               <div className="btn_box">
                 <button
                   className="notice_update button-32"
-                  onClick={handleNoticeClick(notice)}
+                  onClick={() =>
+                    updateClickHandler(selectedNotice?.n_seq)
+                  }
                 >
                   수정
                 </button>

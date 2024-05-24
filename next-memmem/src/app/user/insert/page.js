@@ -63,8 +63,10 @@ const InsertPage = () => {
     if (session) {
       const codeFetch = async () => {
         const u_id = session.user.id.u_id;
-        const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
-        const cname = (await findUnique({ u_id })).tbl_company[0].c_name;
+        const ccode = (await findUnique({ u_id })).tbl_company[0]
+          .c_code;
+        const cname = (await findUnique({ u_id })).tbl_company[0]
+          .c_name;
         setCname(cname);
         setCcode(ccode);
       };
@@ -83,7 +85,7 @@ const InsertPage = () => {
     try {
       const result = AddUserComp({ formData, ccode, formattedDate });
       console.log(result);
-      document.location.href = "/user";
+      window.location.href = "/user";
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +96,7 @@ const InsertPage = () => {
       <h1 className="list_title">회원 등록</h1>
       <div className="wrap">
         <div className="input_div">
-          <form className="formBox input_box" onSubmit={submit}>
+          <form className="formBox input_box">
             <h3>회원 정보</h3>
             <div className="user_error"></div>
             <label>ID</label>
@@ -166,7 +168,12 @@ const InsertPage = () => {
             <label>종료일</label>
             <input className="r_edate" type="date" name="r_edate" value="${U.r_edate }" /> */}
 
-            <input type="submit" value="저장" className="insert" />
+            <input
+              type="button"
+              value="저장"
+              className="insert"
+              onClick={submit}
+            />
           </form>
         </div>
 
@@ -189,7 +196,11 @@ const InsertPage = () => {
                 ) : (
                   userList &&
                   userList.map((USER) => (
-                    <tr key={USER.u_id} data-id={USER.u_id} onClick={() => userClick(USER.u_id)}>
+                    <tr
+                      key={USER.u_id}
+                      data-id={USER.u_id}
+                      onClick={() => userClick(USER.u_id)}
+                    >
                       <td>{USER.u_id}</td>
                       <td>{USER.u_name}</td>
                     </tr>

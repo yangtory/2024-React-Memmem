@@ -70,7 +70,9 @@ const ClassPage = () => {
 
     const dateElements = allDates.map((date, i) => {
       const matchingItems = list?.filter(
-        (item) => item.c_sdate === formatDate(new Date(viewYear, viewMonth - 1, date))
+        (item) =>
+          item.c_sdate <= formatDate(new Date(viewYear, viewMonth - 1, date)) &&
+          item.c_edate >= formatDate(new Date(viewYear, viewMonth - 1, date))
       );
 
       return (
@@ -84,7 +86,11 @@ const ClassPage = () => {
             matchingItems &&
             matchingItems.length > 0 &&
             matchingItems.map((item, index) => (
-              <div key={index} className="class" style={{ backgroundColor: item.c_color }}>
+              <div
+                key={index}
+                className="class"
+                style={{ backgroundColor: item.c_color, color: "black" }}
+              >
                 {item.c_name}
               </div>
             ))}

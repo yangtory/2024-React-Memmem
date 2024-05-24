@@ -6,12 +6,7 @@ import "../../css/search.css";
 import "../../css/notice_detail.css";
 import { useTicket } from "../../provider/TicketProvider";
 import { useModal } from "../../provider/ModalProvider";
-import {
-  deleteNotice,
-  findNotice,
-  selectAll,
-  updateNotice,
-} from "../api/notice";
+import { deleteNotice, findNotice, selectAll, updateNotice } from "../api/notice";
 import { getSession } from "next-auth/react";
 
 const NoticePage = () => {
@@ -22,15 +17,16 @@ const NoticePage = () => {
   const [ndate, setNdate] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({
-    n_seq: selectedNotice?.n_seq || "",
-    n_title: selectedNotice?.n_title || "",
-    n_content: selectedNotice?.n_content || "",
+    n_seq: "",
+    n_title: "",
+    n_content: "",
   });
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -46,10 +42,7 @@ const NoticePage = () => {
     let debounceTimer;
     return (...args) => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(
-        () => callback.apply(this, args),
-        delay
-      );
+      debounceTimer = setTimeout(() => callback.apply(this, args), delay);
     };
   };
   const onNtitleHandler = debounce(onNtitleChange, 300);
@@ -86,6 +79,11 @@ const NoticePage = () => {
   // notice detail 띄우기
   const handleNoticeClick = (notice) => {
     setSelectedNotice(notice);
+    setFormData({
+      n_seq: notice.n_seq,
+      n_title: notice.n_title,
+      n_content: notice.n_content,
+    });
   };
 
   // detail 닫기
@@ -102,10 +100,7 @@ const NoticePage = () => {
 
   // 디테일에서 수정버튼 누르기
   const updateClickHandler = (seq) => {
-    // 클릭-모달-인풋 리드온리지워짐-수정완료버튼생성
-    console.log(seq);
-    setSelectedNotice(seq);
-    setIsEditMode(true); // readonly해제
+    setIsEditMode(true); // readonly 해제
   };
 
   // 수정버튼을 누르고 나서 수정완료를 누를때
@@ -113,7 +108,6 @@ const NoticePage = () => {
     const updateTitle = formData.n_title;
     const updateContent = formData.n_content;
     const seq = formData.n_seq;
-    console.log(seq);
     await updateNotice({
       seq,
       title: updateTitle,
@@ -122,16 +116,13 @@ const NoticePage = () => {
     setIsEditMode(false);
     setSelectedNotice(null);
   };
+
   return (
     <>
       <h1 className="list_title">공지사항</h1>
       <div className="list_home">
         <div className="insert_btn_box">
-          <button
-            className="insert button-32"
-            type="button"
-            onClick={openModal}
-          >
+          <button className="insert button-32" type="button" onClick={openModal}>
             글쓰기
           </button>
         </div>
@@ -177,9 +168,7 @@ const NoticePage = () => {
               <tbody></tbody>
             </table>
             <div className="noList_wrapper">
-              <div className="noList">
-                등록된 공지사항이 없습니다.
-              </div>
+              <div className="noList">등록된 공지사항이 없습니다.</div>
             </div>
           </div>
         ) : (
@@ -203,10 +192,7 @@ const NoticePage = () => {
               </thead>
               <tbody>
                 {noticeList.map((notice, index) => (
-                  <tr
-                    key={notice.n_seq}
-                    onClick={() => handleNoticeClick(notice)}
-                  >
+                  <tr key={notice.n_seq} onClick={() => handleNoticeClick(notice)}>
                     <td className="index">{index + 1}</td>
                     <td className="date">
                       {notice.n_date}
@@ -221,11 +207,7 @@ const NoticePage = () => {
             </table>
           </div>
         )}
-        <div
-          className={
-            selectedNotice ? "modal-backdrop show" : "modal-backdrop"
-          }
-        >
+        <div className={selectedNotice ? "modal-backdrop show" : "modal-backdrop"}>
           <div className={selectedNotice ? "detail show" : "detail"}>
             <div className="close_btn" onClick={handleCloseModal}>
               <span>X</span>
@@ -234,54 +216,47 @@ const NoticePage = () => {
               {isEditMode ? (
                 <>
                   <h3>공지사항 수정</h3>
-                  <input id="seq" value={selectedNotice.n_seq} />
+                  <input id="seq" value={selectedNotice.n_seq} readOnly />
                 </>
               ) : (
-                <input id="seq" value={selectedNotice?.n_seq} />
+                <input id="seq" value={selectedNotice?.n_seq} readOnly />
               )}
 
-              <label htmlFor="title">제목</label>
+              <label htmlFor="n_title">제목</label>
               <input
-                id="title"
-                name="title"
-                value={selectedNotice?.n_title}
+                id="n_title"
+                name="n_title"
+                value={formData.n_title}
                 readOnly={!isEditMode} // 수정모드 readonly=false
-                onClick={handleChange} // 수정모드에서 값 변경 가능하게 설정
+                onChange={handleChange} // 수정모드에서 값 변경 가능하게 설정
               />
 
-              <label htmlFor="content">내용</label>
+              <label htmlFor="n_content">내용</label>
               <textarea
-                id="content"
-                name="content"
+                id="n_content"
+                name="n_content"
                 rows="20"
-                value={selectedNotice?.n_content}
+                value={formData.n_content}
                 readOnly={!isEditMode}
-                onClick={handleChange}
+                onChange={handleChange}
               ></textarea>
 
               <div className="btn_box">
                 {isEditMode ? (
-                  <button
-                    className="notice_update button-32"
-                    onClick={updateHandler}
-                  >
+                  <button className="notice_update button-32" onClick={updateHandler}>
                     수정완료
                   </button>
                 ) : (
                   <>
                     <button
                       className="notice_update button-32"
-                      onClick={() =>
-                        updateClickHandler(selectedNotice?.n_seq)
-                      }
+                      onClick={() => updateClickHandler(selectedNotice?.n_seq)}
                     >
                       수정
                     </button>
                     <button
                       className="notice_delete button-32"
-                      onClick={() =>
-                        deleteHandler(selectedNotice?.n_seq)
-                      }
+                      onClick={() => deleteHandler(selectedNotice?.n_seq)}
                     >
                       삭제
                     </button>

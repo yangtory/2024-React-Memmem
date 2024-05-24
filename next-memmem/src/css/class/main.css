@@ -171,9 +171,6 @@ aside.right::-webkit-scrollbar {
   margin: 0 auto;
 }
 
-div.date {
-  border-right: 1px solid #faaca8;
-}
 span.title {
   /* background-color: #654df1; */
   color: #391145;

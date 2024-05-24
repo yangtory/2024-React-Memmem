@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import "../../css/dash.css";
 import "../../css/table.css";
-import { findUnique } from "../api/user";
 import { selectAll } from "../api/notice";
 import { getSession, useSession } from "next-auth/react";
 
@@ -115,7 +114,9 @@ const DashPage = () => {
             </thead>
             <tbody>
               <tr className="noList">
-                <div className="noList">등록된 공지사항이 없습니다.</div>
+                <div className="noList">
+                  등록된 공지사항이 없습니다.
+                </div>
               </tr>
             </tbody>
           </table>

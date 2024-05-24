@@ -6,8 +6,15 @@ import "../../css/table.css";
 import "../../css/detail.css";
 import { useModal } from "../../provider/ModalProvider";
 import { useTicket } from "../../provider/TicketProvider";
+import AOS from "aos";
 
 const TicketPage = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1200,
+    });
+  }, []);
+
   const { data: session } = useSession();
   const { ticketList, setTicketList } = useTicket();
   const [ticketSeq, setTicketSeq] = useState("");
@@ -103,7 +110,9 @@ const TicketPage = () => {
               </div>
             </div>
           ) : (
-            <div className="noticket card">No ticket selected</div>
+            <div className="noticket card" data-aos="fade-up">
+              No ticket selected
+            </div>
           )}
         </div>
         <div className="table_div half">

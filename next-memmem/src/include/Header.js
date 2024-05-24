@@ -1,4 +1,5 @@
 "use client";
+import "../css/App.css";
 import { useSession, signOut } from "next-auth/react";
 
 const Header = () => {
@@ -14,9 +15,15 @@ const Header = () => {
             height="30px"
             alt=""
           />
-          <a href="/">
-            <h3>Mem</h3>
-          </a>
+          {session ? (
+            <a href="/dash">
+              <h3>Mem</h3>
+            </a>
+          ) : (
+            <a href="/">
+              <h3>Mem</h3>
+            </a>
+          )}
         </div>
         <nav className="nav">
           {loading ? (

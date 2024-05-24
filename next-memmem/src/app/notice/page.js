@@ -115,7 +115,7 @@ const NoticePage = () => {
     const seq = formData.n_seq;
     console.log(seq);
     await updateNotice({
-      seq: seq,
+      seq,
       title: updateTitle,
       content: updateContent,
     });

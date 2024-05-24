@@ -3,9 +3,10 @@ import "../../../css/table.css";
 import "../../../css/input.css";
 import { useEffect, useState } from "react";
 import { AllUser, findUnique } from "../../api/user";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { AddUserComp } from "../../api/userComp";
-
+import "../../../css/user/main.css";
+import "../../../css/user/userInput.css";
 const InsertPage = () => {
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
@@ -62,11 +63,9 @@ const InsertPage = () => {
   useEffect(() => {
     if (session) {
       const codeFetch = async () => {
-        const u_id = session.user.id.u_id;
-        const ccode = (await findUnique({ u_id })).tbl_company[0]
-          .c_code;
-        const cname = (await findUnique({ u_id })).tbl_company[0]
-          .c_name;
+        const session = await getSession();
+        const ccode = session?.user.id.tbl_company[0].c_code;
+        const cname = session?.user.id.tbl_company[0].c_name;
         setCname(cname);
         setCcode(ccode);
       };
@@ -95,7 +94,7 @@ const InsertPage = () => {
     <>
       <h1 className="list_title">회원 등록</h1>
       <div className="wrap">
-        <div className="input_div">
+        <div className="input_div formBox">
           <form className="formBox input_box">
             <h3>회원 정보</h3>
             <div className="user_error"></div>
@@ -168,16 +167,11 @@ const InsertPage = () => {
             <label>종료일</label>
             <input className="r_edate" type="date" name="r_edate" value="${U.r_edate }" /> */}
 
-            <input
-              type="button"
-              value="저장"
-              className="insert"
-              onClick={submit}
-            />
+            <input type="button" value="저장" className="insert" onClick={submit} />
           </form>
         </div>
 
-        <div className="member_list">
+        <div className="member_list right">
           <h3>USER 리스트</h3>
 
           <div className="table_wrapper">
@@ -196,11 +190,7 @@ const InsertPage = () => {
                 ) : (
                   userList &&
                   userList.map((USER) => (
-                    <tr
-                      key={USER.u_id}
-                      data-id={USER.u_id}
-                      onClick={() => userClick(USER.u_id)}
-                    >
+                    <tr key={USER.u_id} data-id={USER.u_id} onClick={() => userClick(USER.u_id)}>
                       <td>{USER.u_id}</td>
                       <td>{USER.u_name}</td>
                     </tr>

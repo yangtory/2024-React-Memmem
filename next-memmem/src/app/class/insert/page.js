@@ -6,7 +6,7 @@ import { getSession } from "next-auth/react";
 
 import { selectAll } from "../../api/teacher";
 
-const InputPage = ({ date, selectedDate }) => {
+const InputPage = ({ date, selectedDate, onColorChange }) => {
   const [teacher, setTeacher] = useState([]);
   const [selectColor, setSelectColor] = useState(null);
   const colorPickerRef = useRef();

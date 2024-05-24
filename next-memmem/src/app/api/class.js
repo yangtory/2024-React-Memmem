@@ -7,6 +7,7 @@ export const classAll = async (ccode, selectedDate) => {
   const result = await CLASS.findMany({
     where: { c_ccode: ccode, c_sdate: selectedDate },
     include: { tbl_teacher: true },
+    orderBy: { c_sdate: "asc" },
   });
   return result;
 };

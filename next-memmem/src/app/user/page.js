@@ -50,10 +50,7 @@ const UserPage = () => {
     let debounceTimer;
     return (...args) => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(
-        () => callback.apply(this, args),
-        delay
-      );
+      debounceTimer = setTimeout(() => callback.apply(this, args), delay);
     };
   };
 
@@ -101,11 +98,7 @@ const UserPage = () => {
               defaultValue={utel}
               onChange={onUtelHandler}
             />
-            <img
-              src="/images/search.png"
-              width="10px"
-              height="10px"
-            />
+            <img src="/images/search.png" width="10px" height="10px" />
           </form>
         </div>
         <div className="table_div">
@@ -120,11 +113,7 @@ const UserPage = () => {
 
             <tbody>
               {users.map((user) => (
-                <tr
-                  key={user.us_uid}
-                  data-id={user.us_uid}
-                  onClick={() => setDetail(user.us_uid)}
-                >
+                <tr key={user.us_uid} data-id={user.us_uid} onClick={() => setDetail(user.us_uid)}>
                   <td>{user.us_uid}</td>
                   <td>{user.us_uname}</td>
                   <td>{user.us_utel}</td>
@@ -144,11 +133,7 @@ const UserPage = () => {
                     <strong>전화번호</strong>
                     <p>{detail.us_utel}</p>
                     <a className="message_btn button-32">
-                      <img
-                        src="/images/mail.png"
-                        width="10px"
-                        height="10px"
-                      ></img>
+                      <img src="/images/mail.png" width="10px" height="10px"></img>
                     </a>
                   </div>
                   <div className="info_detail">

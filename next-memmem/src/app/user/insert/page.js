@@ -14,7 +14,8 @@ const InsertPage = () => {
   const [userList, setUserList] = useState([]);
   const [ccode, setCcode] = useState("");
   const [cname, setCname] = useState("");
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectUser, setSelectUser] = useState("");
   const [formData, setFormData] = useState({
     us_ccode: ccode,
   });
@@ -26,6 +27,7 @@ const InsertPage = () => {
         const users = await AllUser();
 
         setUserList(users);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -61,10 +63,8 @@ const InsertPage = () => {
     if (session) {
       const codeFetch = async () => {
         const u_id = session.user.id.u_id;
-        const ccode = (await findUnique({ u_id })).tbl_company[0]
-          .c_code;
-        const cname = (await findUnique({ u_id })).tbl_company[0]
-          .c_name;
+        const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
+        const cname = (await findUnique({ u_id })).tbl_company[0].c_name;
         setCname(cname);
         setCcode(ccode);
       };
@@ -182,16 +182,19 @@ const InsertPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {userList.map((USER, index) => (
-                  <tr
-                    key={USER.u_id}
-                    data-id={USER.u_id}
-                    onClick={() => userClick(USER.u_id)}
-                  >
-                    <td>{USER.u_id}</td>
-                    <td>{USER.u_name}</td>
+                {isLoading ? (
+                  <tr>
+                    <td colSpan="2">로딩 중...</td>
                   </tr>
-                ))}
+                ) : (
+                  userList &&
+                  userList.map((USER) => (
+                    <tr key={USER.u_id} data-id={USER.u_id} onClick={() => userClick(USER.u_id)}>
+                      <td>{USER.u_id}</td>
+                      <td>{USER.u_name}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

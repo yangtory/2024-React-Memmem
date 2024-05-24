@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import "../../css/table.css"; // CSS 파일을 가져옵니다.
 import "../../css/search.css";
+
 import "../../css/teacher_detail.css";
 import {
   findTeacher,
@@ -13,6 +14,7 @@ import { useTicket } from "../../provider/TicketProvider";
 import { getSession } from "next-auth/react";
 const TeacherPage = () => {
   const { teacherList, setTeacherList } = useTicket();
+
   const { setTeacherModal } = useModal();
   const [tname, setTname] = useState("");
   const [tcode, setTcode] = useState("");
@@ -36,10 +38,12 @@ const TeacherPage = () => {
     let debounceTimer;
     return (...args) => {
       clearTimeout(debounceTimer);
+
       debounceTimer = setTimeout(
         () => callback.apply(this, args),
         delay
       );
+
     };
   };
   const onTnameHandler = debounce(onTnameChange, 300);
@@ -53,8 +57,10 @@ const TeacherPage = () => {
   // 회원권 리스트 셋팅
   useEffect(() => {
     const teacherFetch = async () => {
+
       const session = await getSession();
       const ccode = session?.user.id.tbl_company[0].c_code;
+
       try {
         const result = await selectAll(ccode);
         console.log(result);
@@ -77,10 +83,12 @@ const TeacherPage = () => {
   }, [setTeacherList, tcode, tname, ttel]);
 
   const teacherViewList = teacherList.map((teacher, index) => (
+
     <tr
       key={teacher?.t_code}
       onClick={() => setDetail(teacher?.t_code)}
     >
+
       <td>{index + 1}</td>
       <td>{teacher.t_code}</td>
       <td>{teacher.t_name}</td>
@@ -108,11 +116,13 @@ const TeacherPage = () => {
       <h1 className="list_title">강사 리스트</h1>
       <div className="list_home">
         <div className="teacher input insert_btn_box">
+
           <button
             className="teacher input insert button-32"
             type="button"
             onClick={openModal}
           >
+
             강사추가
           </button>
         </div>
@@ -141,6 +151,7 @@ const TeacherPage = () => {
             />
           </form>
         </div>
+
         <div className="view_box">
           {detail ? (
             <div>
@@ -193,6 +204,7 @@ const TeacherPage = () => {
             <tbody>{teacherViewList}</tbody>
           </table>
         </div>
+
       </div>
     </>
   );

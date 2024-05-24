@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { AllUser, findUnique } from "../../api/user";
 import { getSession, useSession } from "next-auth/react";
 import { AddUserComp } from "../../api/userComp";
-import "../../../css/user/main.css";
+
 import "../../../css/user/userInput.css";
 const InsertPage = () => {
   const today = new Date();

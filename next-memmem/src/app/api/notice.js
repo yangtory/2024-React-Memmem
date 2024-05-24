@@ -40,3 +40,26 @@ export const findNotice = async ({ title, date, ccode }) => {
     },
   });
 };
+
+export const deleteNotice = async (seq) => {
+  await NOTICE.delete({
+    where: { n_seq: seq },
+  });
+};
+
+export const updateNotice = async ({ seq, title, content }) => {
+  try {
+    const updateNotice = await NOTICE.update({
+      where: { n_seq: seq },
+      data: {
+        n_title: title,
+        n_content: content,
+      },
+    });
+    console.log("update ", updateNotice);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    prisma.$disconnect;
+  }
+};

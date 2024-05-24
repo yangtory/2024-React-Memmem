@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getTicketInfo, ticketAll } from "../api/ticket";
 import { useSession } from "next-auth/react";
 import "../../css/table.css";
+import "../../css/detail.css";
 import { useModal } from "../../provider/ModalProvider";
 import { useTicket } from "../../provider/TicketProvider";
 
@@ -71,7 +72,41 @@ const TicketPage = () => {
             회원권 추가
           </a>
         </div>
-        <div className="table_div">
+        <div className="view_box">
+          {ticket ? (
+            <div>
+              <div className="detail_box">
+                <div className="card">
+                  <h3>{ticket.i_title}</h3>
+                  <div className="container">
+                    <p>
+                      현재 <span className="p_count">명</span>{" "}
+                      이용중입니다
+                    </p>
+                    <hr />
+                    <div className="info">
+                      <div>
+                        <strong>가격</strong>
+                        <p>{ticket.i_price}</p>
+                      </div>
+                      <div>
+                        <strong>수강횟수</strong>
+                        <p>{ticket.i_count} 회</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="detail btn_box">
+                    <button className="button-32">수정</button>
+                    <button className="button-32">삭제</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="noticket card">No ticket selected</div>
+          )}
+        </div>
+        <div className="table_div half">
           <table className="ticket list">
             <thead>
               <tr>
@@ -83,18 +118,6 @@ const TicketPage = () => {
             </thead>
             <tbody>{ticketViewList}</tbody>
           </table>
-        </div>
-        <div className="view_box">
-          {ticket ? (
-            <div>
-              <h1>회원권Detail</h1>
-              <p>회원권 : {ticket.i_title}</p>
-              <p>횟수 : {ticket.i_count}</p>
-              <p>가격 : {ticket.i_price}</p>
-            </div>
-          ) : (
-            <p>No ticket selected</p>
-          )}
         </div>
       </div>
     </>

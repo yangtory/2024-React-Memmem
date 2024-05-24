@@ -1,6 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getTicketInfo, ticketAll } from "../api/ticket";
+import {
+  getTicketInfo,
+  getUserCount,
+  ticketAll,
+} from "../api/ticket";
 import { useSession } from "next-auth/react";
 import "../../css/table.css";
 import "../../css/detail.css";
@@ -20,6 +24,7 @@ const TicketPage = () => {
   const [ticketSeq, setTicketSeq] = useState("");
   const [ticket, setTicket] = useState(null);
   const { setIsModal } = useModal();
+  const [count, setCount] = useState("");
 
   // insert 클릭하면 modal 띄우기
   const openModal = () => {
@@ -48,8 +53,12 @@ const TicketPage = () => {
     if (ticketSeq) {
       const fetchTicket = async () => {
         try {
+          // detail
           const result = await getTicketInfo(ticketSeq);
           setTicket(result[0]);
+          // 이용중인 회원
+          const count = await getUserCount(ticketSeq);
+          setCount(count);
         } catch (error) {
           console.log(error);
         }
@@ -87,7 +96,7 @@ const TicketPage = () => {
                   <h3>{ticket.i_title}</h3>
                   <div className="container">
                     <p>
-                      현재 <span className="p_count">명</span>{" "}
+                      현재 <span className="p_count">{count}명</span>
                       이용중입니다
                     </p>
                     <hr />

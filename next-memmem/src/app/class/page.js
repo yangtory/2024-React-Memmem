@@ -188,7 +188,11 @@ const ClassPage = () => {
         </aside>
         <aside className="right">
           {showInputPage ? (
-            <InputPage date={selectedDate} selectedDate={selectedDate} />
+            <InputPage
+              date={selectedDate}
+              selectedDate={selectedDate}
+              onColorChange={handleColorChange}
+            />
           ) : seq ? (
             <UpPage seq={seq} selectedDate={selectedDate} />
           ) : (

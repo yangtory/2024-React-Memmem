@@ -21,6 +21,18 @@ const NoticePage = () => {
   const [ntitle, setNtitle] = useState("");
   const [ndate, setNdate] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
+  const [formData, setFormData] = useState({
+    n_seq: selectedNotice?.n_seq || "",
+    n_title: selectedNotice?.n_title || "",
+    n_content: selectedNotice?.n_content || "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   // 검색 기능
   const onNtitleChange = (e) => {
@@ -71,33 +83,41 @@ const NoticePage = () => {
     fetchNotices();
   }, [setNoticeList, ntitle, ndate, selectedNotice]);
 
+  // notice detail 띄우기
   const handleNoticeClick = (notice) => {
     setSelectedNotice(notice);
   };
 
+  // detail 닫기
   const handleCloseModal = () => {
     setSelectedNotice(null);
+    setIsEditMode(false);
   };
 
+  // 삭제
   const deleteHandler = async (seq) => {
     await deleteNotice(seq);
     setSelectedNotice(null);
   };
 
-  // 디테일에서 수정버튼 눌렀을때
+  // 디테일에서 수정버튼 누르기
   const updateClickHandler = (seq) => {
     // 클릭-모달-인풋 리드온리지워짐-수정완료버튼생성
-    console.log("update 입니다");
+    console.log(seq);
     setSelectedNotice(seq);
     setIsEditMode(true); // readonly해제
   };
 
-  // 수정완료버튼 눌렀을때
-  const updateHandler = async ({ seq, title, content }) => {
+  // 수정버튼을 누르고 나서 수정완료를 누를때
+  const updateHandler = async () => {
+    const updateTitle = formData.n_title;
+    const updateContent = formData.n_content;
+    const seq = formData.n_seq;
+    console.log(seq);
     await updateNotice({
-      seq,
-      title,
-      content,
+      seq: seq,
+      title: updateTitle,
+      content: updateContent,
     });
     setIsEditMode(false);
     setSelectedNotice(null);
@@ -211,13 +231,22 @@ const NoticePage = () => {
               <span>X</span>
             </div>
             <div className="notice input_box">
-              <h3>{isEditMode ? "공지사항 수정" : ""}</h3>
+              {isEditMode ? (
+                <>
+                  <h3>공지사항 수정</h3>
+                  <input id="seq" value={selectedNotice.n_seq} />
+                </>
+              ) : (
+                <input id="seq" value={selectedNotice?.n_seq} />
+              )}
+
               <label htmlFor="title">제목</label>
               <input
                 id="title"
                 name="title"
                 value={selectedNotice?.n_title}
-                readOnly={!isEditMode} // 수정보드 readonly=false
+                readOnly={!isEditMode} // 수정모드 readonly=false
+                onClick={handleChange} // 수정모드에서 값 변경 가능하게 설정
               />
 
               <label htmlFor="content">내용</label>
@@ -227,23 +256,37 @@ const NoticePage = () => {
                 rows="20"
                 value={selectedNotice?.n_content}
                 readOnly={!isEditMode}
+                onClick={handleChange}
               ></textarea>
 
               <div className="btn_box">
-                <button
-                  className="notice_update button-32"
-                  onClick={() =>
-                    updateClickHandler(selectedNotice?.n_seq)
-                  }
-                >
-                  수정
-                </button>
-                <button
-                  className="notice_delete button-32"
-                  onClick={() => deleteHandler(selectedNotice?.n_seq)}
-                >
-                  삭제
-                </button>
+                {isEditMode ? (
+                  <button
+                    className="notice_update button-32"
+                    onClick={updateHandler}
+                  >
+                    수정완료
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      className="notice_update button-32"
+                      onClick={() =>
+                        updateClickHandler(selectedNotice?.n_seq)
+                      }
+                    >
+                      수정
+                    </button>
+                    <button
+                      className="notice_delete button-32"
+                      onClick={() =>
+                        deleteHandler(selectedNotice?.n_seq)
+                      }
+                    >
+                      삭제
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -7,7 +7,7 @@ export const ticketAll = async (ccode) => {
   const result = await TICKET.findMany({
     where: { i_ccode: ccode },
   });
-  prisma.$disconnect;
+  prisma.$disconnect();
   return result;
 };
 
@@ -20,7 +20,7 @@ export const createTicket = async ({ formData }) => {
       i_ccode: formData.i_ccode,
     },
   });
-  prisma.$disconnect;
+  prisma.$disconnect();
   return result;
 };
 
@@ -30,6 +30,6 @@ export const getTicketInfo = async (i_seq) => {
       i_seq: i_seq,
     },
   });
-  prisma.$disconnect;
+  prisma.$disconnect();
   return result;
 };

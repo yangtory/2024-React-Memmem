@@ -2,13 +2,15 @@
 import { useState, useEffect } from "react";
 import "../../css/table.css"; // CSS 파일을 가져옵니다.
 import "../../css/search.css";
+
+import "../../css/teacher_detail.css";
 import { findTeacher, getTeacherInfo, selectAll } from "../api/teacher";
-import { useUser } from "../../provider/UserProvider";
 import { useModal } from "../../provider/ModalProvider";
 import { useTicket } from "../../provider/TicketProvider";
+import { getSession } from "next-auth/react";
 const TeacherPage = () => {
   const { teacherList, setTeacherList } = useTicket();
-  const { ccode } = useUser();
+
   const { setTeacherModal } = useModal();
   const [tname, setTname] = useState("");
   const [tcode, setTcode] = useState("");
@@ -32,6 +34,7 @@ const TeacherPage = () => {
     let debounceTimer;
     return (...args) => {
       clearTimeout(debounceTimer);
+
       debounceTimer = setTimeout(() => callback.apply(this, args), delay);
     };
   };
@@ -46,6 +49,9 @@ const TeacherPage = () => {
   // 회원권 리스트 셋팅
   useEffect(() => {
     const teacherFetch = async () => {
+      const session = await getSession();
+      const ccode = session?.user.id.tbl_company[0].c_code;
+
       try {
         const result = await selectAll(ccode);
         console.log(result);
@@ -125,6 +131,44 @@ const TeacherPage = () => {
             />
           </form>
         </div>
+        <div className="view_box">
+          {detail ? (
+            <div>
+              <div className="detail_box">
+                <div className="card">
+                  <div className="img_box">
+                    <div className="pro_box">
+                      <span className="pro">PRO</span>
+                      <h3>{detail.t_name}</h3>
+                    </div>
+                    {/* <img src="/images/bug.png" width="150px" /> */}
+                  </div>
+                  <div className="teacher_info">
+                    <h4>광주</h4>
+                    <p>
+                      체력단련, 근력강화, 다이어트, 신체균형 <br />
+                      여러 헬스 클럽에서 헬스 트레이너로 근무한 경험이 있음
+                    </p>
+                    <div>
+                      <strong>강사코드</strong>
+                      <span>{detail.t_code}</span>
+                    </div>
+                    <div>
+                      <strong>전화번호</strong>
+                      <span>{detail.t_tel}</span>
+                    </div>
+                  </div>
+                  <div className="detail btn_box">
+                    <button className="button-32">수정</button>
+                    <button className="button-32">삭제</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="nocard">No ticket selected</div>
+          )}
+        </div>
         <div className="table_div">
           <table className="teacher list">
             <thead>
@@ -137,22 +181,6 @@ const TeacherPage = () => {
             </thead>
             <tbody>{teacherViewList}</tbody>
           </table>
-        </div>
-        <div className="view_box">
-          {detail ? (
-            <div>
-              <h1>회원권Detail</h1>
-              <p>회원권 : {detail.t_code}</p>
-              <p>횟수 : {detail.t_name}</p>
-              <p>가격 : {detail.t_tel}</p>
-              <div className="btn_box">
-                <button className="update_btn">수정</button>
-                <button className="delete_btn">삭제</button>
-              </div>
-            </div>
-          ) : (
-            <p>No ticket selected</p>
-          )}
         </div>
       </div>
     </>

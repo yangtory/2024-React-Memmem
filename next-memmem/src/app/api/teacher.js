@@ -8,7 +8,7 @@ export const selectAll = async (ccode) => {
   const result = await TEACHER.findMany({
     where: { t_ccode: ccode },
   });
-  prisma.$disconnect;
+  prisma.$disconnect();
   return result;
 };
 
@@ -27,7 +27,7 @@ export const findTeacher = async ({ tname, tcode, ttel, ccode }) => {
       },
     },
   });
-  prisma.$disconnect;
+  prisma.$disconnect();
   return result;
 };
 
@@ -40,7 +40,7 @@ export const createTeacher = async ({ formData }) => {
       t_tel: formData.t_tel,
     },
   });
-  prisma.$disconnect;
+  prisma.$disconnect();
   return result;
 };
 
@@ -51,6 +51,6 @@ export const getTeacherInfo = async (tcode) => {
       t_code: tcode,
     },
   });
-  prisma.$disconnect;
+  prisma.$disconnect();
   return result;
 };

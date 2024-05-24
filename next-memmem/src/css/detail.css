@@ -1,5 +1,5 @@
 div.detail_box {
-  width: 70%;
+  width: 100%;
   margin: 20px auto;
 }
 
@@ -14,11 +14,12 @@ hr {
   overflow: visible;
   margin: 15px 0;
 }
-div.detail_box.width {
+div.detail_box {
   width: 100%;
 }
 div.card {
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2),
+    0 4px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: #e9dcd6;
   /* background: radial-gradient(circle, #e9dcc9, #e9dcd9); */
   display: flex;
@@ -90,6 +91,8 @@ div.info_detail {
 }
 
 div.detail.btn_box {
+  display: flex;
+  flex-direction: row;
   margin: 5px 10px 20px auto;
   a {
     width: 30%;
@@ -125,4 +128,11 @@ div.info {
   p {
     flex: 1;
   }
+}
+
+.noticket.card {
+  padding: 2rem;
+  text-align: center;
+  font-weight: 900;
+  margin-bottom: 1rem;
 }

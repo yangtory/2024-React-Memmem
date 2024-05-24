@@ -14,13 +14,11 @@ const InsertPage = () => {
   const [userList, setUserList] = useState([]);
   const [ccode, setCcode] = useState("");
   const [cname, setCname] = useState("");
-  const [date, setDate] = useState("");
 
   const [formData, setFormData] = useState({
     us_ccode: ccode,
   });
 
-  const [selectUser, setSelectUser] = useState(null);
   // 모든 유저 찾기
   useEffect(() => {
     const fetchUsers = async () => {
@@ -63,8 +61,10 @@ const InsertPage = () => {
     if (session) {
       const codeFetch = async () => {
         const u_id = session.user.id.u_id;
-        const ccode = (await findUnique({ u_id })).tbl_company[0].c_code;
-        const cname = (await findUnique({ u_id })).tbl_company[0].c_name;
+        const ccode = (await findUnique({ u_id })).tbl_company[0]
+          .c_code;
+        const cname = (await findUnique({ u_id })).tbl_company[0]
+          .c_name;
         setCname(cname);
         setCcode(ccode);
       };
@@ -98,7 +98,14 @@ const InsertPage = () => {
             <h3>회원 정보</h3>
             <div className="user_error"></div>
             <label>ID</label>
-            <input className="us_uid" placeholder="리스트에서 선택해주세요" name="us_uid" readonly value={formData.us_uid} onChange={changeUser} />
+            <input
+              className="us_uid"
+              placeholder="리스트에서 선택해주세요"
+              name="us_uid"
+              readonly
+              value={formData.us_uid}
+              onChange={changeUser}
+            />
             <label>이름</label>
             <input
               className="us_uname"
@@ -108,10 +115,40 @@ const InsertPage = () => {
               value={formData.us_uname}
               onChange={changeUser}
             />
-            <input className="us_utel" type="hidden" placeholder="전화번호" name="us_utel" value={formData.us_utel} onChange={changeUser} />
-            <input className="us_cname" type="hidden" placeholder="업체명" name="us_cname" readonly value={formData.us_cname} onChange={changeUser} />
-            <input className="us_ccode" type="hidden" placeholder="업체코드" name="us_ccode" value={ccode} onChange={changeUser} readonly />
-            <input className="us_date" placeholder="날짜" name="us_date" value={formattedDate} onChange={changeUser} readonly />
+            <input
+              className="us_utel"
+              type="hidden"
+              placeholder="전화번호"
+              name="us_utel"
+              value={formData.us_utel}
+              onChange={changeUser}
+            />
+            <input
+              className="us_cname"
+              type="hidden"
+              placeholder="업체명"
+              name="us_cname"
+              readonly
+              value={formData.us_cname}
+              onChange={changeUser}
+            />
+            <input
+              className="us_ccode"
+              type="hidden"
+              placeholder="업체코드"
+              name="us_ccode"
+              value={ccode}
+              onChange={changeUser}
+              readonly
+            />
+            <input
+              className="us_date"
+              placeholder="날짜"
+              name="us_date"
+              value={formattedDate}
+              onChange={changeUser}
+              readonly
+            />
 
             {/* <h3>수강권 정보</h3>
             <div className="m_error"></div>
@@ -146,7 +183,11 @@ const InsertPage = () => {
               </thead>
               <tbody>
                 {userList.map((USER, index) => (
-                  <tr key={USER.u_id} data-id={USER.u_id} onClick={() => userClick(USER.u_id)}>
+                  <tr
+                    key={USER.u_id}
+                    data-id={USER.u_id}
+                    onClick={() => userClick(USER.u_id)}
+                  >
                     <td>{USER.u_id}</td>
                     <td>{USER.u_name}</td>
                   </tr>

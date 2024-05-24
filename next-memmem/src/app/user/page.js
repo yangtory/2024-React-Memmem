@@ -1,19 +1,17 @@
 "use client";
 import "../../css/table.css";
 import "../../css/detail.css";
+import "../../css/search.css";
 import { useState, useEffect } from "react";
 import { findUsers, userDetail } from "../api/userComp";
-import { getSession, useSession } from "next-auth/react";
-import { findUnique } from "../api/user";
+import { getSession } from "next-auth/react";
 
 const UserPage = () => {
   const [users, setUsers] = useState([]); // userList
   const [uname, setUname] = useState("");
   const [uid, setUid] = useState("");
   const [utel, setUtel] = useState("");
-  const { data: session } = useSession();
   const [detail, setDetail] = useState("");
-  const [ccode, setCcode] = useState("");
   // 검색
   useEffect(() => {
     const userFetch = async () => {
@@ -52,7 +50,10 @@ const UserPage = () => {
     let debounceTimer;
     return (...args) => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => callback.apply(this, args), delay);
+      debounceTimer = setTimeout(
+        () => callback.apply(this, args),
+        delay
+      );
     };
   };
 
@@ -82,10 +83,29 @@ const UserPage = () => {
         </div>
         <div className="customer btn_box search">
           <form method="GET" modelAttribute="SEARCH">
-            <input className="search_input" placeholder="아이디" defaultValue={uid} onChange={onUidHandler} />
-            <input className="search_input" placeholder="이름" defaultValue={uname} onChange={onUnameHandler} />
-            <input className="search_input" placeholder="전화번호" defaultValue={utel} onChange={onUtelHandler} />
-            <img src="${rootPath }/static/images/search.png" width="10px" height="10px" />
+            <input
+              className="search_input"
+              placeholder="아이디"
+              defaultValue={uid}
+              onChange={onUidHandler}
+            />
+            <input
+              className="search_input"
+              placeholder="이름"
+              defaultValue={uname}
+              onChange={onUnameHandler}
+            />
+            <input
+              className="search_input"
+              placeholder="전화번호"
+              defaultValue={utel}
+              onChange={onUtelHandler}
+            />
+            <img
+              src="/images/search.png"
+              width="10px"
+              height="10px"
+            />
           </form>
         </div>
         <div className="table_div">
@@ -100,7 +120,11 @@ const UserPage = () => {
 
             <tbody>
               {users.map((user) => (
-                <tr key={user.us_uid} data-id={user.us_uid} onClick={() => setDetail(user.us_uid)}>
+                <tr
+                  key={user.us_uid}
+                  data-id={user.us_uid}
+                  onClick={() => setDetail(user.us_uid)}
+                >
                   <td>{user.us_uid}</td>
                   <td>{user.us_uname}</td>
                   <td>{user.us_utel}</td>
@@ -120,7 +144,11 @@ const UserPage = () => {
                     <strong>전화번호</strong>
                     <p>{detail.us_utel}</p>
                     <a className="message_btn button-32">
-                      <img src="/images/mail.png" width="10px" height="10px"></img>
+                      <img
+                        src="/images/mail.png"
+                        width="10px"
+                        height="10px"
+                      ></img>
                     </a>
                   </div>
                   <div className="info_detail">

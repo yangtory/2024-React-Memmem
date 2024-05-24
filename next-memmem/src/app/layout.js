@@ -6,7 +6,6 @@ import Side from "../include/Side";
 import css from "../css/modal.module.css";
 import { ModalProvider } from "../provider/ModalProvider";
 import { TicketProvider } from "../provider/TicketProvider";
-import { UserProvider } from "../provider/UserProvider";
 import TicketModal from "../modals/TicketModal";
 import TeacherModal from "../modals/TeacherModal";
 import NoticeModal from "../modals/NoticeModal";
@@ -16,22 +15,20 @@ export default function RootLayout({ children }) {
     <html lang="ko">
       <body>
         <SessionProvider>
-          <UserProvider>
-            <ModalProvider>
-              <TicketProvider>
-                <div className={css.content}>
-                  <TicketModal />
-                  <TeacherModal />
-                  <NoticeModal />
-                  <Header />
-                  <div className="main">
-                    <Side />
-                    <section>{children}</section>
-                  </div>
+          <ModalProvider>
+            <TicketProvider>
+              <div className={css.content}>
+                <TicketModal />
+                <TeacherModal />
+                <NoticeModal />
+                <Header />
+                <div className="main">
+                  <Side />
+                  <section>{children}</section>
                 </div>
-              </TicketProvider>
-            </ModalProvider>
-          </UserProvider>
+              </div>
+            </TicketProvider>
+          </ModalProvider>
         </SessionProvider>
       </body>
     </html>

@@ -2,10 +2,16 @@ div.detail_box {
   width: 100%;
   margin: 20px auto;
 }
-h3 {
+input.tname {
   font-size: 24px;
   font-weight: 400;
   margin: 10px 20px;
+  padding: 5px;
+  border: none;
+  outline: none;
+  background-color: #e6cadd;
+  border-radius: 10px;
+  text-align: center;
 }
 
 hr {
@@ -32,6 +38,10 @@ div.teacher_info {
   width: 70%;
   text-align: center;
 
+  h4 {
+    margin-top: 1rem;
+  }
+
   div {
     display: flex;
     strong {
@@ -39,10 +49,14 @@ div.teacher_info {
       font-size: 1rem;
       padding: 4px;
     }
-    span {
+    input {
       flex: 2;
       font-size: 1rem;
       padding: 4px;
+      border: none;
+      outline: none;
+      background-color: #e9dcd6;
+      border-radius: 10px;
     }
   }
 }
@@ -138,6 +152,7 @@ a.message_btn {
 
 div.detail.btn_box {
   margin: 5px 10px 20px auto;
+  display: flex;
   a {
     width: 30%;
     margin: 5px auto;

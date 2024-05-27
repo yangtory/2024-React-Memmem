@@ -1,10 +1,15 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "../../css/table.css"; // CSS 파일을 가져옵니다.
 import "../../css/search.css";
 
 import "../../css/teacher_detail.css";
-import { findTeacher, getTeacherInfo, selectAll } from "../api/teacher";
+import {
+  findTeacher,
+  getTeacherInfo,
+  selectAll,
+  updateTeacher,
+} from "../api/teacher";
 import { useModal } from "../../provider/ModalProvider";
 import { useTicket } from "../../provider/TicketProvider";
 import { getSession } from "next-auth/react";
@@ -16,6 +21,21 @@ const TeacherPage = () => {
   const [tcode, setTcode] = useState("");
   const [ttel, setTtel] = useState("");
   const [detail, setDetail] = useState("");
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [formData, setFormData] = useState({
+    tcode: "",
+    tname: "",
+    ttel: "",
+  });
+  const tnameInputRef = useRef(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   // 검색 기능
   const onTnameChange = (e) => {
@@ -35,7 +55,10 @@ const TeacherPage = () => {
     return (...args) => {
       clearTimeout(debounceTimer);
 
-      debounceTimer = setTimeout(() => callback.apply(this, args), delay);
+      debounceTimer = setTimeout(
+        () => callback.apply(this, args),
+        delay
+      );
     };
   };
   const onTnameHandler = debounce(onTnameChange, 300);
@@ -71,10 +94,13 @@ const TeacherPage = () => {
       }
     };
     teacherFetch();
-  }, [setTeacherList, tcode, tname, ttel]);
+  }, [setTeacherList, tcode, tname, ttel, isEditMode]);
 
   const teacherViewList = teacherList.map((teacher, index) => (
-    <tr key={teacher?.t_code} onClick={() => setDetail(teacher?.t_code)}>
+    <tr
+      key={teacher?.t_code}
+      onClick={() => setDetail(teacher?.t_code)}
+    >
       <td>{index + 1}</td>
       <td>{teacher.t_code}</td>
       <td>{teacher.t_name}</td>
@@ -89,6 +115,11 @@ const TeacherPage = () => {
         try {
           const result = await getTeacherInfo(detail);
           setDetail(result[0]);
+          setFormData({
+            tcode: result[0].t_code,
+            tname: result[0].t_name,
+            ttel: result[0].t_tel,
+          });
         } catch (error) {
           console.log(error);
         }
@@ -97,12 +128,39 @@ const TeacherPage = () => {
     }
   }, [detail, teacherList]);
 
+  // 수정버튼 클릭
+  const updateHandler = () => {
+    setIsEditMode(true);
+    setTimeout(() => {
+      if (tnameInputRef.current) {
+        tnameInputRef.current.focus();
+        tnameInputRef.current.select();
+      }
+    }, 0); // 다음 렌더링 사이클에서 포커스를 설정하기 위해 setTimeout 사용
+  };
+
+  // 저장버튼 클릭
+  const saveHandler = async () => {
+    const { tname, ttel, tcode } = formData;
+    await updateTeacher({
+      tname,
+      ttel,
+      tcode,
+    });
+    setIsEditMode(false);
+    setDetail(tcode);
+  };
+
   return (
     <>
       <h1 className="list_title">강사 리스트</h1>
       <div className="list_home">
         <div className="teacher input insert_btn_box">
-          <button className="teacher input insert button-32" type="button" onClick={openModal}>
+          <button
+            className="teacher input insert button-32"
+            type="button"
+            onClick={openModal}
+          >
             강사추가
           </button>
         </div>
@@ -139,7 +197,19 @@ const TeacherPage = () => {
                   <div className="img_box">
                     <div className="pro_box">
                       <span className="pro">PRO</span>
-                      <h3>{detail.t_name}</h3>
+                      <input
+                        ref={tnameInputRef}
+                        className="tname"
+                        name="tname"
+                        value={formData.tname}
+                        readOnly={!isEditMode}
+                        style={{
+                          border: isEditMode
+                            ? "0.5px solid #888"
+                            : "none",
+                        }}
+                        onChange={handleChange}
+                      />
                     </div>
                     {/* <img src="/images/bug.png" width="150px" /> */}
                   </div>
@@ -147,20 +217,54 @@ const TeacherPage = () => {
                     <h4>광주</h4>
                     <p>
                       체력단련, 근력강화, 다이어트, 신체균형 <br />
-                      여러 헬스 클럽에서 헬스 트레이너로 근무한 경험이 있음
+                      여러 헬스 클럽에서 헬스 트레이너로 근무한 경험이
+                      있음
                     </p>
                     <div>
                       <strong>강사코드</strong>
-                      <span>{detail.t_code}</span>
+                      <input value={formData.tcode} readOnly />
                     </div>
                     <div>
                       <strong>전화번호</strong>
-                      <span>{detail.t_tel}</span>
+                      <input
+                        name="ttel"
+                        value={formData.ttel}
+                        readOnly={!isEditMode}
+                        style={{
+                          border: isEditMode
+                            ? "0.5px solid #888"
+                            : "none",
+                        }}
+                        onChange={handleChange}
+                      />
                     </div>
                   </div>
                   <div className="detail btn_box">
-                    <button className="button-32">수정</button>
-                    <button className="button-32">삭제</button>
+                    {isEditMode ? (
+                      <button
+                        className="button-32"
+                        onClick={saveHandler}
+                      >
+                        저장
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          className="button-32"
+                          onClick={updateHandler}
+                        >
+                          수정
+                        </button>
+                        <button
+                          className="button-32"
+                          onClick={() => {
+                            deleteClickHandler(ticketSeq);
+                          }}
+                        >
+                          삭제
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

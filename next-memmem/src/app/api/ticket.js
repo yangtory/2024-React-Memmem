@@ -44,3 +44,25 @@ export const getUserCount = async (r_iseq) => {
   prisma.$disconnect();
   return result.length;
 };
+
+export const updateTicket = async ({ seq, price, count }) => {
+  try {
+    await TICKET.update({
+      where: { i_seq: parseInt(seq) },
+      data: {
+        i_price: parseInt(price),
+        i_count: parseInt(count),
+      },
+    });
+    prisma.$disconnect();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteTicket = async (seq) => {
+  await TICKET.delete({
+    where: { i_seq: parseInt(seq) },
+  });
+  prisma.$disconnect();
+};

@@ -248,7 +248,7 @@ const NoticePage = () => {
                 ""
               )}
 
-              <label htmlFor="n_title">제목</label>
+              <label>제목</label>
               <input
                 id="n_title"
                 name="n_title"
@@ -257,7 +257,7 @@ const NoticePage = () => {
                 onChange={handleChange} // 수정모드에서 값 변경 가능하게 설정
               />
 
-              <label htmlFor="n_content">내용</label>
+              <label>내용</label>
               <textarea
                 id="n_content"
                 name="n_content"

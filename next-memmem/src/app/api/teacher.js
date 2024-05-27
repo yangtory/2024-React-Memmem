@@ -54,3 +54,13 @@ export const getTeacherInfo = async (tcode) => {
   prisma.$disconnect();
   return result;
 };
+
+export const updateTeacher = async ({ tcode, tname, ttel }) => {
+  await TEACHER.update({
+    where: { t_code: tcode },
+    data: {
+      t_name: tname,
+      t_tel: ttel,
+    },
+  });
+};

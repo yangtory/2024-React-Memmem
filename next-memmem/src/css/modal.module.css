@@ -1,9 +1,10 @@
 .content {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: absolute;
 }
 
 .close {
@@ -12,7 +13,7 @@
 }
 
 .modal {
-  z-index: 10;
+  /* z-index: 10; */
   width: 100%;
   height: 100%;
   position: absolute;
@@ -23,8 +24,9 @@
 .modal > section {
   width: 50%;
   height: 50%;
-  margin-top: 25%;
-  margin-left: 25%;
+  /* margin-top: 25%; */
+  /* margin-left: 25%; */
+  margin: 10% auto;
   border-radius: 0.5rem;
   background: #e9dcd6;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

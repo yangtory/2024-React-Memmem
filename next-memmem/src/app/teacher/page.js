@@ -5,6 +5,7 @@ import "../../css/search.css";
 
 import "../../css/teacher_detail.css";
 import {
+  deleteTeacher,
   findTeacher,
   getTeacherInfo,
   selectAll,
@@ -22,6 +23,7 @@ const TeacherPage = () => {
   const [ttel, setTtel] = useState("");
   const [detail, setDetail] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
+  const [listUpdate, setListUpdate] = useState(null);
   const [formData, setFormData] = useState({
     tcode: "",
     tname: "",
@@ -83,18 +85,13 @@ const TeacherPage = () => {
         console.log(error);
       }
       // 검색 기능
-      const result = await findTeacher({
-        tname,
-        tcode,
-        ttel,
-        ccode,
-      });
+      const result = await findTeacher(tname, tcode, ttel, ccode);
       if (result) {
         setTeacherList([...result]);
       }
     };
     teacherFetch();
-  }, [setTeacherList, tcode, tname, ttel, isEditMode]);
+  }, [setTeacherList, tcode, tname, ttel, isEditMode, listUpdate]);
 
   const teacherViewList = teacherList.map((teacher, index) => (
     <tr
@@ -142,13 +139,28 @@ const TeacherPage = () => {
   // 저장버튼 클릭
   const saveHandler = async () => {
     const { tname, ttel, tcode } = formData;
-    await updateTeacher({
-      tname,
-      ttel,
-      tcode,
-    });
-    setIsEditMode(false);
-    setDetail(tcode);
+    if (confirm("정말 수정할까요?")) {
+      await updateTeacher({
+        tname,
+        ttel,
+        tcode,
+      });
+      setIsEditMode(false);
+      setDetail(tcode);
+    }
+  };
+
+  const deleteHandler = async (tcode) => {
+    // console.log(tcode);
+    if (confirm("정말 삭제할까요?")) {
+      await deleteTeacher(tcode);
+      setDetail(null);
+      if (listUpdate === null) {
+        setListUpdate("");
+      } else {
+        setListUpdate(null);
+      }
+    }
   };
 
   return (
@@ -258,7 +270,7 @@ const TeacherPage = () => {
                         <button
                           className="button-32"
                           onClick={() => {
-                            deleteClickHandler(ticketSeq);
+                            deleteHandler(formData.tcode);
                           }}
                         >
                           삭제

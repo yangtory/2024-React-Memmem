@@ -27,8 +27,8 @@ export const createNotice = async ({ formData }) => {
   return result;
 };
 
-export const findNotice = async ({ title, date, ccode }) => {
-  return NOTICE.findMany({
+export const findNotice = async (title, date, ccode) => {
+  const result = NOTICE.findMany({
     where: {
       n_ccode: ccode, // 필터링할 조건
       n_title: {
@@ -39,12 +39,19 @@ export const findNotice = async ({ title, date, ccode }) => {
       },
     },
   });
+  prisma.$disconnect();
+  return result;
 };
 
 export const deleteNotice = async (seq) => {
-  await NOTICE.delete({
-    where: { n_seq: seq },
-  });
+  try {
+    await NOTICE.delete({
+      where: { n_seq: seq },
+    });
+    prisma.$disconnect();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const updateNotice = async ({ seq, title, content }) => {
@@ -60,6 +67,6 @@ export const updateNotice = async ({ seq, title, content }) => {
   } catch (error) {
     console.log(error);
   } finally {
-    prisma.$disconnect;
+    prisma.$disconnect();
   }
 };

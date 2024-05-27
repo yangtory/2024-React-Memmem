@@ -34,7 +34,6 @@
 
 .modal > section > header {
   width: 100%;
-  height: 20%;
   display: flex;
   font-size: 20px;
   font-weight: bold;
@@ -161,4 +160,14 @@
   padding-right: 5%;
   text-align: right;
   margin-top: 5px;
+}
+
+.textarea {
+  border: none;
+  outline: none;
+  padding: 0.4rem;
+  border-radius: 5px;
+  resize: none; /* 크기 조절 비활성화 */
+  width: 100%; /* 필요한 경우 너비와 높이 설정 */
+  height: 150px;
 }

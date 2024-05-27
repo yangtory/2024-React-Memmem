@@ -55,7 +55,9 @@ const Side = () => {
               일정관리
             </Link>
           </li>
-          <li>매출관리</li>
+          <li>
+            <Link href="/sales">매출관리</Link>
+          </li>
           <li>
             <Link href="/notice" prefetch={false}>
               공지사항

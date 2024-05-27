@@ -72,11 +72,7 @@ const NoticePage = () => {
       } catch (error) {
         console.error("Failed to fetch notices:", error);
       }
-      const result = await findNotice({
-        ntitle,
-        ndate,
-        ccode,
-      });
+      const result = await findNotice(ntitle, ndate, ccode);
       if (result) {
         setNoticeList([...result]);
       }
@@ -152,7 +148,7 @@ const NoticePage = () => {
               className="search_input"
               placeholder="등록일"
               name="n_date"
-              value={ndate}
+              defaultValue={ndate}
               onChange={onNdateHandler}
             />
           </form>

@@ -118,7 +118,7 @@ const TicketPage = () => {
     if (confirm("정말 삭제할까요?")) {
       await deleteTicket(seq);
       setTicket(null);
-      // ticket 의상태를 변경하면 detail 클릭 시 무한 렌더링함
+      // ticket 상태를 변경하면 detail 클릭 시 무한 렌더링함
       // 삭제 후 임시로 상태를 변경하는 코드
       if (listUpdate === null) {
         setListUpdate("");

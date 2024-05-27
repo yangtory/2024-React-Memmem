@@ -130,6 +130,7 @@ const NoticeModal = () => {
               />
               <label>내용</label>
               <textarea
+                className={styles.textarea}
                 placeholder="내용"
                 rows="7"
                 name="n_content"

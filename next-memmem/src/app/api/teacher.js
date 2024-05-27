@@ -12,23 +12,28 @@ export const selectAll = async (ccode) => {
   return result;
 };
 
-export const findTeacher = async ({ tname, tcode, ttel, ccode }) => {
-  const result = await TEACHER.findMany({
-    where: {
-      t_ccode: ccode, // 필터링할 조건
-      t_name: {
-        contains: tname || "",
+export const findTeacher = async (tname, tcode, ttel, ccode) => {
+  try {
+    const result = await TEACHER.findMany({
+      where: {
+        t_ccode: ccode, // 필터링할 조건
+        t_name: {
+          contains: tname || "",
+        },
+        t_code: {
+          contains: tcode || "",
+        },
+        t_tel: {
+          contains: ttel || "",
+        },
       },
-      t_code: {
-        contains: tcode || "",
-      },
-      t_tel: {
-        contains: ttel || "",
-      },
-    },
-  });
+    });
+    prisma.$disconnect();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
   prisma.$disconnect();
-  return result;
 };
 
 export const createTeacher = async ({ formData }) => {
@@ -47,9 +52,7 @@ export const createTeacher = async ({ formData }) => {
 export const getTeacherInfo = async (tcode) => {
   console.log(tcode);
   const result = await TEACHER.findMany({
-    where: {
-      t_code: tcode,
-    },
+    where: { t_code: tcode },
   });
   prisma.$disconnect();
   return result;
@@ -62,5 +65,11 @@ export const updateTeacher = async ({ tcode, tname, ttel }) => {
       t_name: tname,
       t_tel: ttel,
     },
+  });
+};
+
+export const deleteTeacher = async (tcode) => {
+  await TEACHER.delete({
+    where: { t_code: tcode },
   });
 };

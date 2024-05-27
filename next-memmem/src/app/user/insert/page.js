@@ -2,11 +2,12 @@
 import "../../../css/table.css";
 import "../../../css/input.css";
 import { useEffect, useState } from "react";
-import { AllUser, findUnique } from "../../api/user";
+import { AllUser } from "../../api/user";
 import { getSession, useSession } from "next-auth/react";
 import { AddUserComp } from "../../api/userComp";
 
 import "../../../css/user/userInput.css";
+import { getTicketInfo, ticketAll } from "../../api/ticket";
 const InsertPage = () => {
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
@@ -21,19 +22,68 @@ const InsertPage = () => {
     us_ccode: ccode,
   });
 
+  // ticket-----------------------------------------------------------------
+  const [ticketList, setTicketList] = useState([]);
+  const [ticket, setTicket] = useState(null);
+  const [ticketFormData, setTicketFormData] = useState({
+    r_iseq: "",
+    r_icount: "",
+    r_sdate: "",
+    r_edate: "",
+  });
+
+  useEffect(() => {
+    const fetchTicket = async () => {
+      // 티켓 찾기
+      const session = await getSession();
+      const ccode = session?.user.id.tbl_company[0].c_code;
+      const result = await ticketAll(ccode);
+      // console.log(result);
+      setTicketList(result);
+    };
+    fetchTicket();
+  }, []);
+
+  // select 정보
+  const selectList = ticketList.map((list) => (
+    <option key={list.i_seq} value={list.i_seq}>
+      {list.i_title}
+    </option>
+  ));
+
+  // ticket 선택
+  const ticketInfoHandler = async (seq) => {
+    try {
+      const result = await getTicketInfo(parseInt(seq));
+      setTicket(result[0]?.i_count);
+      // console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // select의 체인지 핸들러,
+  const handleSelectChange = (e) => {
+    const seq = e.target.value; //select 가 change 되면
+    if (seq !== "0") {
+      ticketInfoHandler(seq); // ticketInfoHandler 에 seq 넘겨주고 count 셋팅하기
+    } else {
+      setTicket("");
+    }
+  };
+
+  //----------------------------------------------------------------------
   // 모든 유저 찾기
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const users = await AllUser();
-
         setUserList(users);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
     };
-
     fetchUsers();
   }, []);
 
@@ -151,23 +201,48 @@ const InsertPage = () => {
               readonly
             />
 
-            {/* <h3>수강권 정보</h3>
+            <h3>수강권 정보</h3>
             <div className="m_error"></div>
 
             <div className="selectBox">
-              <select className="select" name="r_iseq">
+              <select
+                className="select"
+                name="r_iseq"
+                onChange={handleSelectChange}
+              >
                 <option value="0">--수강권선택--</option>
-                <option></option>
+                {selectList}
               </select>
             </div>
             <label>수강권횟수</label>
-            <input className="r_icount" placeholder="수강권횟수" name="r_icount" readonly />
+            <input
+              className="r_icount"
+              placeholder="수강권횟수"
+              name="r_icount"
+              value={ticket}
+              readOnly
+            />
             <label>시작일</label>
-            <input className="r_sdate" type="date" name="r_sdate" value="${U.r_sdate }" />
+            <input
+              className="r_sdate"
+              type="date"
+              name="r_sdate"
+              value="${U.r_sdate }"
+            />
             <label>종료일</label>
-            <input className="r_edate" type="date" name="r_edate" value="${U.r_edate }" /> */}
+            <input
+              className="r_edate"
+              type="date"
+              name="r_edate"
+              value="${U.r_edate }"
+            />
 
-            <input type="button" value="저장" className="insert" onClick={submit} />
+            <input
+              type="button"
+              value="저장"
+              className="insert"
+              onClick={submit}
+            />
           </form>
         </div>
 
@@ -190,7 +265,11 @@ const InsertPage = () => {
                 ) : (
                   userList &&
                   userList.map((USER) => (
-                    <tr key={USER.u_id} data-id={USER.u_id} onClick={() => userClick(USER.u_id)}>
+                    <tr
+                      key={USER.u_id}
+                      data-id={USER.u_id}
+                      onClick={() => userClick(USER.u_id)}
+                    >
                       <td>{USER.u_id}</td>
                       <td>{USER.u_name}</td>
                     </tr>

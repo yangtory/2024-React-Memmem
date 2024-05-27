@@ -46,9 +46,8 @@ const UpPage = ({ seq, selectedDate }) => {
     e.preventDefault();
     try {
       await Classupdate(list, list.c_seq);
-      alert("수정이 완료되었습니다.");
     } catch (error) {
-      alert("수정에 실패했습니다.");
+      console.log(error);
     }
   };
 
@@ -64,13 +63,37 @@ const UpPage = ({ seq, selectedDate }) => {
           <label>강사명</label>
           <input placeholder="강사명" value={list.tbl_teacher?.t_name} name="t_name" readonly />
           <label>개강일자</label>
-          <input placeholder="개강일자" type="date" value={selectedDate} name="c_sdate" onChange={handleChange} />
+          <input
+            placeholder="개강일자"
+            type="date"
+            value={selectedDate}
+            name="c_sdate"
+            onChange={handleChange}
+          />
           <label>종강일자</label>
-          <input placeholder="종강일자" type="date" name="c_edate" value={list.c_edate} onChange={handleChange} />
+          <input
+            placeholder="종강일자"
+            type="date"
+            name="c_edate"
+            value={list.c_edate}
+            onChange={handleChange}
+          />
           <label>시작시간</label>
-          <input placeholder="시작시간" type="time" name="c_stime" value={list.c_stime} onChange={handleChange} />
+          <input
+            placeholder="시작시간"
+            type="time"
+            name="c_stime"
+            value={list.c_stime}
+            onChange={handleChange}
+          />
           <label>종료시간</label>
-          <input placeholder="종료시간" type="time" name="c_etime" value={list.c_etime} onChange={handleChange} />
+          <input
+            placeholder="종료시간"
+            type="time"
+            name="c_etime"
+            value={list.c_etime}
+            onChange={handleChange}
+          />
           <label>색상</label>
           <div class="palette">
             <div class="color color1"></div>

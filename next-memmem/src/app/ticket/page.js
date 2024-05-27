@@ -1,30 +1,40 @@
 "use client";
 import { useEffect, useState } from "react";
 import {
+  deleteTicket,
   getTicketInfo,
   getUserCount,
   ticketAll,
+  updateTicket,
 } from "../api/ticket";
 import { useSession } from "next-auth/react";
 import "../../css/table.css";
 import "../../css/detail.css";
 import { useModal } from "../../provider/ModalProvider";
 import { useTicket } from "../../provider/TicketProvider";
-import AOS from "aos";
 
 const TicketPage = () => {
-  useEffect(() => {
-    AOS.init({
-      duration: 1200,
-    });
-  }, []);
-
   const { data: session } = useSession();
   const { ticketList, setTicketList } = useTicket();
   const [ticketSeq, setTicketSeq] = useState("");
   const [ticket, setTicket] = useState(null);
   const { setIsModal } = useModal();
   const [count, setCount] = useState("");
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [listUpdate, setListUpdate] = useState(null);
+  const [formData, setFormData] = useState({
+    i_seq: "",
+    i_price: "",
+    i_count: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   // insert 클릭하면 modal 띄우기
   const openModal = () => {
@@ -38,7 +48,7 @@ const TicketPage = () => {
         try {
           const ccode = session?.user.id.tbl_company[0].c_code;
           const result = await ticketAll(ccode);
-          console.log(result);
+          // console.log(result);
           setTicketList([...result]);
         } catch (error) {
           console.log(error);
@@ -46,7 +56,7 @@ const TicketPage = () => {
       };
       ticketFetch();
     }
-  }, [session, setTicketList]);
+  }, [session, setTicketList, isEditMode, listUpdate]);
 
   // detail 데이터 셋팅
   useEffect(() => {
@@ -56,6 +66,11 @@ const TicketPage = () => {
           // detail
           const result = await getTicketInfo(ticketSeq);
           setTicket(result[0]);
+          setFormData({
+            i_seq: result[0].i_seq,
+            i_price: result[0].i_price,
+            i_count: result[0].i_count,
+          });
           // 이용중인 회원
           const count = await getUserCount(ticketSeq);
           setCount(count);
@@ -79,6 +94,40 @@ const TicketPage = () => {
     </tr>
   ));
 
+  // 수정버튼 클릭
+  const updateClickHandler = () => {
+    setIsEditMode(true);
+  };
+
+  // 저장버튼 클릭
+  const saveClickHandler = async () => {
+    // console.log(formData);
+    if (confirm("정말 수정할까요?")) {
+      const { i_seq, i_price, i_count } = formData;
+      await updateTicket({
+        seq: i_seq,
+        price: i_price,
+        count: i_count,
+      });
+      setIsEditMode(false);
+      setTicketSeq(i_seq);
+    }
+  };
+
+  const deleteClickHandler = async (seq) => {
+    if (confirm("정말 삭제할까요?")) {
+      await deleteTicket(seq);
+      setTicket(null);
+      // ticket 의상태를 변경하면 detail 클릭 시 무한 렌더링함
+      // 삭제 후 임시로 상태를 변경하는 코드
+      if (listUpdate === null) {
+        setListUpdate("");
+      } else {
+        setListUpdate(null);
+      }
+    }
+  };
+
   return (
     <>
       <h1 className="list_title">회원권 등록</h1>
@@ -101,27 +150,69 @@ const TicketPage = () => {
                     </p>
                     <hr />
                     <div className="info">
+                      <input value={formData.i_seq} type="hidden" />
                       <div>
                         <strong>가격</strong>
-                        <p>{ticket.i_price}</p>
+                        <input
+                          name="i_price"
+                          value={formData.i_price}
+                          readOnly={!isEditMode}
+                          onChange={handleChange}
+                          style={{
+                            border: isEditMode
+                              ? "0.5px solid black"
+                              : "none",
+                          }}
+                        />
                       </div>
                       <div>
                         <strong>수강횟수</strong>
-                        <p>{ticket.i_count} 회</p>
+                        <input
+                          name="i_count"
+                          value={formData.i_count}
+                          readOnly={!isEditMode}
+                          onChange={handleChange}
+                          style={{
+                            border: isEditMode
+                              ? "0.5px solid black"
+                              : "none",
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
                   <div className="detail btn_box">
-                    <button className="button-32">수정</button>
-                    <button className="button-32">삭제</button>
+                    {isEditMode ? (
+                      <button
+                        className="button-32"
+                        onClick={saveClickHandler}
+                      >
+                        저장
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          className="button-32"
+                          onClick={updateClickHandler}
+                        >
+                          수정
+                        </button>
+                        <button
+                          className="button-32"
+                          onClick={() => {
+                            deleteClickHandler(ticketSeq);
+                          }}
+                        >
+                          삭제
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="noticket card" data-aos="fade-up">
-              No ticket selected
-            </div>
+            <div className="noticket card">No ticket selected</div>
           )}
         </div>
         <div className="table_div half">

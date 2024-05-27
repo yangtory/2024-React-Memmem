@@ -5,10 +5,7 @@ import "../../../../css/table.css";
 import { getSession, useSession } from "next-auth/react";
 import { classAll } from "../../../api/class";
 
-import { useRouter } from "next/navigation";
-
 const ClassDetail = ({ showInputPage, date, selectedDate, setSeq }) => {
-  const router = useRouter();
   const inputButton = () => {
     showInputPage(true); // 입력 페이지 표시
   };
@@ -61,7 +58,11 @@ const ClassDetail = ({ showInputPage, date, selectedDate, setSeq }) => {
 
           <tbody className="body">
             {classList.map((CLASS, index) => (
-              <tr key={CLASS.c_seq} onClick={() => clickHandler(CLASS.c_seq)} data-seq={CLASS.c_seq}>
+              <tr
+                key={CLASS.c_seq}
+                onClick={() => clickHandler(CLASS.c_seq)}
+                data-seq={CLASS.c_seq}
+              >
                 <td>{index + 1}</td>
                 <td>{CLASS.c_name}</td>
                 <td>{CLASS.tbl_teacher.t_name}</td>

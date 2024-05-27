@@ -8,24 +8,27 @@ import InputPage from "./insert/page";
 import UpPage from "./update/[seq]/page";
 import { getSession, useSession } from "next-auth/react";
 
-import { classAll } from "../api/class"; // import the function to fetch class data
+import { classAll } from "../api/class"; // 수업 데이터를 가져오는 함수 임포트
 
 const ClassPage = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [viewYear, setViewYear] = useState(new Date().getFullYear());
-  const [viewMonth, setViewMonth] = useState(new Date().getMonth() + 1);
-  const [dates, setDates] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [showInputPage, setShowInputPage] = useState(false);
-  const [seq, setSeq] = useState(null);
-  const [classList, setClassList] = useState([]);
-  const [list, setList] = useState([]);
-  const [selectColor, setSelectColor] = useState("#ffffff");
+  const [viewYear, setViewYear] = useState(new Date().getFullYear()); // 현재 연도
+  const [viewMonth, setViewMonth] = useState(new Date().getMonth() + 1); // 현재 월 (0부터 시작하므로 +1)
+  const [dates, setDates] = useState([]); // 달력 날짜들
+  const [selectedDate, setSelectedDate] = useState(null); // 선택된 날짜
+  const [showInputPage, setShowInputPage] = useState(false); // 입력 페이지 표시 여부
+  const [seq, setSeq] = useState(null); // 선택된 수업의 고유 번호
+  const [classList, setClassList] = useState([]); // 선택된 날짜의 수업 목록
+  const [list, setList] = useState([]); // 전체 수업 목록
+  const [setSelectColor] = useState("#ffffff"); // 선택된 색상
+  const { data: session } = useSession(); // 사용자 세션 데이터 가져오기
+
+  // 선택된 색상을 변경하는 함수
   const handleColorChange = (color) => {
     setSelectColor(color);
   };
-  const { data: session } = useSession();
 
+  // 특정 날짜의 수업 목록을 가져오는 함수
   const listFetch = async (ccode, formattedDate) => {
     const result = await classAll(ccode, formattedDate);
     setList(result);
@@ -39,14 +42,16 @@ const ClassPage = () => {
       setIsLoading(false);
     };
     fetchData();
-  }, [viewYear, viewMonth]);
+  }, [viewYear, viewMonth]); // 연도와 월이 변경될 때마다 실행
 
+  // 로딩이 완료되면 달력을 렌더링하는 함수
   useEffect(() => {
     if (!isLoading) {
       renderCalendar();
     }
   }, [isLoading]);
 
+  // 달력을 렌더링하는 함수
   const renderCalendar = async () => {
     document.querySelector(".year-month").textContent = `${viewYear}년 ${viewMonth}월`;
     const today = new Date(viewYear, viewMonth - 1, 1);
@@ -101,6 +106,7 @@ const ClassPage = () => {
     setDates(dateElements);
   };
 
+  // 날짜 클릭 시 실행되는 함수
   const handleDateClick = async (date) => {
     if (!date) return;
     const selectedDate = formatDate(new Date(viewYear, viewMonth - 1, date));
@@ -116,6 +122,7 @@ const ClassPage = () => {
     }
   };
 
+  // 날짜를 YYYY-MM-DD 형식으로 포맷하는 함수
   const formatDate = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -123,6 +130,7 @@ const ClassPage = () => {
     return `${year}-${month}-${day}`;
   };
 
+  // 이전 달로 이동하는 함수
   const prevMonth = () => {
     if (viewMonth === 1) {
       setViewYear((prev) => prev - 1);
@@ -133,6 +141,7 @@ const ClassPage = () => {
     setIsLoading(true);
   };
 
+  // 다음 달로 이동하는 함수
   const nextMonth = () => {
     if (viewMonth === 12) {
       setViewYear((prev) => prev + 1);
@@ -143,6 +152,7 @@ const ClassPage = () => {
     setIsLoading(true);
   };
 
+  // 오늘 날짜로 이동하는 함수
   const goToday = () => {
     const today = new Date();
     setViewYear(today.getFullYear());

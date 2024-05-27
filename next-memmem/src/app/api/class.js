@@ -1,13 +1,15 @@
 "use server";
 import prisma from "./prisma";
 const CLASS = prisma.tbl_class;
-const TEACHER = prisma.tbl_teacher;
 
 export const classAll = async (ccode, selectedDate) => {
   const result = await CLASS.findMany({
-    where: { c_ccode: ccode, c_sdate: selectedDate },
+    where: {
+      c_ccode: ccode,
+      AND: [{ c_sdate: { lte: selectedDate } }, { c_edate: { gte: selectedDate } }],
+    },
     include: { tbl_teacher: true },
-    orderBy: { c_sdate: "asc" },
+    orderBy: [{ c_sdate: "asc" }, { c_edate: "desc" }], // c_sdate를 기준으로 오름차순 정렬
   });
   return result;
 };
@@ -49,4 +51,10 @@ export const Classupdate = async (classData, seq) => {
     },
   });
   return result;
+};
+
+export const classDelete = async (c_seq) => {
+  await CLASS.delete({
+    where: { c_seq },
+  });
 };

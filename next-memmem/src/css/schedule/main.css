@@ -1,45 +1,37 @@
 @charset "UTF-8";
 
-section.schedulePage {
-  /* overflow: hidden; */
+section.classPage {
   min-height: 80vh;
-  /* height: 50%; */
 }
+
 div.section_box {
   display: flex;
   height: 70vh;
-  /* border: 1px solid red; */
+  gap: 1rem; /* 두 박스 사이의 간격을 조정 */
 }
 
 aside.left {
   display: flex;
-  flex-direction: row;
-  flex: 1;
-  /* height: 95%; */
+  flex-direction: column;
+  /* margin-left: 2rem; 제거 */
 }
+
 aside.right {
-  overflow: auto;
   display: flex;
   height: 93%;
   flex-direction: column;
-  /* align-items: stretch; */
-  flex: 1;
-  /* justify-content: center; */
-  margin-top: 5.2rem;
-  border: 3px dashed #e6cadd;
+  width: 50%;
+  /* margin-top: 5.2rem; 제거 */
   border-radius: 10px;
-  margin-right: 2rem;
+
   div.title {
-    /* border: 1px solid black; */
     background-color: #e9dcd6;
     display: flex;
     flex-direction: column;
     margin: 12px 8px 0 8px;
     padding: 8px;
-    /* background-image: linear-gradient(19deg, #fccecb 20%, #e2daff 100%); */
     border-radius: 10px;
     font-weight: 600;
-    /* overflow: scroll; */
     &:hover {
       cursor: pointer;
     }
@@ -56,9 +48,11 @@ aside.right {
     }
   }
 }
+
 aside.right::-webkit-scrollbar {
   display: none;
 }
+
 .calendar {
   display: flex;
   flex-direction: column;
@@ -74,14 +68,17 @@ aside.right::-webkit-scrollbar {
   align-items: center;
   font-weight: 900;
 }
+
 .year-month {
   font-size: 35px;
 }
+
 .calNav {
   display: flex;
   border: 1px solid #faaca8;
   border-radius: 5px;
 }
+
 .nav-btn {
   width: 28px;
   height: 30px;
@@ -91,27 +88,28 @@ aside.right::-webkit-scrollbar {
   background-color: #faaca8;
   cursor: pointer;
 }
+
 .go-today {
   width: 75px;
   border-left: 1px solid #faaca8;
-  /* border-right: 1px solid #faaca8; */
 }
 
 .days {
   display: flex;
   margin: 25px 0 10px;
 }
+
 .day {
   width: calc(100% / 7);
   text-align: center;
 }
+
 .dates {
   display: flex;
   flex-flow: row wrap;
   height: 450px;
-  border-top: 1px solid #faaca8;
+  border: 1px solid #faaca8;
   overflow: auto;
-  /* border-right: 1px solid #faaca8; */
 }
 
 .dates::-webkit-scrollbar {
@@ -135,16 +133,10 @@ aside.right::-webkit-scrollbar {
 
 .date {
   width: calc(100% / 7);
-  /* height: calc(100% / 5); */
   height: 25%;
-  /* padding: 15px; */
-
   text-align: center;
-  border-bottom: 1px solid #faaca8;
-  border-left: 1px solid #faaca8;
-
+  border: 1px solid #faaca8;
   font-weight: 900;
-
   &:hover {
     cursor: pointer;
   }
@@ -161,7 +153,7 @@ aside.right::-webkit-scrollbar {
 }
 
 .other {
-  opacity: 0.5;
+  border: 1px solid #faaca8;
 }
 
 .today {
@@ -170,17 +162,14 @@ aside.right::-webkit-scrollbar {
   margin: 0 auto;
 }
 
-div.date {
-  border-right: 1px solid #faaca8;
-}
 span.title {
-  /* background-color: #654df1; */
   color: #391145;
   width: 100%;
   border-radius: 2px;
   margin: 2px auto 0;
   font-size: 0.8rem;
 }
+
 .title-container {
   display: flex;
   flex-direction: column;
@@ -194,7 +183,6 @@ span.title {
 
 .cal_wrapper {
   height: 100%;
-  /* background-color: #e6cadd; */
   border: 3px dashed #e6cadd;
   padding: 8px;
   border-radius: 10px;

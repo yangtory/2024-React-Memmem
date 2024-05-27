@@ -1,18 +1,25 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import "../../../css/input.css";
-import { createClass, getTeacherList } from "../../api/class";
+
 import { getSession } from "next-auth/react";
 
-import { selectAll } from "../../api/teacher";
 import { createSchedule } from "../../api/schedule";
 
 const InputPage = ({ selectedDate, onColorChange }) => {
   const [selectColor, setSelectColor] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const titleRef = useRef(null);
+  const contentRef = useRef(null);
+
+  const edateRef = useRef(null);
+
   const colorPickerRef = useRef();
 
   const [formData, setFormData] = useState({
     s_sdate: selectedDate,
+    s_edate: "",
   });
   const [ccode, setCcode] = useState("");
   useEffect(() => {
@@ -32,10 +39,38 @@ const InputPage = ({ selectedDate, onColorChange }) => {
       ccode,
     });
   };
-  const submit = async () => {
-    const result = createSchedule({ formData });
-    console.log("추가완료", result);
-    router.push("/schedule");
+  const submit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.s_title) {
+      setErrorMessage("제목을 입력하세요");
+      titleRef.current.focus();
+      return;
+    }
+    if (!formData.s_content) {
+      setErrorMessage("내용을 입력하세요");
+      contentRef.current.focus();
+      return;
+    }
+    if (!formData.s_edate) {
+      setErrorMessage("종료일을 입력하세요");
+      edateRef.current.focus();
+      return;
+    }
+    if (formData.s_edate < formData.s_sdate) {
+      setErrorMessage("종료일은 시작일 이후여야 합니다");
+      edateRef.current.focus();
+      return;
+    }
+    if (!formData.s_color) {
+      setErrorMessage("색상을 지정하세요");
+
+      return;
+    }
+
+    await createSchedule({ formData });
+
+    window.location.reload();
   };
 
   // RGB 형식을 HEX 형식으로 변환하는 함수
@@ -63,7 +98,7 @@ const InputPage = ({ selectedDate, onColorChange }) => {
     const backgroundColor = computedStyle.backgroundColor;
     const hexColor = rgbToHex(backgroundColor);
 
-    setFormData({ ...formData, c_color: hexColor }); // 선택된 색상을 formData에 추가
+    setFormData({ ...formData, s_color: hexColor }); // 선택된 색상을 formData에 추가
     colorPickerRef.current.value = hexColor;
     onColorChange(hexColor); // 선택된 색상을 부모 컴포넌트로 전달
   };
@@ -72,38 +107,15 @@ const InputPage = ({ selectedDate, onColorChange }) => {
     <>
       <div className="input_div">
         <form className="input_box" onSubmit={submit}>
-          <label>수업명</label>
-          <input placeholder="수업명" name="c_name" onChange={InputChange} />
-          <label>강사</label>
-          <div className="selectBox">
-            <select name="c_tcode" onChange={InputChange}>
-              <option value="">강사선택</option>
-              {teacher.map((TEACHER, index) => (
-                <option value={TEACHER.t_code}>{TEACHER.t_name}</option>
-              ))}
-            </select>
-          </div>
+          {errorMessage && <div className="class schedule_error">{errorMessage}</div>}
+          <label>제목</label>
+          <input placeholder="제목" name="s_title" onChange={InputChange} ref={titleRef} />
+          <label>내용</label>
+          <input placeholder="제목" name="s_content" onChange={InputChange} ref={contentRef} />
           <label>시작일자</label>
-          <input
-            placeholder="시작일자"
-            type="date"
-            name="c_sdate"
-            onChange={InputChange}
-            value={selectedDate}
-          />
+          <input placeholder="시작일자" type="date" name="s_sdate" onChange={InputChange} value={selectedDate} />
           <label>종료일자</label>
-          <input placeholder="종료일자" type="date" name="c_edate" onChange={InputChange} />
-          <label>시작시간</label>
-          <input
-            placeholder="시작시간"
-            type="time"
-            min="00:00"
-            max="24:00"
-            name="c_stime"
-            onChange={InputChange}
-          />
-          <label>종료시간</label>
-          <input placeholder="종료시간" type="time" name="c_etime" onChange={InputChange} />
+          <input placeholder="종료일자" type="date" name="s_edate" onChange={InputChange} ref={edateRef} />
           <label>색상</label>
           <div className="palette">
             <div className="color color1" onClick={colorClick}></div>
@@ -115,15 +127,8 @@ const InputPage = ({ selectedDate, onColorChange }) => {
             <div className="color color7" onClick={colorClick}></div>
             <div className="color color8" onClick={colorClick}></div>
           </div>
-          <input
-            type="hidden"
-            id="colorPicker"
-            className="colorPicker"
-            name="c_color"
-            ref={colorPickerRef}
-            onChange={InputChange}
-          />
-          <input type="hidden" value={ccode} name="c_ccode" />
+          <input type="hidden" id="colorPicker" className="colorPicker" name="s_color" ref={colorPickerRef} onChange={InputChange} />
+          <input type="hidden" value={ccode} name="s_ccode" />
           <input type="submit" className="insert" value="작성" />
         </form>
       </div>

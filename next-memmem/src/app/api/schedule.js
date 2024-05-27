@@ -26,3 +26,32 @@ export const createSchedule = async ({ formData }) => {
     },
   });
 };
+
+export const scheduleUnique = async (seq) => {
+  const result = await SCHEDULE.findUnique({
+    where: { s_seq: seq },
+  });
+  return result;
+};
+
+export const scheduleUpdate = async (s_seq, data) => {
+  try {
+    const updatedSchedule = await SCHEDULE.update({
+      where: { s_seq },
+      data,
+    });
+    console.log("업데이트된 스케줄:", updatedSchedule);
+    return updatedSchedule;
+  } catch (error) {
+    console.error("스케줄 업데이트 실패:", error);
+    throw error;
+  }
+};
+
+export const scheduleDelete = async (s_seq) => {
+  await SCHEDULE.delete({
+    where: {
+      s_seq,
+    },
+  });
+};

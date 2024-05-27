@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from "react";
 import "../../css/schedule/main.css";
 
-import { useRouter } from "next/navigation";
 import { getSession, useSession } from "next-auth/react";
 import { scheduleAll } from "../api/schedule";
 import ScheduleDetail from "./detail/[dates]/page";
 import InputPage from "./insert/page";
+import UpPage from "./update/[seq]/page";
 
 const SchedulePage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -17,9 +17,9 @@ const SchedulePage = () => {
   const [selectedDate, setSelectedDate] = useState(null); // 선택된 날짜
   const [showInputPage, setShowInputPage] = useState(false); // 입력 페이지 표시 여부
   const [seq, setSeq] = useState(null); // 선택된 수업의 고유 번호
-  const [classList, setClassList] = useState([]); // 선택된 날짜의 수업 목록
+  const [scheduleList, setScheduleList] = useState([]);
   const [list, setList] = useState([]); // 전체 수업 목록
-  const [setSelectColor] = useState("#ffffff"); // 선택된 색상
+  const [selectColor, setSelectColor] = useState("#ffffff"); // 선택된 색상(지우면 오류생김)
   const { data: session } = useSession(); // 사용자 세션 데이터 가져오기
 
   // 선택된 색상을 변경하는 함수
@@ -75,26 +75,17 @@ const SchedulePage = () => {
     const dateElements = allDates.map((date, i) => {
       const matchingItems = list?.filter(
         (item) =>
-          item.c_sdate <= formatDate(new Date(viewYear, viewMonth - 1, date)) &&
-          item.c_edate >= formatDate(new Date(viewYear, viewMonth - 1, date))
+          item.s_sdate <= formatDate(new Date(viewYear, viewMonth - 1, date)) && item.s_edate >= formatDate(new Date(viewYear, viewMonth - 1, date))
       );
 
       return (
-        <div
-          key={i}
-          className={`date ${date ? "this" : "other"}`}
-          onClick={() => handleDateClick(date)}
-        >
+        <div key={i} className={`date ${date ? "this" : "other"}`} onClick={() => handleDateClick(date)}>
           <div>{date}</div>
           {date &&
             matchingItems &&
             matchingItems.length > 0 &&
             matchingItems.map((item, index) => (
-              <div
-                key={index}
-                className="class"
-                style={{ backgroundColor: item.s_color, color: "black" }}
-              >
+              <div key={index} className="class" style={{ backgroundColor: item.s_color, color: "black" }}>
                 {item.s_title}
               </div>
             ))}
@@ -117,7 +108,7 @@ const SchedulePage = () => {
       const session = await getSession();
       const ccode = session?.user.id.tbl_company[0].c_code;
       const result = await scheduleAll(ccode, selectedDate);
-      setClassList(result);
+      setScheduleList(result);
     }
   };
 
@@ -197,19 +188,15 @@ const SchedulePage = () => {
         </aside>
         <aside className="right">
           {showInputPage ? (
-            <InputPage
-              date={selectedDate}
-              selectedDate={selectedDate}
-              onColorChange={handleColorChange}
-            />
+            <InputPage date={selectedDate} selectedDate={selectedDate} onColorChange={handleColorChange} />
           ) : seq ? (
             <UpPage seq={seq} selectedDate={selectedDate} />
           ) : (
             selectedDate && (
               <ScheduleDetail
                 date={selectedDate}
-                classList={classList}
-                setClassList={setClassList}
+                scheduleList={scheduleList}
+                setScheduleList={setScheduleList}
                 showInputPage={setShowInputPage}
                 selectedDate={selectedDate}
                 setSeq={setSeq}

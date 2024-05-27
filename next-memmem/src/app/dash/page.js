@@ -114,9 +114,7 @@ const DashPage = () => {
             </thead>
             <tbody>
               <tr className="noList">
-                <div className="noList">
-                  등록된 공지사항이 없습니다.
-                </div>
+                <td className="noList">등록된 공지사항이 없습니다.</td>
               </tr>
             </tbody>
           </table>

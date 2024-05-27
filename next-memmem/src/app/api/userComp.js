@@ -35,14 +35,40 @@ export const AddUserComp = async ({ formData, ccode, formattedDate }) => {
     },
   });
 };
-export const userDetail = async (uid) => {
-  console.log("uid", uid);
+export const userDetail = async (us_uid, us_ccode) => {
+  try {
+    const result = await USERCOMP.findMany({
+      where: {
+        us_uid: us_uid,
+        us_ccode: us_ccode,
+      },
+    });
+    return result;
+  } catch (error) {}
+};
 
-  const result = await USERCOMP.findMany({
+export const userUpdate = async ({ us_uid, us_uname, us_utel, us_ccode }) => {
+  await USERCOMP.update({
     where: {
-      us_uid: uid,
+      us_uid_us_ccode: {
+        us_uid,
+        us_ccode,
+      },
+    },
+    data: {
+      us_uname,
+      us_utel,
     },
   });
+};
 
-  return result;
+export const deleteUser = async (us_uid, us_ccode) => {
+  await USERCOMP.delete({
+    where: {
+      us_uid_us_ccode: {
+        us_uid,
+        us_ccode,
+      },
+    },
+  });
 };

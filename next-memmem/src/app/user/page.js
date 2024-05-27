@@ -3,15 +3,20 @@ import "../../css/table.css";
 import "../../css/detail.css";
 import "../../css/search.css";
 import { useState, useEffect } from "react";
-import { findUsers, userDetail } from "../api/userComp";
+import { deleteUser, findUsers, userDetail } from "../api/userComp";
 import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const UserPage = () => {
   const [users, setUsers] = useState([]); // userList
   const [uname, setUname] = useState("");
   const [uid, setUid] = useState("");
   const [utel, setUtel] = useState("");
-  const [detail, setDetail] = useState("");
+
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const router = useRouter();
+
   // 검색
   useEffect(() => {
     const userFetch = async () => {
@@ -24,6 +29,7 @@ const UserPage = () => {
         ccode,
       });
       if (result) {
+        console.log(result);
         setUsers([...result]);
       }
     };
@@ -33,18 +39,27 @@ const UserPage = () => {
 
   // 디테일
   useEffect(() => {
-    if (detail) {
-      const detailFetch = async () => {
+    const detailFetch = async () => {
+      if (selectedUser) {
+        const session = await getSession();
+        const ccode = session?.user.id.tbl_company[0].c_code;
         try {
-          const result = await userDetail(detail);
-          setDetail(result[0]);
+          const result = await userDetail(selectedUser, ccode);
+          if (result) {
+            console.log(result);
+            setSelectedUser(result); // 반환된 데이터로 설정
+          }
         } catch (error) {
           console.log(error);
         }
-      };
-      detailFetch();
-    }
-  }, [detail, users]);
+      }
+    };
+    detailFetch();
+  }, [selectedUser]);
+  const onUserClick = (user) => {
+    setSelectedUser(user);
+    // console.log(selectedUser);
+  };
 
   const debounce = (callback, delay = 200) => {
     let debounceTimer;
@@ -69,6 +84,17 @@ const UserPage = () => {
   const onUidHandler = debounce(onUidChange, 300);
   const onUtelHandler = debounce(onUtelChange, 300);
 
+  const updateHandler = (id) => {
+    // if (selectedUser) {
+    router.push(`/user/update/${id}`);
+    // }
+  };
+
+  const deleteHandler = async (us_uid, us_ccode) => {
+    await deleteUser(us_uid, us_ccode);
+    window.location.reload();
+  };
+
   return (
     <>
       <h1 className="list_title">회원 리스트</h1>
@@ -79,7 +105,7 @@ const UserPage = () => {
           </a>
         </div>
         <div className="customer btn_box search">
-          <form method="GET" modelAttribute="SEARCH">
+          <form method="GET">
             <input
               className="search_input"
               placeholder="아이디"
@@ -113,7 +139,11 @@ const UserPage = () => {
 
             <tbody>
               {users.map((user) => (
-                <tr key={user.us_uid} data-id={user.us_uid} onClick={() => setDetail(user.us_uid)}>
+                <tr
+                  key={user.us_uid}
+                  data-id={user.us_uid}
+                  onClick={() => onUserClick(user.tbl_user.u_id)}
+                >
                   <td>{user.us_uid}</td>
                   <td>{user.us_uname}</td>
                   <td>{user.us_utel}</td>
@@ -123,15 +153,19 @@ const UserPage = () => {
           </table>
         </div>
         <div>
-          {detail ? (
+          {selectedUser && (
             <div className="detail_box width">
               <div className="card">
                 <div className="info_container">
-                  <div className="info_head">
+                  <div
+                    className="info_head"
+                    key={selectedUser.us_uid}
+                    data-id={selectedUser.us_uid}
+                  >
                     <strong>ID</strong>
-                    <p>{detail.us_uid}</p>
+                    <p>{selectedUser[0].us_uid}</p>
                     <strong>전화번호</strong>
-                    <p>{detail.us_utel}</p>
+                    <p>{selectedUser[0].us_utel}</p>
                     <a className="message_btn button-32">
                       <img src="/images/mail.png" width="10px" height="10px"></img>
                     </a>
@@ -139,15 +173,15 @@ const UserPage = () => {
                   <div className="info_detail">
                     <div>
                       <strong>업체코드</strong>
-                      <p>{detail.us_ccode}</p>
+                      <p>{selectedUser[0].us_ccode}</p>
                     </div>
                     <div>
                       <strong>업체명</strong>
-                      <p>{detail.us_cname}</p>
+                      <p>{selectedUser[0].us_cname}</p>
                     </div>
                     <div>
                       <strong>이름</strong>
-                      <p>{detail.us_uname}</p>
+                      <p>{selectedUser[0].us_uname}</p>
                     </div>
                     <div>
                       <strong>메모</strong>
@@ -156,14 +190,19 @@ const UserPage = () => {
                   </div>
                 </div>
                 <div className="detail btn_box">
-                  <a className="button-32">수정</a>
-                  <a className="delete_btn button-32">삭제</a>
+                  <a className="button-32" onClick={() => updateHandler(selectedUser[0].us_uid)}>
+                    수정
+                  </a>
+                  <a
+                    className="delete_btn button-32"
+                    onClick={() => deleteHandler(selectedUser[0].us_uid, selectedUser[0].us_ccode)}
+                  >
+                    삭제
+                  </a>
                   <a className="button-32">회원권정보</a>
                 </div>
               </div>
             </div>
-          ) : (
-            ""
           )}
         </div>
       </div>

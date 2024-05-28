@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import {
   createUserTicket,
+  findDetail,
   userMinfoList,
 } from "../../../api/userMinfo";
 import "../../../../css/user/userTicketModal.css";
@@ -13,6 +14,7 @@ const TicketList = ({ params }) => {
   const [isModal, setIsModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [ticketList, setTicketList] = useState([]);
+  const [ticket, setTicket] = useState(null);
   const [formData, setFormData] = useState({
     r_iseq: "",
     r_icount: "",
@@ -117,7 +119,7 @@ const TicketList = ({ params }) => {
   const viewList = userMinfo.map((list) => {
     const dDay = calcDday(list.r_edate);
     return (
-      <tr key={list.r_iseq} onClick={() => openDetail()}>
+      <tr key={list.r_iseq} onClick={() => setTicket(list.r_iseq)}>
         <td>{list.r_uid}</td>
         <td>{list.tbl_minfo.i_title}</td>
         <td>{list.r_icount}</td>
@@ -131,6 +133,15 @@ const TicketList = ({ params }) => {
       </tr>
     );
   });
+
+  // 디테일 정보찾기
+  useEffect(() => {
+    const findUser = async () => {
+      console.log("client", ticket, id);
+      await findDetail(ticket, id);
+    };
+    findUser();
+  }, [ticket]);
 
   const openDetail = async () => {
     setIsModal(true);

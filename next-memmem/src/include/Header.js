@@ -17,11 +17,11 @@ const Header = () => {
           />
           {session ? (
             <a href="/dash">
-              <h3>Mem</h3>
+              <h4>Mem</h4>
             </a>
           ) : (
             <a href="/">
-              <h3>Mem</h3>
+              <h4>Mem</h4>
             </a>
           )}
         </div>

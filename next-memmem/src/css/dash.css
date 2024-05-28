@@ -30,6 +30,9 @@
   justify-content: center;
 }
 .top {
+  overflow: auto;
+}
+.top {
   background-color: #e9dcd6;
   width: 90%;
   display: flex;
@@ -156,4 +159,26 @@ tr.noList {
   top: 80%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.top {
+  overflow-y: scroll;
+}
+.top::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  border-radius: 10px;
+}
+
+.top:hover::-webkit-scrollbar {
+  display: block;
+}
+
+.top::-webkit-scrollbar-thumb {
+  background-color: #e9dcd6;
+  border-radius: 5px;
+}
+
+.top::-webkit-scrollbar-thumb:hover {
+  background-color: #faaca8;
 }

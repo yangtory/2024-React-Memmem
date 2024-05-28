@@ -2,7 +2,7 @@
 import styles from "../css/modal.module.css";
 import { useModal } from "../provider/ModalProvider";
 import { useEffect, useState } from "react";
-import { useTicket } from "../provider/TicketProvider";
+import { useAdd } from "../provider/AddListProvider";
 import { getSession } from "next-auth/react";
 import { createNotice } from "../app/api/notice";
 import moment from "moment";
@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const NoticeModal = () => {
   const { noticeModal, setNoticeModal } = useModal();
-  const { addNotice } = useTicket();
+  const { addNotice } = useAdd();
 
   const [formData, setFormData] = useState({
     n_seq: "",

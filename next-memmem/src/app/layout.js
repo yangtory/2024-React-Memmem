@@ -6,31 +6,34 @@ import Header from "../include/Header";
 import Side from "../include/Side";
 import css from "../css/modal.module.css";
 import { ModalProvider } from "../provider/ModalProvider";
-import { TicketProvider } from "../provider/TicketProvider";
 import TicketModal from "../modals/TicketModal";
 import TeacherModal from "../modals/TeacherModal";
 import NoticeModal from "../modals/NoticeModal";
-import UserTicketModal from "../modals/UserTicketModal";
+import { AddListProvider } from "../provider/AddListProvider";
+import { useRouter } from "next/navigation";
 
 export default function RootLayout({ children }) {
+  const router = useRouter();
+  const pathSegments = router.query;
+  console.log(pathSegments);
+  // const id = pathSegments[pathSegments.length - 1];
   return (
     <html lang="ko">
       <body>
         <SessionProvider>
           <ModalProvider>
-            <TicketProvider>
+            <AddListProvider>
               <div className={css.content}>
                 <TicketModal />
                 <TeacherModal />
                 <NoticeModal />
-                <UserTicketModal />
                 <Header />
                 <div className="main">
                   <Side />
                   <section>{children}</section>
                 </div>
               </div>
-            </TicketProvider>
+            </AddListProvider>
           </ModalProvider>
         </SessionProvider>
       </body>

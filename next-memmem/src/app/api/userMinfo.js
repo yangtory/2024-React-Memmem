@@ -26,3 +26,17 @@ export const userMinfoList = async ({ id }) => {
   prisma.$disconnect();
   return result;
 };
+
+export const createUserTicket = async ({ formData, id }) => {
+  const result = await USER_MINFO.create({
+    data: {
+      r_uid: id,
+      r_icount: parseInt(formData.r_icount),
+      r_iseq: parseInt(formData.r_iseq),
+      r_sdate: formData.r_sdate,
+      r_edate: formData.r_edate,
+    },
+  });
+  prisma.$disconnect();
+  return result;
+};

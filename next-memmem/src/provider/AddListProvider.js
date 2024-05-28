@@ -1,16 +1,17 @@
 // TicketContext.js
 import { createContext, useContext, useState } from "react";
 
-const TicketContext = createContext();
+const AddListContext = createContext();
 
-export const useTicket = () => {
-  return useContext(TicketContext);
+export const useAdd = () => {
+  return useContext(AddListContext);
 };
 
-export const TicketProvider = ({ children }) => {
+export const AddListProvider = ({ children }) => {
   const [ticketList, setTicketList] = useState([]);
   const [teacherList, setTeacherList] = useState([]);
   const [noticeList, setNoticeList] = useState([]);
+  const [userTicketList, setUserTicketList] = useState([]);
 
   const addTicket = (newTicket) => {
     setTicketList((prevList) => [...prevList, newTicket]);
@@ -24,11 +25,11 @@ export const TicketProvider = ({ children }) => {
   };
 
   const addUserTicket = (newUserTicket) => {
-    set;
+    setUserTicketList((prevList) => [...prevList, newUserTicket]);
   };
 
   return (
-    <TicketContext.Provider
+    <AddListContext.Provider
       value={{
         ticketList,
         setTicketList,
@@ -39,9 +40,10 @@ export const TicketProvider = ({ children }) => {
         addTicket,
         addTeacher,
         addNotice,
+        addUserTicket,
       }}
     >
       {children}
-    </TicketContext.Provider>
+    </AddListContext.Provider>
   );
 };

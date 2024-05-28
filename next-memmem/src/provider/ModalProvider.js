@@ -13,7 +13,6 @@ export const ModalProvider = ({ children }) => {
   const [isModal, setIsModal] = useState(false);
   const [teacherModal, setTeacherModal] = useState(false);
   const [noticeModal, setNoticeModal] = useState(false);
-  const [userTicketModal, setUserTicketModal] = useState(false);
 
   return (
     <ModalContext.Provider
@@ -24,8 +23,6 @@ export const ModalProvider = ({ children }) => {
         setTeacherModal,
         noticeModal,
         setNoticeModal,
-        userTicketModal,
-        setUserTicketModal,
       }}
     >
       {children}

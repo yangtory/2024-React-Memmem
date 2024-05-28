@@ -3,12 +3,12 @@ import styles from "../css/modal.module.css";
 import { useModal } from "../provider/ModalProvider";
 import { useEffect, useState } from "react";
 import { createTicket } from "../app/api/ticket";
-import { useTicket } from "../provider/TicketProvider";
+import { useAdd } from "../provider/AddListProvider";
 import { getSession } from "next-auth/react";
 
 const TicketModal = () => {
   const { isModal, setIsModal } = useModal();
-  const { addTicket } = useTicket();
+  const { addTicket } = useAdd();
   const [formData, setFormData] = useState({
     i_title: "",
     i_price: "",

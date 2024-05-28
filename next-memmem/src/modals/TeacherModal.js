@@ -3,12 +3,12 @@ import styles from "../css/modal.module.css";
 import { useModal } from "../provider/ModalProvider";
 import { useEffect, useState } from "react";
 import { getSession } from "next-auth/react";
-import { useTicket } from "../provider/TicketProvider";
+import { useAdd } from "../provider/AddListProvider";
 import { createTeacher, selectAll } from "../app/api/teacher";
 
 const TeacherModal = () => {
   const { teacherModal, setTeacherModal } = useModal();
-  const { addTeacher } = useTicket();
+  const { addTeacher } = useAdd();
   const [formData, setFormData] = useState({
     t_code: "",
     t_name: "",

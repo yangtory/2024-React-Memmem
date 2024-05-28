@@ -12,10 +12,10 @@ import {
   updateTeacher,
 } from "../api/teacher";
 import { useModal } from "../../provider/ModalProvider";
-import { useTicket } from "../../provider/TicketProvider";
+import { useAdd } from "../../provider/AddListProvider";
 import { getSession } from "next-auth/react";
 const TeacherPage = () => {
-  const { teacherList, setTeacherList } = useTicket();
+  const { teacherList, setTeacherList } = useAdd();
 
   const { setTeacherModal } = useModal();
   const [tname, setTname] = useState("");

@@ -11,11 +11,11 @@ import { useSession } from "next-auth/react";
 import "../../css/table.css";
 import "../../css/detail.css";
 import { useModal } from "../../provider/ModalProvider";
-import { useTicket } from "../../provider/TicketProvider";
+import { useAdd } from "../../provider/AddListProvider";
 
 const TicketPage = () => {
   const { data: session } = useSession();
-  const { ticketList, setTicketList } = useTicket();
+  const { ticketList, setTicketList } = useAdd();
   const [ticketSeq, setTicketSeq] = useState("");
   const [ticket, setTicket] = useState(null);
   const { setIsModal } = useModal();

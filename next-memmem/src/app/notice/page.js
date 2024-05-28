@@ -4,7 +4,7 @@ import "../../css/table.css";
 import "../../css/notice.css";
 import "../../css/search.css";
 import "../../css/notice_detail.css";
-import { useTicket } from "../../provider/TicketProvider";
+import { useAdd } from "../../provider/AddListProvider";
 import { useModal } from "../../provider/ModalProvider";
 import {
   deleteNotice,
@@ -15,7 +15,7 @@ import {
 import { getSession } from "next-auth/react";
 
 const NoticePage = () => {
-  const { noticeList, setNoticeList } = useTicket();
+  const { noticeList, setNoticeList } = useAdd();
   const { setNoticeModal } = useModal();
   const [selectedNotice, setSelectedNotice] = useState(null);
   const [ntitle, setNtitle] = useState("");

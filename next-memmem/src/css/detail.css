@@ -18,8 +18,7 @@ div.detail_box {
   width: 100%;
 }
 div.card {
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2),
-    0 4px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: #e9dcd6;
   /* background: radial-gradient(circle, #e9dcc9, #e9dcd9); */
   display: flex;
@@ -91,12 +90,12 @@ div.info_detail {
 }
 
 div.detail.btn_box {
-  display: flex;
+  /* display: flex; */
   flex-direction: row;
   margin: 5px 10px 20px auto;
   a {
     width: 30%;
-    margin: 5px auto;
+    margin: 5px 3px;
     border-radius: 0;
     background-color: #e6cadd;
     color: #391145;

@@ -1,12 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import {
-  deleteTicket,
-  getTicketInfo,
-  getUserCount,
-  ticketAll,
-  updateTicket,
-} from "../api/ticket";
+import { deleteTicket, getTicketInfo, getUserCount, ticketAll, updateTicket } from "../api/ticket";
 import { useSession } from "next-auth/react";
 import "../../css/table.css";
 import "../../css/detail.css";
@@ -83,10 +77,7 @@ const TicketPage = () => {
   }, [ticketSeq, ticketList]);
 
   const ticketViewList = ticketList.map((ticket, index) => (
-    <tr
-      key={ticket?.i_seq}
-      onClick={() => setTicketSeq(ticket?.i_seq)}
-    >
+    <tr key={ticket?.i_seq} onClick={() => setTicketSeq(ticket?.i_seq)}>
       <td>{index + 1}</td>
       <td>{ticket?.i_title}</td>
       <td>{ticket?.i_price.toLocaleString()}</td>
@@ -159,9 +150,7 @@ const TicketPage = () => {
                           readOnly={!isEditMode}
                           onChange={handleChange}
                           style={{
-                            border: isEditMode
-                              ? "0.5px solid black"
-                              : "none",
+                            border: isEditMode ? "0.5px solid black" : "none",
                           }}
                         />
                       </div>
@@ -173,9 +162,7 @@ const TicketPage = () => {
                           readOnly={!isEditMode}
                           onChange={handleChange}
                           style={{
-                            border: isEditMode
-                              ? "0.5px solid black"
-                              : "none",
+                            border: isEditMode ? "0.5px solid black" : "none",
                           }}
                         />
                       </div>
@@ -183,18 +170,12 @@ const TicketPage = () => {
                   </div>
                   <div className="detail btn_box">
                     {isEditMode ? (
-                      <button
-                        className="button-32"
-                        onClick={saveClickHandler}
-                      >
+                      <button className="button-32" onClick={saveClickHandler}>
                         저장
                       </button>
                     ) : (
                       <>
-                        <button
-                          className="button-32"
-                          onClick={updateClickHandler}
-                        >
+                        <button className="button-32" onClick={updateClickHandler}>
                           수정
                         </button>
                         <button

@@ -171,3 +171,24 @@
   width: 100%; /* 필요한 경우 너비와 높이 설정 */
   height: 150px;
 }
+
+.selectBox {
+  width: 100%;
+}
+.select {
+  width: 100%;
+  padding: 0.3rem;
+  text-align: center;
+  font-family: inherit;
+  border-radius: 0px;
+  border: none;
+  outline: none;
+  background-color: #e9dcd6;
+  border-bottom: 1px solid #eee;
+  color: #391145;
+  margin: 15px 0;
+
+  &:focus {
+    border-bottom: 1px solid #eee;
+  }
+}

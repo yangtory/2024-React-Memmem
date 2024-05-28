@@ -23,6 +23,10 @@ export const TicketProvider = ({ children }) => {
     setNoticeList((prevList) => [...prevList, newNotice]);
   };
 
+  const addUserTicket = (newUserTicket) => {
+    set;
+  };
+
   return (
     <TicketContext.Provider
       value={{

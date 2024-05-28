@@ -35,7 +35,7 @@ const UserPage = () => {
     };
 
     userFetch();
-  }, [uname, uid, utel]);
+  }, [uname, uid, utel, selectedUser]);
 
   // 디테일
   useEffect(() => {
@@ -65,7 +65,10 @@ const UserPage = () => {
     let debounceTimer;
     return (...args) => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => callback.apply(this, args), delay);
+      debounceTimer = setTimeout(
+        () => callback.apply(this, args),
+        delay
+      );
     };
   };
 
@@ -92,9 +95,13 @@ const UserPage = () => {
 
   const deleteHandler = async (us_uid, us_ccode) => {
     await deleteUser(us_uid, us_ccode);
-    window.location.reload();
+    setSelectedUser(null);
+    // window.location.reload();
   };
 
+  const userMinfoListHandler = async (id) => {
+    router.push(`/user/ticket/${id}`);
+  };
   return (
     <>
       <h1 className="list_title">회원 리스트</h1>
@@ -124,7 +131,11 @@ const UserPage = () => {
               defaultValue={utel}
               onChange={onUtelHandler}
             />
-            <img src="/images/search.png" width="10px" height="10px" />
+            <img
+              src="/images/search.png"
+              width="10px"
+              height="10px"
+            />
           </form>
         </div>
         <div className="table_div">
@@ -167,7 +178,11 @@ const UserPage = () => {
                     <strong>전화번호</strong>
                     <p>{selectedUser[0].us_utel}</p>
                     <a className="message_btn button-32">
-                      <img src="/images/mail.png" width="10px" height="10px"></img>
+                      <img
+                        src="/images/mail.png"
+                        width="10px"
+                        height="10px"
+                      ></img>
                     </a>
                   </div>
                   <div className="info_detail">
@@ -190,16 +205,33 @@ const UserPage = () => {
                   </div>
                 </div>
                 <div className="detail btn_box">
-                  <a className="button-32" onClick={() => updateHandler(selectedUser[0].us_uid)}>
+                  <a
+                    className="button-32"
+                    onClick={() =>
+                      updateHandler(selectedUser[0].us_uid)
+                    }
+                  >
                     수정
                   </a>
                   <a
                     className="delete_btn button-32"
-                    onClick={() => deleteHandler(selectedUser[0].us_uid, selectedUser[0].us_ccode)}
+                    onClick={() =>
+                      deleteHandler(
+                        selectedUser[0].us_uid,
+                        selectedUser[0].us_ccode
+                      )
+                    }
                   >
                     삭제
                   </a>
-                  <a className="button-32">회원권정보</a>
+                  <a
+                    className="button-32"
+                    onClick={() =>
+                      userMinfoListHandler(selectedUser[0].us_uid)
+                    }
+                  >
+                    회원권
+                  </a>
                 </div>
               </div>
             </div>

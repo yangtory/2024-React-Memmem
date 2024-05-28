@@ -8,6 +8,7 @@ import { AddUserComp } from "../../api/userComp";
 
 import "../../../css/user/userInput.css";
 import { getTicketInfo, ticketAll } from "../../api/ticket";
+import { addUserMinfo } from "../../api/userMinfo";
 const InsertPage = () => {
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
@@ -24,13 +25,20 @@ const InsertPage = () => {
 
   // ticket-----------------------------------------------------------------
   const [ticketList, setTicketList] = useState([]);
-  const [ticket, setTicket] = useState(null);
+  // const [ticket, setTicket] = useState(null);
   const [ticketFormData, setTicketFormData] = useState({
     r_iseq: "",
     r_icount: "",
     r_sdate: "",
     r_edate: "",
   });
+
+  const changeTicket = (e) => {
+    setTicketFormData({
+      ...ticketFormData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   useEffect(() => {
     const fetchTicket = async () => {
@@ -51,11 +59,15 @@ const InsertPage = () => {
     </option>
   ));
 
-  // ticket 선택
+  // ticket 선택 i_count 정보 찾기
   const ticketInfoHandler = async (seq) => {
+    setTicketFormData({ r_iseq: seq });
     try {
       const result = await getTicketInfo(parseInt(seq));
-      setTicket(result[0]?.i_count);
+      setTicketFormData({
+        r_icount: result[0].i_count,
+        r_iseq: result[0].i_seq,
+      });
       // console.log(result);
     } catch (error) {
       console.log(error);
@@ -67,8 +79,6 @@ const InsertPage = () => {
     const seq = e.target.value; //select 가 change 되면
     if (seq !== "0") {
       ticketInfoHandler(seq); // ticketInfoHandler 에 seq 넘겨주고 count 셋팅하기
-    } else {
-      setTicket("");
     }
   };
 
@@ -122,18 +132,22 @@ const InsertPage = () => {
       codeFetch();
     }
   }, [session]);
-  // const addComp = (e) => {
-  //   setFormData({
-  //     ...formData,
-  //     [e.target.name]: e.target.value,
-  //     ccode,
-  //   });
-  // };
 
   const submit = async () => {
     try {
-      const result = AddUserComp({ formData, ccode, formattedDate });
-      console.log(result);
+      // 회원권 정보가 없으면 유저만 등록
+      if (ticketFormData.r_icount === "") {
+        await AddUserComp({ formData, ccode, formattedDate });
+      } else {
+        // 있으면 회원권도 등록
+        await AddUserComp({ formData, ccode, formattedDate });
+        const ruid = formData.us_uid;
+        await addUserMinfo({
+          ticketFormData,
+          ruid,
+        });
+      }
+
       window.location.href = "/user";
     } catch (error) {
       console.log(error);
@@ -153,7 +167,7 @@ const InsertPage = () => {
               className="us_uid"
               placeholder="리스트에서 선택해주세요"
               name="us_uid"
-              readonly
+              readOnly
               value={formData.us_uid}
               onChange={changeUser}
             />
@@ -162,7 +176,7 @@ const InsertPage = () => {
               className="us_uname"
               placeholder="리스트에서 선택해주세요"
               name="us_uname"
-              readonly
+              readOnly
               value={formData.us_uname}
               onChange={changeUser}
             />
@@ -179,7 +193,7 @@ const InsertPage = () => {
               type="hidden"
               placeholder="업체명"
               name="us_cname"
-              readonly
+              readOnly
               value={formData.us_cname}
               onChange={changeUser}
             />
@@ -190,7 +204,7 @@ const InsertPage = () => {
               name="us_ccode"
               value={ccode}
               onChange={changeUser}
-              readonly
+              readOnly
             />
             <input
               className="us_date"
@@ -198,7 +212,7 @@ const InsertPage = () => {
               name="us_date"
               value={formattedDate}
               onChange={changeUser}
-              readonly
+              readOnly
             />
 
             <h3>수강권 정보</h3>
@@ -208,6 +222,7 @@ const InsertPage = () => {
               <select
                 className="select"
                 name="r_iseq"
+                value={ticketFormData.r_iseq}
                 onChange={handleSelectChange}
               >
                 <option value="0">--수강권선택--</option>
@@ -219,7 +234,8 @@ const InsertPage = () => {
               className="r_icount"
               placeholder="수강권횟수"
               name="r_icount"
-              value={ticket}
+              value={ticketFormData.r_icount}
+              onChange={changeTicket}
               readOnly
             />
             <label>시작일</label>
@@ -227,14 +243,16 @@ const InsertPage = () => {
               className="r_sdate"
               type="date"
               name="r_sdate"
-              value="${U.r_sdate }"
+              value={ticketFormData.r_sdate}
+              onChange={changeTicket}
             />
             <label>종료일</label>
             <input
               className="r_edate"
               type="date"
               name="r_edate"
-              value="${U.r_edate }"
+              value={ticketFormData.r_edate}
+              onChange={changeTicket}
             />
 
             <input

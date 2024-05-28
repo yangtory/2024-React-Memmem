@@ -10,6 +10,7 @@ import { TicketProvider } from "../provider/TicketProvider";
 import TicketModal from "../modals/TicketModal";
 import TeacherModal from "../modals/TeacherModal";
 import NoticeModal from "../modals/NoticeModal";
+import UserTicketModal from "../modals/UserTicketModal";
 
 export default function RootLayout({ children }) {
   return (
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
                 <TicketModal />
                 <TeacherModal />
                 <NoticeModal />
+                <UserTicketModal />
                 <Header />
                 <div className="main">
                   <Side />

@@ -21,7 +21,8 @@ const SchedulePage = () => {
   const [list, setList] = useState([]); // 전체 수업 목록
   const [selectColor, setSelectColor] = useState("#ffffff"); // 선택된 색상(지우면 오류생김)
   const { data: session } = useSession(); // 사용자 세션 데이터 가져오기
-
+  const [isLoad, setIsLoad] = useState(false);
+  const [showUpdatePage, setShowUpdatePage] = useState(false);
   // 선택된 색상을 변경하는 함수
   const handleColorChange = (color) => {
     setSelectColor(color);
@@ -41,14 +42,12 @@ const SchedulePage = () => {
       setIsLoading(false);
     };
     fetchData();
-  }, [viewYear, viewMonth]); // 연도와 월이 변경될 때마다 실행
+  }, [viewYear, viewMonth, isLoad]); // 연도와 월이 변경될 때마다 실행
 
   // 로딩이 완료되면 달력을 렌더링하는 함수
   useEffect(() => {
-    if (!isLoading) {
-      renderCalendar();
-    }
-  }, [isLoading]);
+    renderCalendar();
+  }, [isLoading, isLoad, list]);
 
   // 달력을 렌더링하는 함수
   const renderCalendar = async () => {
@@ -75,17 +74,26 @@ const SchedulePage = () => {
     const dateElements = allDates.map((date, i) => {
       const matchingItems = list?.filter(
         (item) =>
-          item.s_sdate <= formatDate(new Date(viewYear, viewMonth - 1, date)) && item.s_edate >= formatDate(new Date(viewYear, viewMonth - 1, date))
+          item.s_sdate <= formatDate(new Date(viewYear, viewMonth - 1, date)) &&
+          item.s_edate >= formatDate(new Date(viewYear, viewMonth - 1, date))
       );
 
       return (
-        <div key={i} className={`date ${date ? "this" : "other"}`} onClick={() => handleDateClick(date)}>
+        <div
+          key={i}
+          className={`date ${date ? "this" : "other"}`}
+          onClick={() => handleDateClick(date)}
+        >
           <div>{date}</div>
           {date &&
             matchingItems &&
             matchingItems.length > 0 &&
             matchingItems.map((item, index) => (
-              <div key={index} className="class" style={{ backgroundColor: item.s_color, color: "black" }}>
+              <div
+                key={index}
+                className="class"
+                style={{ backgroundColor: item.s_color, color: "black" }}
+              >
                 {item.s_title}
               </div>
             ))}
@@ -102,6 +110,7 @@ const SchedulePage = () => {
     const selectedDate = formatDate(new Date(viewYear, viewMonth - 1, date));
     setSelectedDate(selectedDate);
     setShowInputPage(false);
+    setShowUpdatePage(false);
     setSeq(null);
 
     if (session) {
@@ -188,9 +197,22 @@ const SchedulePage = () => {
         </aside>
         <aside className="right">
           {showInputPage ? (
-            <InputPage date={selectedDate} selectedDate={selectedDate} onColorChange={handleColorChange} />
-          ) : seq ? (
-            <UpPage seq={seq} selectedDate={selectedDate} />
+            <InputPage
+              isLoad={isLoad}
+              setIsLoad={setIsLoad}
+              date={selectedDate}
+              selectedDate={selectedDate}
+              setShowInputPage={setShowInputPage}
+              onColorChange={handleColorChange}
+            />
+          ) : showUpdatePage ? (
+            <UpPage
+              seq={seq}
+              selectedDate={selectedDate}
+              setShowUpdatePage={setShowUpdatePage}
+              isLoad={isLoad}
+              setIsLoad={setIsLoad}
+            />
           ) : (
             selectedDate && (
               <ScheduleDetail
@@ -200,6 +222,7 @@ const SchedulePage = () => {
                 showInputPage={setShowInputPage}
                 selectedDate={selectedDate}
                 setSeq={setSeq}
+                setShowUpdatePage={setShowUpdatePage}
               />
             )
           )}

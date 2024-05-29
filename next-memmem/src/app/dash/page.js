@@ -17,22 +17,6 @@ const DashPage = () => {
   const [monthlyTotal, setMonthlyTotal] = useState([]);
 
   const router = useRouter();
-  useEffect(() => {
-    if (session) {
-      const dashFetch = async () => {
-        try {
-          const session = await getSession();
-          const ccode = session?.user.id.tbl_company[0].c_code;
-
-          const result = await selectAll(ccode);
-          setNoticeList([...result]);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      dashFetch();
-    }
-  }, [session]);
 
   useEffect(() => {
     if (session) {
@@ -44,12 +28,17 @@ const DashPage = () => {
         const sumResult = await totalPrice(ccode);
         setTotalSum(sumResult);
       };
+      const dashFetch = async () => {
+        try {
+          const session = await getSession();
+          const ccode = session?.user.id.tbl_company[0].c_code;
 
-      fetchTotalUsers();
-    }
-  }, [session]);
-  useEffect(() => {
-    if (session) {
+          const result = await selectAll(ccode);
+          setNoticeList([...result]);
+        } catch (error) {
+          console.log(error);
+        }
+      };
       const fetchMonthlyUsers = async () => {
         const session = await getSession();
         const ccode = session?.user.id.tbl_company[0].c_code;
@@ -61,6 +50,9 @@ const DashPage = () => {
         const results = await Promise.all(promises);
         setMonthlyUsers(results.map((result) => result.length));
       };
+
+      fetchTotalUsers();
+      dashFetch();
       fetchMonthlyUsers();
     }
   }, [session]);

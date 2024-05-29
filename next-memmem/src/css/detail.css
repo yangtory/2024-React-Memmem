@@ -18,8 +18,7 @@ div.detail_box {
   width: 100%;
 }
 div.card {
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2),
-    0 4px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: #e9dcd6;
   /* background: radial-gradient(circle, #e9dcc9, #e9dcd9); */
   display: flex;
@@ -28,6 +27,7 @@ div.card {
 }
 div.container {
   padding: 1rem 16px 0.5rem 16px;
+  border: 1px solid red;
 }
 div.info_container {
   padding: 1rem 16px 0.5rem 16px;
@@ -38,7 +38,8 @@ div.info_container {
 }
 
 div.info_head {
-  width: 100%;
+  /* border: 1px solid red; */
+  /* width: 100% I; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,9 +95,11 @@ div.detail_btn_box {
   display: flex;
   flex-direction: row;
   margin: 5px 10px 20px auto;
+
+  width: 20%;
   a {
     width: 30%;
-    margin: 5px auto;
+    margin: 5px 3px;
     border-radius: 0;
     background-color: #e6cadd;
     color: #391145;

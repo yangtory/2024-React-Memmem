@@ -7,21 +7,19 @@ section.classPage {
 div.section_box {
   display: flex;
   height: 70vh;
-  gap: 1rem; /* 두 박스 사이의 간격을 조정 */
 }
 
 aside.left {
   display: flex;
   flex-direction: column;
-  /* margin-left: 2rem; 제거 */
 }
 
 aside.right {
   display: flex;
+  width: 50%;
   height: 93%;
   flex-direction: column;
-  width: 50%;
-  /* margin-top: 5.2rem; 제거 */
+  margin-top: 2rem;
   border-radius: 10px;
 
   div.title {
@@ -59,7 +57,7 @@ aside.right::-webkit-scrollbar {
   width: 600px;
   height: 100%;
   justify-content: center;
-  margin: 40px;
+  margin: 30px 0 0 40px;
 }
 
 .calHeader {
@@ -186,4 +184,13 @@ span.title {
   border: 3px dashed #e6cadd;
   padding: 8px;
   border-radius: 10px;
+}
+
+.btn_box {
+  display: flex;
+  justify-content: end;
+}
+
+.addClass {
+  width: 20%;
 }

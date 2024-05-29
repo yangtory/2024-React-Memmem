@@ -181,7 +181,7 @@ const TicketPage = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="detail btn_box">
+                  <div className="detail_btn_box">
                     {isEditMode ? (
                       <button
                         className="button-32"

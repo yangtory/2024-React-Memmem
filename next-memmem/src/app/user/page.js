@@ -204,7 +204,7 @@ const UserPage = () => {
                     </div>
                   </div>
                 </div>
-                <div className="detail btn_box">
+                <div className="detail_btn_box">
                   <a
                     className="button-32"
                     onClick={() =>

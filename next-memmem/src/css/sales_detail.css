@@ -27,7 +27,7 @@ th.content {
   top: 50%;
   left: 50%;
   transform: translate(-40%, -60%);
-  background-color: white;
+  background-color: #e9dcd6;
   z-index: 999; /* 다른 요소보다 앞에 표시되도록 */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* 그림자 효과 */
 }

@@ -5,6 +5,8 @@ import { getSession } from "next-auth/react";
 import { salesDataAll } from "../api/userMinfo";
 import { findComp } from "../api/company";
 import "../../css/sales_detail.css";
+import "../../css/table.css";
+import "../../css/search.css";
 
 const SalesPage = () => {
   const [salesList, setSalesList] = useState([]);

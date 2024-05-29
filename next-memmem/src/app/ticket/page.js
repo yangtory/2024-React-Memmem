@@ -1,6 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
-import { deleteTicket, getTicketInfo, getUserCount, ticketAll, updateTicket } from "../api/ticket";
+import { useEffect, useRef, useState } from "react";
+import {
+  deleteTicket,
+  getTicketInfo,
+  getUserCount,
+  ticketAll,
+  updateTicket,
+} from "../api/ticket";
 import { useSession } from "next-auth/react";
 import "../../css/table.css";
 import "../../css/detail.css";
@@ -16,6 +22,7 @@ const TicketPage = () => {
   const [count, setCount] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
   const [listUpdate, setListUpdate] = useState(null);
+  const priceInputRef = useRef();
   const [formData, setFormData] = useState({
     i_seq: "",
     i_price: "",
@@ -77,7 +84,10 @@ const TicketPage = () => {
   }, [ticketSeq, ticketList]);
 
   const ticketViewList = ticketList.map((ticket, index) => (
-    <tr key={ticket?.i_seq} onClick={() => setTicketSeq(ticket?.i_seq)}>
+    <tr
+      key={ticket?.i_seq}
+      onClick={() => setTicketSeq(ticket?.i_seq)}
+    >
       <td>{index + 1}</td>
       <td>{ticket?.i_title}</td>
       <td>{ticket?.i_price.toLocaleString()}</td>
@@ -88,6 +98,12 @@ const TicketPage = () => {
   // 수정버튼 클릭
   const updateClickHandler = () => {
     setIsEditMode(true);
+    setTimeout(() => {
+      if (priceInputRef.current) {
+        priceInputRef.current.focus();
+        priceInputRef.current.select();
+      }
+    }, 0); // 다음 렌더링 사이클에서 포커스를 설정하기 위해 setTimeout 사용
   };
 
   // 저장버튼 클릭
@@ -145,12 +161,15 @@ const TicketPage = () => {
                       <div>
                         <strong>가격</strong>
                         <input
+                          ref={priceInputRef}
                           name="i_price"
                           value={formData.i_price}
                           readOnly={!isEditMode}
                           onChange={handleChange}
                           style={{
-                            border: isEditMode ? "0.5px solid black" : "none",
+                            border: isEditMode
+                              ? "0.5px solid #888"
+                              : "none",
                           }}
                         />
                       </div>
@@ -162,7 +181,9 @@ const TicketPage = () => {
                           readOnly={!isEditMode}
                           onChange={handleChange}
                           style={{
-                            border: isEditMode ? "0.5px solid black" : "none",
+                            border: isEditMode
+                              ? "0.5px solid #888"
+                              : "none",
                           }}
                         />
                       </div>
@@ -170,12 +191,18 @@ const TicketPage = () => {
                   </div>
                   <div className="detail_btn_box">
                     {isEditMode ? (
-                      <button className="button-32" onClick={saveClickHandler}>
+                      <button
+                        className="button-32"
+                        onClick={saveClickHandler}
+                      >
                         저장
                       </button>
                     ) : (
                       <>
-                        <button className="button-32" onClick={updateClickHandler}>
+                        <button
+                          className="button-32"
+                          onClick={updateClickHandler}
+                        >
                           수정
                         </button>
                         <button

@@ -162,9 +162,7 @@ const NoticePage = () => {
                   <th className="index" width="20px">
                     No.
                   </th>
-                  <th className="date" width="80px">
-                    작성일자
-                  </th>
+                  <th width="80px">작성일자</th>
                   <th className="title" width="200px">
                     제목
                   </th>

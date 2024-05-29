@@ -1,8 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import "../../css/table.css"; // CSS 파일을 가져옵니다.
+import "../../css/table.css";
 import "../../css/search.css";
-
 import "../../css/teacher_detail.css";
 import {
   deleteTeacher,

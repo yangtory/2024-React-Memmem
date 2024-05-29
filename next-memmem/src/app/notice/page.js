@@ -65,7 +65,7 @@ const NoticePage = () => {
     const fetchNotices = async () => {
       const session = await getSession();
       const ccode = session?.user.id.tbl_company[0].c_code;
-      // 프리즈마를 사용하여 공지사항 데이터 가져오기
+      // 공지사항 데이터 가져오기
       try {
         const result = await selectAll({ ccode });
         setNoticeList([...result]);

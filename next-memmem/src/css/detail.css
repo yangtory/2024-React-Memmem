@@ -145,3 +145,14 @@ div.info {
   font-weight: 900;
   margin-bottom: 1rem;
 }
+
+.ticket_input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background-color: #e9dcd6;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 10px;
+}

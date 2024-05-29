@@ -89,8 +89,8 @@ div.info_detail {
   }
 }
 
-div.detail.btn_box {
-  /* display: flex; */
+div.detail_btn_box {
+  display: flex;
   flex-direction: row;
   margin: 5px 10px 20px auto;
   a {

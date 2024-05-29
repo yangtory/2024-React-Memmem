@@ -5,7 +5,7 @@ import { createClass } from "../../api/class";
 import { getSession } from "next-auth/react";
 import { selectAll } from "../../api/teacher";
 
-const InputPage = ({ selectedDate, onColorChange }) => {
+const InputPage = ({ selectedDate, onColorChange, setIsLoad, isLoad, setShowInputPage }) => {
   const [teacher, setTeacher] = useState([]);
   const [selectColor, setSelectColor] = useState(null);
   const colorPickerRef = useRef();
@@ -81,7 +81,7 @@ const InputPage = ({ selectedDate, onColorChange }) => {
       return;
     }
     if (formData.c_edate < formData.c_sdate) {
-      setErrorMessage("종료일은 시작일 이후여야 합니다");
+      setErrorMessage("종료일은 시작일 이후로 입력해주세요");
       edateRef.current.focus();
       return;
     }
@@ -101,7 +101,12 @@ const InputPage = ({ selectedDate, onColorChange }) => {
     }
 
     await createClass({ formData: { ...formData, ccode } });
-    window.location.reload();
+    if (isLoad === true) {
+      setIsLoad(false);
+    } else {
+      setIsLoad(true);
+    }
+    setShowInputPage(false);
   };
 
   const rgbToHex = (rgb) => {
@@ -138,7 +143,7 @@ const InputPage = ({ selectedDate, onColorChange }) => {
 
   return (
     <div className="input_div">
-      <form className="input_box" onSubmit={handleSubmit}>
+      <form className="input_box">
         {errorMessage && <div className="class schedule_error">{errorMessage}</div>}
         <label>수업명</label>
         <input placeholder="수업명" name="c_name" onChange={handleInputChange} ref={nameRef} />
@@ -154,13 +159,40 @@ const InputPage = ({ selectedDate, onColorChange }) => {
           </select>
         </div>
         <label>시작일자</label>
-        <input placeholder="시작일자" type="date" name="c_sdate" onChange={handleInputChange} value={selectedDate} ref={sdateRef} />
+        <input
+          placeholder="시작일자"
+          type="date"
+          name="c_sdate"
+          onChange={handleInputChange}
+          value={selectedDate}
+          ref={sdateRef}
+        />
         <label>종료일자</label>
-        <input placeholder="종료일자" type="date" name="c_edate" onChange={handleInputChange} ref={edateRef} />
+        <input
+          placeholder="종료일자"
+          type="date"
+          name="c_edate"
+          onChange={handleInputChange}
+          ref={edateRef}
+        />
         <label>시작시간</label>
-        <input placeholder="시작시간" type="time" min="00:00" max="24:00" name="c_stime" onChange={handleInputChange} ref={stimeRef} />
+        <input
+          placeholder="시작시간"
+          type="time"
+          min="00:00"
+          max="24:00"
+          name="c_stime"
+          onChange={handleInputChange}
+          ref={stimeRef}
+        />
         <label>종료시간</label>
-        <input placeholder="종료시간" type="time" name="c_etime" onChange={handleInputChange} ref={etimeRef} />
+        <input
+          placeholder="종료시간"
+          type="time"
+          name="c_etime"
+          onChange={handleInputChange}
+          ref={etimeRef}
+        />
         <label>색상</label>
         <div className="palette">
           <div className="color color1" onClick={handleColorClick}></div>
@@ -172,9 +204,16 @@ const InputPage = ({ selectedDate, onColorChange }) => {
           <div className="color color7" onClick={handleColorClick}></div>
           <div className="color color8" onClick={handleColorClick}></div>
         </div>
-        <input type="hidden" id="colorPicker" className="colorPicker" name="c_color" ref={colorPickerRef} onChange={handleInputChange} />
+        <input
+          type="hidden"
+          id="colorPicker"
+          className="colorPicker"
+          name="c_color"
+          ref={colorPickerRef}
+          onChange={handleInputChange}
+        />
         <input type="hidden" value={ccode} name="c_ccode" />
-        <input type="submit" className="insert" value="작성" />
+        <input type="button" className="insert" value="작성" onClick={handleSubmit} />
       </form>
     </div>
   );

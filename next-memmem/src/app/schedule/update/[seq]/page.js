@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { scheduleDelete, scheduleUnique, scheduleUpdate } from "../../../api/schedule";
 import "../../../../css/schedule/update.css";
-const UpPage = ({ seq, selectedDate }) => {
+const UpPage = ({ seq, selectedDate, isLoad, setIsLoad, setShowUpdatePage }) => {
   const [list, setList] = useState({});
   const [selectColor, setSelectColor] = useState(null);
   const [formData, setFormData] = useState({
@@ -11,7 +11,12 @@ const UpPage = ({ seq, selectedDate }) => {
     s_sdate: "",
     s_edate: "",
   });
+  const titleRef = useRef(null);
+  const contentRef = useRef(null);
+  const sdateRef = useRef(null);
+  const edateRef = useRef(null);
   const colorPickerRef = useRef();
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +47,37 @@ const UpPage = ({ seq, selectedDate }) => {
   };
 
   const update = async () => {
+    if (!formData.s_title) {
+      setErrorMessage("제목을 입력하세요");
+      titleRef.current.focus();
+      return;
+    }
+    if (!formData.s_content) {
+      setErrorMessage("내용을 입력하세요");
+      contentRef.current.focus();
+      return;
+    }
+    if (!formData.s_sdate) {
+      setErrorMessage("시작일을 입력하세요");
+      sdateRef.current.focus();
+      return;
+    }
+    if (!formData.s_edate) {
+      setErrorMessage("종료일을 입력하세요");
+      edateRef.current.focus();
+      return;
+    }
+    if (formData.s_edate < formData.s_sdate) {
+      setErrorMessage("종료일은 시작일 이후여야 합니다");
+      edateRef.current.focus();
+      return;
+    }
+    if (!formData.s_color) {
+      setErrorMessage("색상을 지정하세요");
+
+      return;
+    }
+
     await scheduleUpdate(formData.s_seq, {
       s_title: formData.s_title,
       s_content: formData.s_content,
@@ -49,11 +85,22 @@ const UpPage = ({ seq, selectedDate }) => {
       s_edate: formData.s_edate,
       s_color: formData.s_color,
     });
-    window.location.reload();
+
+    if (isLoad === true) {
+      setIsLoad(false);
+    } else {
+      setIsLoad(true);
+    }
+    setShowUpdatePage(false);
   };
   const deleteHandler = async (s_seq) => {
     await scheduleDelete(s_seq);
-    window.location.reload();
+    if (isLoad === true) {
+      setIsLoad(false);
+    } else {
+      setIsLoad(true);
+    }
+    setShowUpdatePage(false);
   };
   // RGB 형식을 HEX 형식으로 변환하는 함수
   const rgbToHex = (rgb) => {
@@ -94,15 +141,42 @@ const UpPage = ({ seq, selectedDate }) => {
     <>
       <div className="update input_div">
         <form className="input_box">
+          {errorMessage && <div className="class schedule_error">{errorMessage}</div>}
           <input type="hidden" name="s_seq" value={formData.s_seq} />
           <label>제목</label>
-          <input placeholder="제목" name="s_title" value={formData.s_title || ""} onChange={handleChange} />
+          <input
+            ref={titleRef}
+            placeholder="제목"
+            name="s_title"
+            value={formData.s_title || ""}
+            onChange={handleChange}
+          />
           <label>내용</label>
-          <input placeholder="내용" value={formData.s_content || ""} name="s_content" onChange={handleChange} />
+          <input
+            ref={contentRef}
+            placeholder="내용"
+            value={formData.s_content || ""}
+            name="s_content"
+            onChange={handleChange}
+          />
           <label>시작일자</label>
-          <input placeholder="시작일자" type="date" name="s_sdate" value={formData.s_sdate || selectedDate} onChange={handleChange} />
+          <input
+            ref={sdateRef}
+            placeholder="시작일자"
+            type="date"
+            name="s_sdate"
+            value={formData.s_sdate || selectedDate}
+            onChange={handleChange}
+          />
           <label>종료일자</label>
-          <input placeholder="종료일자" type="date" name="s_edate" value={formData.s_edate || ""} onChange={handleChange} />
+          <input
+            placeholder="종료일자"
+            type="date"
+            name="s_edate"
+            value={formData.s_edate || ""}
+            onChange={handleChange}
+            ref={edateRef}
+          />
 
           <label>색상</label>
           <div className="palette">
@@ -126,7 +200,13 @@ const UpPage = ({ seq, selectedDate }) => {
           />
           <div className="schedule">
             <input type="button" className="insert" value="수정" onClick={update} />
-            <input type="button" className="delete" data-seq={seq} value="삭제" onClick={() => deleteHandler(formData.s_seq)} />
+            <input
+              type="button"
+              className="delete"
+              data-seq={seq}
+              value="삭제"
+              onClick={() => deleteHandler(formData.s_seq)}
+            />
           </div>
         </form>
       </div>

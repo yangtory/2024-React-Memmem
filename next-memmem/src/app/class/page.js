@@ -17,11 +17,13 @@ const ClassPage = () => {
   const [dates, setDates] = useState([]); // 달력 날짜들
   const [selectedDate, setSelectedDate] = useState(null); // 선택된 날짜
   const [showInputPage, setShowInputPage] = useState(false); // 입력 페이지 표시 여부
+  const [showUpdatePage, setShowUpdatePage] = useState(false);
   const [seq, setSeq] = useState(null); // 선택된 수업의 고유 번호
   const [classList, setClassList] = useState([]); // 선택된 날짜의 수업 목록
   const [list, setList] = useState([]); // 전체 수업 목록
   const [selectColor, setSelectColor] = useState("#ffffff"); // 선택된 색상(지우면 오류생김)
   const { data: session } = useSession(); // 사용자 세션 데이터 가져오기
+  const [isLoad, setIsLoad] = useState(false);
 
   // 선택된 색상을 변경하는 함수
   const handleColorChange = (color) => {
@@ -42,14 +44,12 @@ const ClassPage = () => {
       setIsLoading(false);
     };
     fetchData();
-  }, [viewYear, viewMonth]); // 연도와 월이 변경될 때마다 실행
+  }, [viewYear, viewMonth, isLoad]); // 연도와 월이 변경될 때마다 실행
 
   // 로딩이 완료되면 달력을 렌더링하는 함수
   useEffect(() => {
-    if (!isLoading) {
-      renderCalendar();
-    }
-  }, [isLoading]);
+    renderCalendar();
+  }, [list, isLoading, isLoad]);
 
   // 달력을 렌더링하는 함수
   const renderCalendar = async () => {
@@ -76,17 +76,26 @@ const ClassPage = () => {
     const dateElements = allDates.map((date, i) => {
       const matchingItems = list?.filter(
         (item) =>
-          item.c_sdate <= formatDate(new Date(viewYear, viewMonth - 1, date)) && item.c_edate >= formatDate(new Date(viewYear, viewMonth - 1, date))
+          item.c_sdate <= formatDate(new Date(viewYear, viewMonth - 1, date)) &&
+          item.c_edate >= formatDate(new Date(viewYear, viewMonth - 1, date))
       );
 
       return (
-        <div key={i} className={`date ${date ? "this" : "other"}`} onClick={() => handleDateClick(date)}>
+        <div
+          key={i}
+          className={`date ${date ? "this" : "other"}`}
+          onClick={() => handleDateClick(date)}
+        >
           <div>{date}</div>
           {date &&
             matchingItems &&
             matchingItems.length > 0 &&
             matchingItems.map((item, index) => (
-              <div key={index} className="class" style={{ backgroundColor: item.c_color, color: "black" }}>
+              <div
+                key={index}
+                className="class"
+                style={{ backgroundColor: item.c_color, color: "black" }}
+              >
                 {item.c_name}
               </div>
             ))}
@@ -103,12 +112,14 @@ const ClassPage = () => {
     const selectedDate = formatDate(new Date(viewYear, viewMonth - 1, date));
     setSelectedDate(selectedDate);
     setShowInputPage(false);
+    setShowUpdatePage(false);
     setSeq(null);
 
     if (session) {
       const session = await getSession();
       const ccode = session?.user.id.tbl_company[0].c_code;
       const result = await classAll(ccode, selectedDate);
+
       setClassList(result);
     }
   };
@@ -189,9 +200,24 @@ const ClassPage = () => {
         </aside>
         <aside className="right">
           {showInputPage ? (
-            <InputPage date={selectedDate} selectedDate={selectedDate} onColorChange={handleColorChange} />
-          ) : seq ? (
-            <UpPage seq={seq} selectedDate={selectedDate} />
+            <InputPage
+              setIsLoad={setIsLoad}
+              isLoad={isLoad}
+              setShowInputPage={setShowInputPage}
+              date={selectedDate}
+              selectedDate={selectedDate}
+              onColorChange={handleColorChange}
+            />
+          ) : showUpdatePage ? (
+            <UpPage
+              seq={seq}
+              selectedDate={selectedDate}
+              isLoad={isLoad}
+              setIsLoad={setIsLoad}
+              setShowInputPage={setShowInputPage}
+              setShowUpdatePage={setShowUpdatePage}
+              showUpdatePage={showUpdatePage}
+            />
           ) : (
             selectedDate && (
               <ClassDetail
@@ -201,6 +227,10 @@ const ClassPage = () => {
                 showInputPage={setShowInputPage}
                 selectedDate={selectedDate}
                 setSeq={setSeq}
+                isLoad={isLoad}
+                setIsLoad={setIsLoad}
+                showUpdatePage={showUpdatePage}
+                setShowUpdatePage={setShowUpdatePage}
               />
             )
           )}

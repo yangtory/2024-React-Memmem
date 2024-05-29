@@ -4,7 +4,7 @@ import { getSession, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { scheduleAll } from "../../../api/schedule";
 import "../../../../css/table.css";
-const ScheduleDetail = ({ selectedDate, showInputPage, date, setSeq }) => {
+const ScheduleDetail = ({ selectedDate, showInputPage, date, setSeq, setShowUpdatePage }) => {
   const inputButton = () => {
     showInputPage(true);
   };
@@ -29,12 +29,13 @@ const ScheduleDetail = ({ selectedDate, showInputPage, date, setSeq }) => {
 
   const clickHandler = (seq) => {
     setSeq(seq);
+    setShowUpdatePage(true);
   };
   return (
     <>
       <div className="list_home">
-        <div className="insert_btn_box btn_box">
-          <a className="insert button-32" onClick={inputButton} date={date}>
+        <div className="btn_box">
+          <a className="insert button-32 addClass" onClick={inputButton} date={date}>
             수업 추가
           </a>
         </div>
@@ -51,7 +52,11 @@ const ScheduleDetail = ({ selectedDate, showInputPage, date, setSeq }) => {
 
           <tbody className="body">
             {scheduleList.map((SCHEDULE, index) => (
-              <tr key={SCHEDULE.s_seq} onClick={() => clickHandler(SCHEDULE.s_seq)} data-seq={SCHEDULE.s_seq}>
+              <tr
+                key={SCHEDULE.s_seq}
+                onClick={() => clickHandler(SCHEDULE.s_seq)}
+                data-seq={SCHEDULE.s_seq}
+              >
                 <td>{index + 1}</td>
                 <td>{SCHEDULE.s_title}</td>
                 <td>{SCHEDULE.s_sdate}</td>

@@ -41,16 +41,20 @@ export const createUserTicket = async ({ formData, id }) => {
   return result;
 };
 
-export const findDetail = async ({ ticket, id }) => {
-  const result = await USER_MINFO.findUnique({
-    where: {
-      r_uid_r_iseq: {
-        r_uid: id,
-        r_iseq: ticket,
+export const findDetail = async (ticketSeq, id) => {
+  try {
+    const result = await USER_MINFO.findUnique({
+      where: {
+        r_iseq_r_uid: {
+          r_uid: id,
+          r_iseq: ticketSeq,
+        },
       },
-    },
-  });
-  console.log("server", result);
-  prisma.$disconnect();
-  return result;
+      include: { tbl_minfo: true },
+    });
+    prisma.$disconnect();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 };

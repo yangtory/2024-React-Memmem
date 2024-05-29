@@ -14,7 +14,8 @@ const TicketList = ({ params }) => {
   const [isModal, setIsModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [ticketList, setTicketList] = useState([]);
-  const [ticket, setTicket] = useState(null);
+  const [ticketSeq, setTicketSeq] = useState(null);
+  const [detail, setDetail] = useState(null);
   const [formData, setFormData] = useState({
     r_iseq: "",
     r_icount: "",
@@ -119,7 +120,7 @@ const TicketList = ({ params }) => {
   const viewList = userMinfo.map((list) => {
     const dDay = calcDday(list.r_edate);
     return (
-      <tr key={list.r_iseq} onClick={() => setTicket(list.r_iseq)}>
+      <tr key={list.r_iseq} onClick={() => setTicketSeq(list.r_iseq)}>
         <td>{list.r_uid}</td>
         <td>{list.tbl_minfo.i_title}</td>
         <td>{list.r_icount}</td>
@@ -137,15 +138,12 @@ const TicketList = ({ params }) => {
   // 디테일 정보찾기
   useEffect(() => {
     const findUser = async () => {
-      console.log("client", ticket, id);
-      await findDetail(ticket, id);
+      const result = await findDetail(ticketSeq, id);
+      console.log("server", result);
+      setDetail(result);
     };
     findUser();
-  }, [ticket]);
-
-  const openDetail = async () => {
-    setIsModal(true);
-  };
+  }, [ticketSeq, id]);
 
   return (
     <>
@@ -156,6 +154,90 @@ const TicketList = ({ params }) => {
             <a className="insert button-32" onClick={openModal}>
               회원권 추가
             </a>
+          </div>
+
+          <div className="view_box">
+            {detail ? (
+              <div>
+                <div className="detail_box">
+                  <div className="card">
+                    <h3>{detail.tbl_minfo.i_title}</h3>
+                    <div className="container">
+                      <div className="info">
+                        <div>
+                          <strong>잔여횟수</strong>
+                          <input
+                            name="r_icount"
+                            value={detail.r_icount}
+                            readOnly={!isEditMode}
+                            onChange={changeTicket}
+                            style={{
+                              border: isEditMode
+                                ? "0.5px solid black"
+                                : "none",
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <strong>기간</strong>
+                          <input
+                            name="r_icount"
+                            value={detail.r_sdate}
+                            readOnly={!isEditMode}
+                            // onChange={handleChange}
+                            style={{
+                              border: isEditMode
+                                ? "0.5px solid black"
+                                : "none",
+                            }}
+                          />
+                          <input
+                            name="r_icount"
+                            value={detail.r_edate}
+                            readOnly={!isEditMode}
+                            // onChange={handleChange}
+                            style={{
+                              border: isEditMode
+                                ? "0.5px solid black"
+                                : "none",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="detail_btn_box">
+                      {isEditMode ? (
+                        <button
+                          className="button-32"
+                          // onClick={saveClickHandler}
+                        >
+                          저장
+                        </button>
+                      ) : (
+                        <>
+                          <button
+                            className="button-32"
+                            // onClick={updateClickHandler}
+                          >
+                            수정
+                          </button>
+                          <button
+                            className="button-32"
+                            // onClick={() => {
+                            //   deleteClickHandler(ticketSeq);
+                            // }}
+                          >
+                            삭제
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="noticket card">No ticket selected</div>
+            )}
           </div>
 
           <table className="user_ticket list">

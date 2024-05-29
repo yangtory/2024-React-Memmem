@@ -5,7 +5,15 @@ import "../../../../css/table.css";
 import { getSession, useSession } from "next-auth/react";
 import { classAll } from "../../../api/class";
 
-const ClassDetail = ({ showInputPage, date, selectedDate, setSeq }) => {
+const ClassDetail = ({
+  showInputPage,
+  date,
+  selectedDate,
+  setSeq,
+  setShowUpdatePage,
+  showUpdatePage,
+  setIsLoad,
+}) => {
   const inputButton = () => {
     showInputPage(true); // 입력 페이지 표시
   };
@@ -32,6 +40,8 @@ const ClassDetail = ({ showInputPage, date, selectedDate, setSeq }) => {
 
   const clickHandler = (seq) => {
     setSeq(seq);
+    setShowUpdatePage(true);
+    setIsLoad(true);
   };
 
   return (

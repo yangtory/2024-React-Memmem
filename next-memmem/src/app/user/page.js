@@ -193,7 +193,7 @@ const UserPage = () => {
                     </div>
                   </div>
                 </div>
-                <div className="detail btn_box">
+                <div className="detail_btn_box">
                   <a className="button-32" onClick={() => updateHandler(selectedUser[0].us_uid)}>
                     수정
                   </a>

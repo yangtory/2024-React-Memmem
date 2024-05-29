@@ -68,44 +68,22 @@ const TicketModal = () => {
         <form className={styles.form} onSubmit={handleSubmit}>
           <main>
             <div className={styles.input_div}>
-              <div className="ticket error"></div>
+              {/* <div className="ticket error"></div> */}
               <label>업체코드</label>
-              <input
-                value={formData.i_ccode}
-                name="i_ccode"
-                readOnly
-              />
+              <input value={formData.i_ccode} name="i_ccode" readOnly />
               <label>제목</label>
-              <input
-                placeholder="제목"
-                name="i_title"
-                value={formData.i_title}
-                onChange={handleChange}
-              />
+              <input placeholder="제목" name="i_title" value={formData.i_title} onChange={handleChange} />
               <label>수강횟수</label>
-              <input
-                placeholder="수강횟수"
-                name="i_count"
-                value={formData.i_count}
-                onChange={handleChange}
-              />
+              <input placeholder="수강횟수" name="i_count" value={formData.i_count} onChange={handleChange} />
               <label>가격</label>
-              <input
-                placeholder="가격"
-                name="i_price"
-                value={formData.i_price}
-                onChange={handleChange}
-              />
+              <input placeholder="가격" name="i_price" value={formData.i_price} onChange={handleChange} />
             </div>
           </main>
           <footer className={styles.footer}>
             <button type="submit" className={styles["btn-left"]}>
               추가
             </button>
-            <button
-              className={styles["btn-right"]}
-              onClick={onClickClose}
-            >
+            <button className={styles["btn-right"]} onClick={onClickClose}>
               Close
             </button>
           </footer>

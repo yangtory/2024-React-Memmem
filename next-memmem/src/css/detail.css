@@ -27,6 +27,7 @@ div.card {
 }
 div.container {
   padding: 1rem 16px 0.5rem 16px;
+  border: 1px solid red;
 }
 div.info_container {
   padding: 1rem 16px 0.5rem 16px;
@@ -37,7 +38,8 @@ div.info_container {
 }
 
 div.info_head {
-  width: 100%;
+  /* border: 1px solid red; */
+  /* width: 100% I; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,6 +95,8 @@ div.detail_btn_box {
   display: flex;
   flex-direction: row;
   margin: 5px 10px 20px auto;
+
+  width: 20%;
   a {
     width: 30%;
     margin: 5px 3px;

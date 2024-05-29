@@ -107,6 +107,7 @@ div.input_box {
     border: 1px solid transparent;
     border-radius: 5px;
     cursor: default;
+    background-color: white;
     &:focus {
       border: 1px solid #111;
     }

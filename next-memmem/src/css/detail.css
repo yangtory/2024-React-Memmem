@@ -18,8 +18,7 @@ div.detail_box {
   width: 100%;
 }
 div.card {
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2),
-    0 4px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: #e9dcd6;
   /* background: radial-gradient(circle, #e9dcc9, #e9dcd9); */
   display: flex;
@@ -28,7 +27,6 @@ div.card {
 }
 div.container {
   padding: 1rem 16px 0.5rem 16px;
-  border: 1px solid red;
 }
 div.info_container {
   padding: 1rem 16px 0.5rem 16px;

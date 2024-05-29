@@ -36,7 +36,7 @@ const ScheduleDetail = ({ selectedDate, showInputPage, date, setSeq, setShowUpda
       <div className="list_home">
         <div className="btn_box">
           <a className="insert button-32 addClass" onClick={inputButton} date={date}>
-            수업 추가
+            일정 추가
           </a>
         </div>
 
@@ -52,11 +52,7 @@ const ScheduleDetail = ({ selectedDate, showInputPage, date, setSeq, setShowUpda
 
           <tbody className="body">
             {scheduleList.map((SCHEDULE, index) => (
-              <tr
-                key={SCHEDULE.s_seq}
-                onClick={() => clickHandler(SCHEDULE.s_seq)}
-                data-seq={SCHEDULE.s_seq}
-              >
+              <tr key={SCHEDULE.s_seq} onClick={() => clickHandler(SCHEDULE.s_seq)} data-seq={SCHEDULE.s_seq}>
                 <td>{index + 1}</td>
                 <td>{SCHEDULE.s_title}</td>
                 <td>{SCHEDULE.s_sdate}</td>

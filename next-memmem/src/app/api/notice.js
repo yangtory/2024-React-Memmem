@@ -7,7 +7,7 @@ export const selectAll = async ({ ccode }) => {
   const result = await NOTICE.findMany({
     where: { n_ccode: ccode },
   });
-  prisma.$disconnect;
+  prisma.$disconnect();
   return result;
 };
 
@@ -23,7 +23,7 @@ export const createNotice = async ({ formData }) => {
       n_time: formData.n_time,
     },
   });
-  prisma.$disconnect;
+  prisma.$disconnect();
   return result;
 };
 

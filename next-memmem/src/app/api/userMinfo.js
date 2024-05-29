@@ -55,6 +55,43 @@ export const findDetail = async (ticketSeq, id) => {
     prisma.$disconnect();
     return result;
   } catch (error) {
+    prisma.$disconnect();
     console.log(error);
   }
+};
+
+export const updateUserTicket = async (formData, id) => {
+  try {
+    const result = await USER_MINFO.update({
+      where: {
+        r_iseq_r_uid: {
+          r_uid: id,
+          r_iseq: formData.r_iseq,
+        },
+      },
+      data: {
+        r_icount: parseInt(formData.r_icount),
+        r_sdate: formData.r_sdate,
+        r_edate: formData.r_edate,
+      },
+    });
+    prisma.$disconnect();
+    return result;
+  } catch (error) {
+    prisma.$disconnect();
+    console.log(error);
+  }
+};
+
+export const deleteUserTicket = async (ticketSeq, id) => {
+  const result = await USER_MINFO.delete({
+    where: {
+      r_iseq_r_uid: {
+        r_uid: id,
+        r_iseq: ticketSeq,
+      },
+    },
+  });
+  prisma.$disconnect();
+  return result;
 };

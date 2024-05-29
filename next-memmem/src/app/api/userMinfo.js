@@ -95,3 +95,16 @@ export const deleteUserTicket = async (ticketSeq, id) => {
   prisma.$disconnect();
   return result;
 };
+
+export const salesDataAll = async () => {
+  const result = await USER_MINFO.findMany({
+    include: {
+      tbl_minfo: true,
+    },
+    orderBy: {
+      r_sdate: "asc",
+    },
+  });
+  prisma.$disconnect();
+  return result;
+};

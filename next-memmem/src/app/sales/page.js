@@ -2,7 +2,9 @@
 import { useState, useEffect } from "react";
 import { searchSalesList } from "../api/sales";
 import { getSession } from "next-auth/react";
-// import html2canvas from "html2canvas";
+import { salesDataAll } from "../api/userMinfo";
+import { findComp } from "../api/company";
+import "../../css/sales_detail.css";
 
 const SalesPage = () => {
   const [salesList, setSalesList] = useState([]);
@@ -10,11 +12,12 @@ const SalesPage = () => {
     r_sdate: "",
     r_edate: "",
     r_uid: "",
-    r_ititle: "",
+    i_title: "",
     ccode: "",
   });
   const [detail, setDetail] = useState(null);
-  //   const [isEditMode, setIsEditMode] = useState(false);
+  const [sum, setSum] = useState(0);
+  const [comp, setComp] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,39 +27,55 @@ const SalesPage = () => {
     }));
   };
 
-  //   const debounce = (callback, delay = 200) => {
-  //     let debounceTimer;
-  //     return (...args) => {
-  //       clearTimeout(debounceTimer);
-
-  //       debounceTimer = setTimeout(
-  //         () => callback.apply(this, args),
-  //         delay
-  //       );
-  //     };
-  //   };
-  //   const onSearchHandler = debounce(handleChange, 300);
-
   const handleSearch = async () => {
     const session = await getSession();
     const setCode = session?.user.id.tbl_company[0].c_code;
-    const result = await searchSalesList({
-      ...searchData,
-      ccode: setCode,
-    });
+    const { r_sdate, r_edate, r_uid, i_title } = searchData;
+
+    const result = await searchSalesList(
+      r_sdate,
+      r_edate,
+      r_uid,
+      i_title,
+      setCode
+    );
+
     if (result) {
       setSalesList([...result]);
     }
   };
 
-  //   const saveReceipt = () => {
-  //     html2canvas(document.querySelector(".detail")).then((canvas) => {
-  //       var link = document.createElement("a");
-  //       link.download = "receipt.png";
-  //       link.href = canvas.toDataURL();
-  //       link.click();
-  //     });
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await salesDataAll();
+      setSalesList(result);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // reduce 를 이용해 배열의 값 합산
+    const totalSum = salesList.reduce(
+      // 0 부터 시작
+      (acc, list) => acc + parseInt(list.tbl_minfo.i_price),
+      0
+    );
+    setSum(totalSum);
+  }, [salesList]);
+
+  useEffect(() => {
+    const getCompInfo = async () => {
+      const session = await getSession();
+      const code = session?.user.id.tbl_company[0].c_code;
+      const result = await findComp(code);
+      setComp(result);
+    };
+    getCompInfo();
+  }, []);
+
+  const closeDetail = () => {
+    setDetail(null);
+  };
 
   return (
     <>
@@ -100,8 +119,8 @@ const SalesPage = () => {
                 <input
                   className="search_input"
                   placeholder="회원권이름"
-                  name="r_ititle"
-                  value={searchData.r_ititle}
+                  name="i_title"
+                  value={searchData.i_title}
                   onChange={handleChange}
                 />
               </div>
@@ -109,7 +128,9 @@ const SalesPage = () => {
                 className="button-32"
                 type="button"
                 onClick={handleSearch}
-              ></button>
+              >
+                검색
+              </button>
             </form>
           </div>
           <div className="table_div">
@@ -119,7 +140,6 @@ const SalesPage = () => {
                   <th>No.</th>
                   <th>매출 날짜</th>
                   <th>회원 아이디</th>
-                  <th>회원권 번호</th>
                   <th>회원권 이름</th>
                   <th>회원권 가격</th>
                 </tr>
@@ -134,10 +154,11 @@ const SalesPage = () => {
                     <td>{index + 1}</td>
                     <td className="sdate">{sales.r_sdate}</td>
                     <td className="id">{sales.r_uid}</td>
-                    <td className="seq">{sales.i_seq}</td>
-                    <td className="title">{sales.i_title}</td>
+                    <td className="title">
+                      {sales.tbl_minfo.i_title}
+                    </td>
                     <td className="price">
-                      {sales.i_price.toLocaleString()}
+                      {sales.tbl_minfo.i_price}
                     </td>
                   </tr>
                 ))}
@@ -146,45 +167,43 @@ const SalesPage = () => {
           </div>
           <table className="total_list list">
             <tbody>
-              <tr className="total">
+              <tr>
                 <td>총 매출</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td className="total"></td>
+                <td>{sum}</td>
               </tr>
             </tbody>
           </table>
           {detail && (
-            <div className="modal-backdrop">
-              <div className="detail">
+            <div
+              className={
+                detail ? "modal-backdrop show" : "modal-backdrop"
+              }
+            >
+              <div className={detail ? "detail show" : "detail"}>
                 <div className="sales recipe">
                   <h1>매출 영수증</h1>
                   <div>
                     <label>업체코드</label>
-                    <input value={detail.i_ccode} readOnly />
+                    <input
+                      value={detail.tbl_minfo.i_ccode}
+                      readOnly
+                    />
                   </div>
                   <div>
                     <label>업체 명</label>
-                    <input
-                      value={initialCompanyName.c_name}
-                      readOnly
-                    />
+                    <input value={comp.c_name} readOnly />
                   </div>
                   <div>
                     <label>전화번호</label>
-                    <input
-                      value={initialCompanyName.c_tel}
-                      readOnly
-                    />
+                    <input value={comp.c_tel} readOnly />
                   </div>
                   <div>
                     <label>주소</label>
-                    <input
-                      value={initialCompanyName.c_addr}
-                      readOnly
-                    />
+                    <input value={comp.c_addr} readOnly />
                   </div>
                   <div>
                     <label>영수증번호</label>
@@ -200,21 +219,24 @@ const SalesPage = () => {
                   </div>
                   <div>
                     <label>회원권이름</label>
-                    <input value={detail.i_title} readOnly />
+                    <input
+                      value={detail.tbl_minfo.i_title}
+                      readOnly
+                    />
                   </div>
                   <div>
                     <label>회원권가격</label>
                     <input
-                      value={detail.i_price.toLocaleString()}
+                      value={detail.tbl_minfo.i_price}
                       readOnly
                     />
                   </div>
                   <div>
                     <button
                       className="button-32"
-                      onClick={saveReceipt}
+                      onClick={closeDetail}
                     >
-                      저장하기
+                      닫기
                     </button>
                   </div>
                 </div>
@@ -222,31 +244,9 @@ const SalesPage = () => {
             </div>
           )}
         </div>
-        <style jsx>{`
-          .list_title {
-            // Add your styles here
-          }
-          .list_home {
-            // Add your styles here
-          }
-          // Add other styles as necessary
-        `}</style>
       </div>
     </>
   );
 };
-
-// export async function getServerSideProps() {
-//   // 서버에서 데이터를 가져오는 로직을 구현합니다.
-//   const salesList = await fetchSalesList();
-//   const companyName = await fetchCompanyName();
-
-//   return {
-//     props: {
-//       initialSalesList: salesList,
-//       initialCompanyName: companyName,
-//     },
-//   };
-// }
 
 export default SalesPage;

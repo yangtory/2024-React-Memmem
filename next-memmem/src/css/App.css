@@ -115,6 +115,10 @@ form.login {
     display: flex;
     flex-direction: column;
   }
+  .login.error {
+    width: 100%;
+    background-color: #25293482;
+  }
   input {
     padding: 12px;
     border: none;

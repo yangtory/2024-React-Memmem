@@ -37,8 +37,8 @@ const ClassDetail = ({ showInputPage, date, selectedDate, setSeq }) => {
   return (
     <>
       <div className="list_home">
-        <div className="insert_btn_box btn_box">
-          <a className="insert button-32" onClick={inputButton} date={date}>
+        <div className=" btn_box">
+          <a className="insert button-32 addClass" onClick={inputButton} date={date}>
             수업 추가
           </a>
         </div>

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import "../../css/table.css";
 import "../../css/search.css";
 import "../../css/teacher_detail.css";
+import "../../css/modal.module.css";
 import {
   deleteTeacher,
   findTeacher,

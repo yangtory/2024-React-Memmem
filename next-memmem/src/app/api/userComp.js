@@ -33,7 +33,7 @@ export const findUsers = async ({ uname, uid, utel, ccode }) => {
 
 export const AddUserComp = async ({ formData, ccode, formattedDate }) => {
   try {
-    const newUserComp = await USERCOMP.create({
+    const newUserComp = await USERCOMP?.create({
       data: {
         us_uid: formData.us_uid,
         us_ccode: ccode,

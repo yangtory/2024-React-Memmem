@@ -156,7 +156,10 @@ const InsertPage = () => {
       uname.current.focus();
       return;
     }
-    const hasTicketInfo = ticketFormData.r_iseq || ticketFormData.r_sdate || ticketFormData.r_edate;
+    const hasTicketInfo =
+      ticketFormData.r_iseq ||
+      ticketFormData.r_sdate ||
+      ticketFormData.r_edate;
 
     if (!hasTicketInfo) {
       if (!hasTicketInfo) {
@@ -230,7 +233,9 @@ const InsertPage = () => {
         <div className="input_div formBox">
           <form className="formBox input_box">
             <h3>회원 정보</h3>
-            {errorMessage && <div className="user_error">{errorMessage}</div>}
+            {errorMessage && (
+              <div className="user_error">{errorMessage}</div>
+            )}
             <label>ID</label>
             <input
               className="us_uid"
@@ -287,7 +292,9 @@ const InsertPage = () => {
             />
 
             <h3>수강권 정보</h3>
-            {mErrorMessage && <div className="m_error">{mErrorMessage}</div>}
+            {mErrorMessage && (
+              <div className="m_error">{mErrorMessage}</div>
+            )}
 
             <div className="selectBox">
               <select
@@ -329,7 +336,12 @@ const InsertPage = () => {
               ref={edate}
             />
 
-            <input type="button" value="저장" className="insert" onClick={submit} />
+            <input
+              type="button"
+              value="저장"
+              className="insert"
+              onClick={submit}
+            />
           </form>
         </div>
 
@@ -352,7 +364,11 @@ const InsertPage = () => {
                 ) : (
                   userList &&
                   userList.map((USER) => (
-                    <tr key={USER.u_id} data-id={USER.u_id} onClick={() => userClick(USER.u_id)}>
+                    <tr
+                      key={USER.u_id}
+                      data-id={USER.u_id}
+                      onClick={() => userClick(USER.u_id)}
+                    >
                       <td>{USER.u_id}</td>
                       <td>{USER.u_name}</td>
                     </tr>
@@ -366,9 +382,6 @@ const InsertPage = () => {
       {showConfirmModal && (
         <div className="modal">
           <div className="modal-content">
-            <button className="close-btn" onClick={handleCancel}>
-              X
-            </button>
             <p>수강권 없이 등록하겠습니까?</p>
             <div className="modalBtn">
               <button className="confirmBtn" onClick={handleConfirm}>

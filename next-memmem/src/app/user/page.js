@@ -65,7 +65,10 @@ const UserPage = () => {
     let debounceTimer;
     return (...args) => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => callback.apply(this, args), delay);
+      debounceTimer = setTimeout(
+        () => callback.apply(this, args),
+        delay
+      );
     };
   };
 
@@ -128,8 +131,86 @@ const UserPage = () => {
               defaultValue={utel}
               onChange={onUtelHandler}
             />
-            <img src="/images/search.png" width="10px" height="10px" />
+            <img
+              src="/images/search.png"
+              width="10px"
+              height="10px"
+            />
           </form>
+        </div>
+        <div>
+          {selectedUser && (
+            <div className="detail_box width">
+              <div className="card">
+                <div className="info_container">
+                  <div
+                    className="info_head"
+                    key={selectedUser.us_uid}
+                    data-id={selectedUser.us_uid}
+                  >
+                    <strong>ID</strong>
+                    <p>{selectedUser[0].us_uid}</p>
+                    <strong>전화번호</strong>
+                    <p>{selectedUser[0].us_utel}</p>
+                    <a className="message_btn button-32">
+                      <img
+                        src="/images/mail.png"
+                        width="10px"
+                        height="10px"
+                      ></img>
+                    </a>
+                  </div>
+                  <div className="info_detail">
+                    <div>
+                      <strong>업체코드</strong>
+                      <p>{selectedUser[0].us_ccode}</p>
+                    </div>
+                    <div>
+                      <strong>업체명</strong>
+                      <p>{selectedUser[0].us_cname}</p>
+                    </div>
+                    <div>
+                      <strong>이름</strong>
+                      <p>{selectedUser[0].us_uname}</p>
+                    </div>
+                    <div>
+                      <strong>메모</strong>
+                      <p>다이어트, 식단관리 원함</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="detail_btn_box">
+                  <a
+                    className="button-32"
+                    onClick={() =>
+                      updateHandler(selectedUser[0].us_uid)
+                    }
+                  >
+                    수정
+                  </a>
+                  <a
+                    className="delete_btn button-32"
+                    onClick={() =>
+                      deleteHandler(
+                        selectedUser[0].us_uid,
+                        selectedUser[0].us_ccode
+                      )
+                    }
+                  >
+                    삭제
+                  </a>
+                  <a
+                    className="button-32"
+                    onClick={() =>
+                      userMinfoListHandler(selectedUser[0].us_uid)
+                    }
+                  >
+                    회원권
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div className="table_div">
           <table className="customer list">
@@ -155,64 +236,6 @@ const UserPage = () => {
               ))}
             </tbody>
           </table>
-        </div>
-        <div>
-          {selectedUser && (
-            <div className="detail_box width">
-              <div className="card">
-                <div className="info_container">
-                  <div
-                    className="info_head"
-                    key={selectedUser.us_uid}
-                    data-id={selectedUser.us_uid}
-                  >
-                    <strong>ID</strong>
-                    <p>{selectedUser[0].us_uid}</p>
-                    <strong>전화번호</strong>
-                    <p>{selectedUser[0].us_utel}</p>
-                    <a className="message_btn button-32">
-                      <img src="/images/mail.png" width="10px" height="10px"></img>
-                    </a>
-                  </div>
-                  <div className="info_detail">
-                    <div>
-                      <strong>업체코드</strong>
-                      <p>{selectedUser[0].us_ccode}</p>
-                    </div>
-                    <div>
-                      <strong>업체명</strong>
-                      <p>{selectedUser[0].us_cname}</p>
-                    </div>
-                    <div>
-                      <strong>이름</strong>
-                      <p>{selectedUser[0].us_uname}</p>
-                    </div>
-                    <div>
-                      <strong>메모</strong>
-                      <p>다이어트, 식단관리 원함</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="detail_btn_box">
-                  <a className="button-32" onClick={() => updateHandler(selectedUser[0].us_uid)}>
-                    수정
-                  </a>
-                  <a
-                    className="delete_btn button-32"
-                    onClick={() => deleteHandler(selectedUser[0].us_uid, selectedUser[0].us_ccode)}
-                  >
-                    삭제
-                  </a>
-                  <a
-                    className="button-32"
-                    onClick={() => userMinfoListHandler(selectedUser[0].us_uid)}
-                  >
-                    회원권
-                  </a>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </>

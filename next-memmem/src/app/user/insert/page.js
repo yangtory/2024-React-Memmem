@@ -1,7 +1,7 @@
 "use client";
 import "../../../css/table.css";
 import "../../../css/input.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AllUser } from "../../api/user";
 import { getSession, useSession } from "next-auth/react";
 import { AddUserComp } from "../../api/userComp";
@@ -9,6 +9,7 @@ import { AddUserComp } from "../../api/userComp";
 import "../../../css/user/userInput.css";
 import { getTicketInfo, ticketAll } from "../../api/ticket";
 import { addUserMinfo } from "../../api/userMinfo";
+
 const InsertPage = () => {
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
@@ -22,7 +23,14 @@ const InsertPage = () => {
   const [formData, setFormData] = useState({
     us_ccode: ccode,
   });
-
+  const uid = useRef();
+  const uname = useRef();
+  const sdate = useRef();
+  const edate = useRef();
+  const riseq = useRef();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [mErrorMessage, setMErrorMessage] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   // ticket-----------------------------------------------------------------
   const [ticketList, setTicketList] = useState([]);
   // const [ticket, setTicket] = useState(null);
@@ -133,7 +141,50 @@ const InsertPage = () => {
     }
   }, [session]);
 
-  const submit = async () => {
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!formData.us_uid) {
+      setErrorMessage("리스트에서 유저를 선택해주세요");
+
+      uid.current.focus();
+      return;
+    } else {
+      setErrorMessage("");
+    }
+    if (!formData.us_uname) {
+      setErrorMessage("리스트에서 유저를 선택해주세요");
+      uname.current.focus();
+      return;
+    }
+    const hasTicketInfo = ticketFormData.r_iseq || ticketFormData.r_sdate || ticketFormData.r_edate;
+
+    if (!hasTicketInfo) {
+      if (!hasTicketInfo) {
+        setShowConfirmModal(true);
+        return;
+      }
+    } else {
+      if (!ticketFormData.r_iseq) {
+        setMErrorMessage("수강권을 선택해 주세요");
+        riseq.current.focus();
+        return;
+      }
+      if (!ticketFormData.r_sdate) {
+        setMErrorMessage("시작일을 입력해 주세요");
+        sdate.current.focus();
+        return;
+      }
+      if (!ticketFormData.r_edate) {
+        setMErrorMessage("종료일을 입력해 주세요");
+        edate.current.focus();
+        return;
+      }
+      if (ticketFormData.r_sdate > ticketFormData.r_edate) {
+        setMErrorMessage("종료일은 시작일 이후로 입력해주세요");
+        edate.current.focus();
+        return;
+      }
+    }
     try {
       // 회원권 정보가 없으면 유저만 등록
       if (ticketFormData.r_icount === "") {
@@ -154,6 +205,24 @@ const InsertPage = () => {
     }
   };
 
+  const submitWithoutTicket = async () => {
+    try {
+      await AddUserComp({ formData, ccode, formattedDate });
+      window.location.href = "/user";
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleCancel = () => {
+    setShowConfirmModal(false);
+    setMErrorMessage("수강권을 선택해 주세요");
+    riseq.current.focus();
+  };
+  const handleConfirm = () => {
+    setShowConfirmModal(false);
+    submitWithoutTicket();
+  };
+
   return (
     <>
       <h1 className="list_title">회원 등록</h1>
@@ -161,7 +230,7 @@ const InsertPage = () => {
         <div className="input_div formBox">
           <form className="formBox input_box">
             <h3>회원 정보</h3>
-            <div className="user_error"></div>
+            {errorMessage && <div className="user_error">{errorMessage}</div>}
             <label>ID</label>
             <input
               className="us_uid"
@@ -170,6 +239,7 @@ const InsertPage = () => {
               readOnly
               value={formData.us_uid}
               onChange={changeUser}
+              ref={uid}
             />
             <label>이름</label>
             <input
@@ -179,6 +249,7 @@ const InsertPage = () => {
               readOnly
               value={formData.us_uname}
               onChange={changeUser}
+              ref={uname}
             />
             <input
               className="us_utel"
@@ -216,7 +287,7 @@ const InsertPage = () => {
             />
 
             <h3>수강권 정보</h3>
-            <div className="m_error"></div>
+            {mErrorMessage && <div className="m_error">{mErrorMessage}</div>}
 
             <div className="selectBox">
               <select
@@ -224,6 +295,7 @@ const InsertPage = () => {
                 name="r_iseq"
                 value={ticketFormData.r_iseq}
                 onChange={handleSelectChange}
+                ref={riseq}
               >
                 <option value="0">--수강권선택--</option>
                 {selectList}
@@ -245,6 +317,7 @@ const InsertPage = () => {
               name="r_sdate"
               value={ticketFormData.r_sdate}
               onChange={changeTicket}
+              ref={sdate}
             />
             <label>종료일</label>
             <input
@@ -253,14 +326,10 @@ const InsertPage = () => {
               name="r_edate"
               value={ticketFormData.r_edate}
               onChange={changeTicket}
+              ref={edate}
             />
 
-            <input
-              type="button"
-              value="저장"
-              className="insert"
-              onClick={submit}
-            />
+            <input type="button" value="저장" className="insert" onClick={submit} />
           </form>
         </div>
 
@@ -283,11 +352,7 @@ const InsertPage = () => {
                 ) : (
                   userList &&
                   userList.map((USER) => (
-                    <tr
-                      key={USER.u_id}
-                      data-id={USER.u_id}
-                      onClick={() => userClick(USER.u_id)}
-                    >
+                    <tr key={USER.u_id} data-id={USER.u_id} onClick={() => userClick(USER.u_id)}>
                       <td>{USER.u_id}</td>
                       <td>{USER.u_name}</td>
                     </tr>
@@ -298,6 +363,24 @@ const InsertPage = () => {
           </div>
         </div>
       </div>
+      {showConfirmModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <button className="close-btn" onClick={handleCancel}>
+              X
+            </button>
+            <p>수강권 없이 등록하겠습니까?</p>
+            <div className="modalBtn">
+              <button className="confirmBtn" onClick={handleConfirm}>
+                네
+              </button>
+              <button className="confirmBtn" onClick={handleCancel}>
+                아니요
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

@@ -31,10 +31,8 @@ const TicketDetail = ({
   };
 
   const saveClickHandler = async () => {
-    if (confirm("정말 수정할까요?")) {
-      await updateUserTicket(formData, id);
-      setIsEditMode(false);
-    }
+    await updateUserTicket(formData, id);
+    setIsEditMode(false);
   };
 
   const deleteClickHandler = async () => {
@@ -101,16 +99,10 @@ const TicketDetail = ({
             </button>
           ) : (
             <>
-              <button
-                className="button-32"
-                onClick={updateClickHandler}
-              >
+              <button className="button-32" onClick={updateClickHandler}>
                 수정
               </button>
-              <button
-                className="button-32"
-                onClick={deleteClickHandler}
-              >
+              <button className="button-32" onClick={deleteClickHandler}>
                 삭제
               </button>
             </>

@@ -8,6 +8,7 @@ export const selectAll = async ({ ccode }) => {
     where: { n_ccode: ccode },
     orderBy: [{ n_date: "desc" }, { n_time: "desc" }],
   });
+  console.log(result);
   prisma.$disconnect();
   return result;
 };
@@ -71,4 +72,11 @@ export const updateNotice = async ({ seq, title, content }) => {
   } finally {
     prisma.$disconnect();
   }
+};
+
+export const findNoticeList = async (ccode) => {
+  const result = await NOTICE.findMany({
+    where: { n_ccode: ccode },
+  });
+  return result;
 };

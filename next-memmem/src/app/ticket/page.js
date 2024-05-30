@@ -1,12 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import {
-  deleteTicket,
-  getTicketInfo,
-  getUserCount,
-  ticketAll,
-  updateTicket,
-} from "../api/ticket";
+import { deleteTicket, getTicketInfo, getUserCount, ticketAll, updateTicket } from "../api/ticket";
 import { useSession } from "next-auth/react";
 import "../../css/table.css";
 import "../../css/detail.css";
@@ -84,10 +78,7 @@ const TicketPage = () => {
   }, [ticketSeq, ticketList]);
 
   const ticketViewList = ticketList.map((ticket, index) => (
-    <tr
-      key={ticket?.i_seq}
-      onClick={() => setTicketSeq(ticket?.i_seq)}
-    >
+    <tr key={ticket?.i_seq} onClick={() => setTicketSeq(ticket?.i_seq)}>
       <td>{index + 1}</td>
       <td>{ticket?.i_title}</td>
       <td>{ticket?.i_price.toLocaleString()}</td>
@@ -109,16 +100,15 @@ const TicketPage = () => {
   // 저장버튼 클릭
   const saveClickHandler = async () => {
     // console.log(formData);
-    if (confirm("정말 수정할까요?")) {
-      const { i_seq, i_price, i_count } = formData;
-      await updateTicket({
-        seq: i_seq,
-        price: i_price,
-        count: i_count,
-      });
-      setIsEditMode(false);
-      setTicketSeq(i_seq);
-    }
+
+    const { i_seq, i_price, i_count } = formData;
+    await updateTicket({
+      seq: i_seq,
+      price: i_price,
+      count: i_count,
+    });
+    setIsEditMode(false);
+    setTicketSeq(i_seq);
   };
 
   const deleteClickHandler = async (seq) => {
@@ -167,9 +157,7 @@ const TicketPage = () => {
                           readOnly={!isEditMode}
                           onChange={handleChange}
                           style={{
-                            border: isEditMode
-                              ? "0.5px solid #888"
-                              : "none",
+                            border: isEditMode ? "0.5px solid #888" : "none",
                           }}
                         />
                       </div>
@@ -181,9 +169,7 @@ const TicketPage = () => {
                           readOnly={!isEditMode}
                           onChange={handleChange}
                           style={{
-                            border: isEditMode
-                              ? "0.5px solid #888"
-                              : "none",
+                            border: isEditMode ? "0.5px solid #888" : "none",
                           }}
                         />
                       </div>
@@ -191,18 +177,12 @@ const TicketPage = () => {
                   </div>
                   <div className="detail_btn_box">
                     {isEditMode ? (
-                      <button
-                        className="button-32"
-                        onClick={saveClickHandler}
-                      >
+                      <button className="button-32" onClick={saveClickHandler}>
                         저장
                       </button>
                     ) : (
                       <>
-                        <button
-                          className="button-32"
-                          onClick={updateClickHandler}
-                        >
+                        <button className="button-32" onClick={updateClickHandler}>
                           수정
                         </button>
                         <button

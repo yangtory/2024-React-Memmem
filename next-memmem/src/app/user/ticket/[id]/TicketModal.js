@@ -1,14 +1,12 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { getTicketInfo } from "../../../api/ticket";
+import "../../../../css/input.css";
+const TicketModal = ({ closeModal, formData, setFormData, selectList, createUserTicket, id }) => {
+  const [error, setError] = useState("");
+  const riseq = useRef();
+  const sdate = useRef();
+  const edate = useRef();
 
-const TicketModal = ({
-  closeModal,
-  formData,
-  setFormData,
-  selectList,
-  createUserTicket,
-  id,
-}) => {
   const changeTicket = (e) => {
     setFormData({
       ...formData,
@@ -17,6 +15,27 @@ const TicketModal = ({
   };
 
   const addClickHandler = async () => {
+    if (!formData.r_iseq) {
+      setError("수강권을 선택해주세요");
+      riseq.current?.focus();
+      return;
+    }
+    if (!formData.r_sdate) {
+      setError("시작일을 입력해 주세요");
+      sdate.current?.focus();
+      return;
+    }
+    if (!formData.r_edate) {
+      setError("종료일을 입력해 주세요");
+      edate.current?.focus();
+      return;
+    }
+    if (formData.r_sdate > formData.r_edate) {
+      setError("종료일은 시작일 이후로 입력해주세요");
+      edate.current?.focus();
+      return;
+    }
+
     const result = await createUserTicket({ formData, id });
     closeModal();
     setFormData({
@@ -47,12 +66,14 @@ const TicketModal = ({
         </div>
         <div className="notice input_box">
           <h3>수강권 추가</h3>
+          <div className="m_error">{error}</div>
           <label>수강권</label>
           <select
             className="select"
             name="r_iseq"
             value={formData.r_iseq}
             onChange={handleSelectChange}
+            ref={riseq}
           >
             <option value="0">--수강권선택--</option>
             {selectList}
@@ -73,6 +94,7 @@ const TicketModal = ({
             name="r_sdate"
             value={formData.r_sdate}
             onChange={changeTicket}
+            ref={sdate}
           />
           <label>종료일</label>
           <input
@@ -81,6 +103,7 @@ const TicketModal = ({
             name="r_edate"
             value={formData.r_edate}
             onChange={changeTicket}
+            ref={edate}
           />
 
           <div className="btn_box">

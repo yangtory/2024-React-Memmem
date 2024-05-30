@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import "../../css/dash.css";
 import "../../css/table.css";
-import { selectAll } from "../api/notice";
+import { findNoticeList, selectAll } from "../api/notice";
 import { getSession, useSession } from "next-auth/react";
 import { getTotal, getMonthTotal, totalPrice, getMonthTotalSales } from "../api/userComp";
 import { Chart, scales } from "chart.js/auto";
@@ -32,8 +32,8 @@ const DashPage = () => {
         try {
           const session = await getSession();
           const ccode = session?.user.id.tbl_company[0].c_code;
-
-          const result = await selectAll(ccode);
+          console.log(ccode);
+          const result = await findNoticeList(ccode);
           setNoticeList([...result]);
         } catch (error) {
           console.log(error);
@@ -195,7 +195,7 @@ const DashPage = () => {
               </div>
             </div>
           ) : (
-            <div className="error">
+            <div className="dash_error">
               <div className="total error_left">
                 <div>아직 매출이 없습니다</div>
               </div>
@@ -216,7 +216,7 @@ const DashPage = () => {
               </div>
             </div>
           ) : (
-            <div className="error">
+            <div className="dash_error">
               <div className="total error_right">
                 <div>이용중인 회원이 없습니다</div>
               </div>

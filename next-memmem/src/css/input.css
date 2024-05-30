@@ -10,11 +10,7 @@
   padding: 20px;
   border-radius: 10px;
   background-color: #e9dcd6;
-  background-image: linear-gradient(
-    to right,
-    #e9dcd6,
-    #ece1da
-  ); /* 그라데이션 */
+  background-image: linear-gradient(to right, #e9dcd6, #ece1da); /* 그라데이션 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -155,4 +151,9 @@ div.schedule_error,
 div.class_error {
   color: #ff4f33;
   font-size: 0.8rem;
+}
+div.ticket_error {
+  color: #ff4f33;
+  font-size: 1rem;
+  text-align: center;
 }

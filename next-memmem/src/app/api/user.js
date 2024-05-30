@@ -9,7 +9,10 @@ const USER = prisma.tbl_user;
 export const findUnique = async ({ u_id }) => {
   const result = await USER.findUnique({
     where: { u_id: u_id },
-    include: { tbl_company: true },
+    include: {
+      tbl_company: true,
+      tbl_role: true,
+    },
   });
   //   console.log("findUnique result:", result);
   prisma.$disconnect();
@@ -38,7 +41,10 @@ export const createCCode = async () => {
 // user insert, 회원가입
 export const createUser = async ({ formData }) => {
   const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(formData.u_password, saltRounds);
+  const hashedPassword = await bcrypt.hash(
+    formData.u_password,
+    saltRounds
+  );
 
   let newUser;
   try {

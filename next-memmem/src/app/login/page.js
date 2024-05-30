@@ -23,6 +23,7 @@ const LoginPage = () => {
     }
   }, []);
 
+  // 로그인 요청
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -34,21 +35,25 @@ const LoginPage = () => {
       setErrorMessage("아이디와 비밀번호를 모두 입력해주세요.");
       return;
     }
-
     const res = await signIn("credentials", {
       id: idValue,
       password: passwordValue,
       redirect: false,
     });
+
     if (res?.error === "CredentialsSignin") {
       setErrorMessage("아이디 또는 비밀번호가 잘못되었습니다.");
-    } else {
-      // 세션 객체의 유무를 확인하여 페이지 이동 처리
-      const session = await getSession();
-      if (session) {
-        window.location.href = "/dash";
-      }
+      return;
     }
+    if (res?.error === "role_user") {
+      setErrorMessage("관리자만 로그인 가능합니다.");
+      return;
+    }
+
+    // 세션 객체의 유무를 확인하여 페이지 이동 처리
+    const session = await getSession();
+    console.log(session);
+    window.location.href = "/dash";
   });
 
   return (

@@ -32,6 +32,12 @@ const Handler = NextAuth({
 
         const user = await findUnique({ u_id: id });
         // console.log("USER", user);
+        if (!bcrypt.compareSync(password, user.u_password)) {
+          throw new Error("CredentialsSignin");
+        }
+        if (user && user.tbl_role[0].r_role === "ROLE_USER") {
+          throw new Error("role_user");
+        }
         if (user && bcrypt.compareSync(password, user.u_password)) {
           // console.log("USER OK", user);
           return {
@@ -40,8 +46,6 @@ const Handler = NextAuth({
             // name: user.u_name,
             // member: user,
           };
-        } else {
-          throw new Error("CredentialsSignin"); // 예외 발생 시 에러 코드 전달
         }
       },
     }),

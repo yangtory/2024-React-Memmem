@@ -10,13 +10,8 @@ import TicketModal from "../modals/TicketModal";
 import TeacherModal from "../modals/TeacherModal";
 import NoticeModal from "../modals/NoticeModal";
 import { AddListProvider } from "../provider/AddListProvider";
-import { useRouter } from "next/navigation";
 
 export default function RootLayout({ children }) {
-  const router = useRouter();
-  const pathSegments = router.query;
-  console.log(pathSegments);
-  // const id = pathSegments[pathSegments.length - 1];
   return (
     <html lang="ko">
       <body>

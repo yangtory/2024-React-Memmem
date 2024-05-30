@@ -44,7 +44,7 @@ nav.nav {
 
 div.main {
   display: flex;
-  height: 100vh;
+  height: 94.8vh;
   background-color: #fff;
   section {
     width: 100%;
@@ -93,7 +93,7 @@ div.join_wrap {
   background-image: linear-gradient(19deg, #fccecb 20%, #e2daff 100%);
 }
 form.login {
-  margin-top: 3rem;
+  margin: 3rem auto;
   width: 70%;
   height: 50%;
   background-color: #25293482;
@@ -115,9 +115,13 @@ form.login {
     display: flex;
     flex-direction: column;
   }
-  .login.error {
-    width: 100%;
-    background-color: #25293482;
+  .login_error {
+    background-color: #25293400;
+    color: #6dd0fe;
+    font-size: 1.2rem;
+    text-align: center;
+    animation: blink 0.5s ease-in-out;
+    padding: 2px;
   }
   input {
     padding: 12px;
@@ -130,11 +134,12 @@ form.login {
     color: black;
     border-radius: 3px;
   }
-  &:nth-of-type(1) {
+  /* &:nth-of-type(1) {
+
     text-align: center;
     color: #6dd0fe;
     font-size: 1.5rem;
-  }
+  } */
   button {
     width: 30%;
     margin: 5px auto;
@@ -142,7 +147,7 @@ form.login {
   }
 }
 form.join {
-  margin-top: 3rem;
+  margin: 3rem auto;
   width: 70%;
   height: 80%;
   background-color: #25293482;
@@ -165,10 +170,16 @@ form.join {
     width: 100%;
     display: flex;
     flex-direction: column;
-    div.join.error {
+    margin: 0 auto;
+    div.join_error {
+      width: 50%;
       text-align: center;
       color: #febb0b;
       size: 1.3rem;
+      background-color: #25293400;
+      border-radius: 5px;
+      animation: blink 0.5s ease-in-out;
+      padding: 2px;
     }
   }
   input {
@@ -231,4 +242,21 @@ div.authenticated {
   filter: saturate(0.2) opacity(0.5);
   -webkit-filter: saturate(0.2) opacity(0.5);
   cursor: not-allowed;
+}
+
+.div_box_aos {
+  width: 100%;
+  margin: 0 auto;
+}
+
+@keyframes blink {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: #ff00005e;
+  }
+  100% {
+    background-color: transparent;
+  }
 }

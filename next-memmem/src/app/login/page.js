@@ -1,14 +1,19 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getSession, signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useHref } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const LoginPage = () => {
   const idRef = useRef();
   const passRef = useRef();
   const [errorMessage, setErrorMessage] = useState("");
-  const router = useRouter();
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1200,
+    });
+  }, []);
 
   useEffect(() => {
     const searchParam = new URLSearchParams(window.location.search);
@@ -16,20 +21,23 @@ const LoginPage = () => {
     if (uselogin) {
       setErrorMessage("로그인이 필요한 서비스입니다.");
     }
-    // setErrorMessage(uselogin);
-    // console.log('router.query:', router.query);
-    // 페이지 로드 시 URL 쿼리 파라미터에서 오류 메시지 읽기
-    // if (router.query && router.query.error === 'uselogin') {
-    //     setErrorMessage('로그인이 필요한 서비스입니다.'); // 오류 메시지는 문자열 형태로 변경
-    // }
   }, []);
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setErrorMessage("");
+
+    const idValue = idRef.current.value;
+    const passwordValue = passRef.current.value;
+
+    if (!idValue || !passwordValue) {
+      setErrorMessage("아이디와 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+
     const res = await signIn("credentials", {
-      id: idRef.current.value,
-      password: passRef.current.value,
+      id: idValue,
+      password: passwordValue,
       redirect: false,
     });
     if (res?.error === "CredentialsSignin") {
@@ -46,24 +54,25 @@ const LoginPage = () => {
   return (
     <>
       <div className="login_wrap">
-        <form className="login" onSubmit={handleSubmit}>
-          <h1>Login</h1>
-          {errorMessage && (
-            <div className="login error">{errorMessage}</div>
-          )}
-          <div>
-            <div className="login error"></div>
-            <input placeholder="Username" ref={idRef} />
-            <input
-              type="password"
-              placeholder="Password"
-              ref={passRef}
-            />
-            <button type="submit" className="login_btn button-32">
-              SUBMIT
-            </button>
-          </div>
-        </form>
+        <div className="div_box_aos" data-aos="fade-up">
+          <form className="login" onSubmit={handleSubmit}>
+            <h1>Login</h1>
+            {errorMessage && (
+              <div className="login_error">{errorMessage}</div>
+            )}
+            <div>
+              <input placeholder="Username" ref={idRef} />
+              <input
+                type="password"
+                placeholder="Password"
+                ref={passRef}
+              />
+              <button type="submit" className="login_btn button-32">
+                SUBMIT
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );

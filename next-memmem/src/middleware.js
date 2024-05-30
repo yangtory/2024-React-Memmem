@@ -4,7 +4,7 @@ export const middleware = async (req) => {
   const { pathname } = req.nextUrl;
   // console.log(req.cookies.get('next-auth.session-token'));
 
-  // 보호할 경로를 배열에 정의합니다.
+  // 보호할 경로
   const protectedPaths = [
     "/dash",
     "/user",
@@ -15,7 +15,7 @@ export const middleware = async (req) => {
     "/notice",
   ];
 
-  // 오류를 가정하고 메시지를 설정합니다.
+  // 오류를 가정하고 메시지를 설정
   if (
     !req.cookies.get("next-auth.session-token") &&
     protectedPaths.some((path) => pathname.startsWith(path))
@@ -28,7 +28,6 @@ export const middleware = async (req) => {
   } else {
     return NextResponse.next();
   }
-  // 리다이렉트 시에 query string을 사용하여 오류 메시지를 전달합니다.
 };
 
 // export const config = {

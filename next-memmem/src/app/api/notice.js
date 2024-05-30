@@ -6,6 +6,7 @@ const NOTICE = prisma.tbl_notice;
 export const selectAll = async ({ ccode }) => {
   const result = await NOTICE.findMany({
     where: { n_ccode: ccode },
+    orderBy: [{ n_date: "desc" }, { n_time: "desc" }],
   });
   prisma.$disconnect();
   return result;
@@ -38,6 +39,7 @@ export const findNotice = async (title, date, ccode) => {
         contains: date || "",
       },
     },
+    orderBy: [{ n_date: "desc" }, { n_time: "desc" }],
   });
   prisma.$disconnect();
   return result;

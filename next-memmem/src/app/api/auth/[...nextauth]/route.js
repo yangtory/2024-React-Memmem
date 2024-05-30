@@ -31,9 +31,9 @@ const Handler = NextAuth({
         const { id, password } = credentials;
 
         const user = await findUnique({ u_id: id });
-        console.log("USER", user);
+        // console.log("USER", user);
         if (user && bcrypt.compareSync(password, user.u_password)) {
-          console.log("USER OK", user);
+          // console.log("USER OK", user);
           return {
             ...user, // 이걸로 바꾸니까 위의 user 값이 다 나옴
             // id: user.u_id,

@@ -3,13 +3,9 @@ import "../css/App.css";
 import "../css/welcome.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import DashPage from "./dash/page";
 
 const Main = () => {
-  const { data: session } = useSession();
-
   useEffect(() => {
     AOS.init({
       duration: 1200,

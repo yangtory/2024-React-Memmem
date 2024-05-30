@@ -98,8 +98,10 @@ const NoticePage = () => {
 
   // 삭제
   const deleteHandler = async (seq) => {
-    await deleteNotice(seq);
-    setSelectedNotice(null);
+    if (confirm("정말 삭제할까요?")) {
+      await deleteNotice(seq);
+      setSelectedNotice(null);
+    }
   };
 
   // 디테일에서 수정버튼 누르기
@@ -187,7 +189,7 @@ const NoticePage = () => {
                   <th className="index" width="20px">
                     No.
                   </th>
-                  <th className="date" width="80px">
+                  <th className="notice_date" width="80px">
                     작성일자
                   </th>
                   <th className="title" width="200px">
@@ -205,7 +207,7 @@ const NoticePage = () => {
                     onClick={() => handleNoticeClick(notice)}
                   >
                     <td className="index">{index + 1}</td>
-                    <td className="date">
+                    <td className="notice_date">
                       {notice.n_date}
                       <br />
                       {notice.n_time}

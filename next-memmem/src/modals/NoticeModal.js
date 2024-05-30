@@ -62,9 +62,38 @@ const NoticeModal = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const result = await createNotice({ formData });
-      addNotice(result);
-      setNoticeModal(false);
+      if (!formData.n_title) {
+        if (
+          confirm(
+            "제목을 입력하지 않으면 '제목없음' 으로 등록됩니다. "
+          )
+        ) {
+          setFormData((formData.n_title = "제목없음"));
+          const result = await createNotice({ formData });
+          addNotice(result);
+          setNoticeModal(false);
+        } else {
+          return;
+        }
+      }
+      if (!formData.n_content) {
+        if (
+          confirm(
+            "내용을 입력하지 않으면 '내용없음' 으로 등록됩니다."
+          )
+        ) {
+          setFormData((formData.n_content = "내용없음"));
+          const result = await createNotice({ formData });
+          addNotice(result);
+          setNoticeModal(false);
+        } else {
+          return;
+        }
+      } else {
+        const result = await createNotice({ formData });
+        addNotice(result);
+        setNoticeModal(false);
+      }
 
       // formData 초기화
       setFormData({
@@ -96,14 +125,37 @@ const NoticeModal = () => {
         <form className={styles.form} onSubmit={handleSubmit}>
           <main>
             <div className={styles.input_div}>
-              <div className="ticket error"></div>
-              <input value={formData.n_date} name="n_date" type="hidden" readOnly />
-              <input value={formData.n_time} name="n_time" type="hidden" readOnly />
-              <input value={formData.n_uid} name="n_uid" type="hidden" readOnly />
+              <input
+                value={formData.n_date}
+                name="n_date"
+                type="hidden"
+                readOnly
+              />
+              <input
+                value={formData.n_time}
+                name="n_time"
+                type="hidden"
+                readOnly
+              />
+              <input
+                value={formData.n_uid}
+                name="n_uid"
+                type="hidden"
+                readOnly
+              />
               <label>업체코드</label>
-              <input value={formData.n_ccode} name="n_ccode" readOnly />
+              <input
+                value={formData.n_ccode}
+                name="n_ccode"
+                readOnly
+              />
               <label>제목</label>
-              <input placeholder="제목" name="n_title" value={formData.n_title} onChange={handleChange} />
+              <input
+                placeholder="제목"
+                name="n_title"
+                value={formData.n_title}
+                onChange={handleChange}
+              />
               <label>내용</label>
               <textarea
                 className={styles.textarea}
@@ -119,7 +171,10 @@ const NoticeModal = () => {
             <button type="submit" className={styles["btn-left"]}>
               추가
             </button>
-            <button className={styles["btn-right"]} onClick={onClickClose}>
+            <button
+              className={styles["btn-right"]}
+              onClick={onClickClose}
+            >
               Close
             </button>
           </footer>

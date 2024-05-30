@@ -30,7 +30,16 @@ div.list_home {
 table.notice.list {
   table-layout: fixed;
   overflow: scroll;
-  td.date {
+  th.notice_date {
+    border-bottom: 1px solid #364043;
+    color: #391145;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.5em 1em;
+    text-align: center;
+    white-space: nowrap;
+  }
+  td.notice_date {
     font-size: 0.8rem;
   }
   td.title {

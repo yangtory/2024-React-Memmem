@@ -92,7 +92,6 @@ const TeacherModal = () => {
         <form className={styles.form} onSubmit={handleSubmit}>
           <main>
             <div className={styles.input_div}>
-              <div className="ticket error"></div>
               <label>업체코드</label>
               <input
                 value={formData.t_ccode}

@@ -281,7 +281,7 @@ const TeacherPage = () => {
               </div>
             </div>
           ) : (
-            <div className="nocard">No ticket selected</div>
+            <div className="nocard card">No teacher selected</div>
           )}
         </div>
         <div className="table_div">

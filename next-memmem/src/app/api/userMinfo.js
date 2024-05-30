@@ -18,7 +18,7 @@ export const addUserMinfo = async ({ ticketFormData, ruid }) => {
   return result;
 };
 
-export const userMinfoList = async ({ id }) => {
+export const userMinfoList = async (id) => {
   const result = await USER_MINFO.findMany({
     where: { r_uid: id },
     include: { tbl_minfo: true },

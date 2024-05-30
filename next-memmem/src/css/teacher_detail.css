@@ -163,3 +163,10 @@ div.detail_btn_box {
     border-radius: 10px;
   }
 }
+
+.nocard.card {
+  padding: 2rem;
+  text-align: center;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
